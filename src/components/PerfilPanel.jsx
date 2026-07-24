@@ -5,6 +5,7 @@ import HistorialEmbarazo from "./HistorialEmbarazo";
 import ContactosMedicos from "./ContactosMedicos";
 import PlanParto from "./PlanParto";
 import ChecklistHospital from "./ChecklistHospital";
+import PartnerManagement from "./partner/PartnerManagement";
 import { emptyPerfil, loadPerfil, savePerfil } from "../data/perfil";
 import { totalWeeks } from "../data/seguimientoSemanal";
 import { emptyBebe, loadBebe, saveBebe } from "../data/bebe";
@@ -36,6 +37,12 @@ const seccionesTarjetas = [
     title: "Contactos del equipo médico",
     desc: "Todos los teléfonos importantes, a mano para una emergencia",
     view: "contactos-medicos",
+  },
+  {
+    icon: "👥",
+    title: "Tu partner",
+    desc: "Invitalo para que vea tus citas, síntomas y reciba tus notas",
+    view: "partner",
   },
 ];
 
@@ -84,6 +91,10 @@ export default function PerfilPanel({ onLogout }) {
 
   if (view === "checklist-hospital") {
     return <ChecklistHospital onBack={() => setView("list")} />;
+  }
+
+  if (view === "partner") {
+    return <PartnerManagement onBack={() => setView("list")} />;
   }
 
   const update = (field, value) => {

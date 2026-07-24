@@ -23,6 +23,7 @@ import {
   disconnectGoogleCalendar,
   getGoogleCalendarEvents,
 } from "../data/googleCalendar";
+import { syncCitaCompartida, deleteCitaCompartida, fetchCitasRsvp } from "../data/partner";
 
 const TIPO_PRIMERA_CONSULTA_POSTPARTO = "Primera consulta postparto";
 
@@ -34,7 +35,7 @@ const emptyForm = {
   lugar: "",
   preguntas: "",
   notas: "",
-  compartirPartner: false,
+  compartirPartner: true,
 };
 
 export default function ControlCitas({ onBack }) {
@@ -54,6 +55,7 @@ export default function ControlCitas({ onBack }) {
   const [googleLoading, setGoogleLoading] = useState(true);
   const [googleEvents, setGoogleEvents] = useState([]);
   const [googleMsg, setGoogleMsg] = useState(null);
+  const [rsvpMap, setRsvpMap] = useState({});
 
   useEffect(() => {
     setCitas(loadCitas());
@@ -96,6 +98,15 @@ export default function ControlCitas({ onBack }) {
   useEffect(() => {
     savePrimeraConsulta({ marcadas, propias });
   }, [marcadas, propias]);
+
+  useEffect(() => {
+    const ids = citas.filter((c) => c.compartirPartner).map((c) => c.id);
+    if (ids.length === 0) {
+      setRsvpMap({});
+      return;
+    }
+    fetchCitasRsvp(ids).then(setRsvpMap);
+  }, [citas]);
 
   const togglePregunta = (item) => {
     setMarcadas((prev) =>
@@ -155,13 +166,17 @@ export default function ControlCitas({ onBack }) {
   const handleGuardar = () => {
     if (!form.fecha || !form.tipo) return;
     let next;
+    let guardada;
     if (editingId) {
-      next = citas.map((c) => (c.id === editingId ? { ...form, id: editingId } : c));
+      guardada = { ...form, id: editingId };
+      next = citas.map((c) => (c.id === editingId ? guardada : c));
     } else {
-      next = [...citas, { ...form, id: Date.now().toString() }];
+      guardada = { ...form, id: Date.now().toString() };
+      next = [...citas, guardada];
     }
     setCitas(next);
     saveCitas(next);
+    syncCitaCompartida(guardada);
     setSaved(true);
     setSelectedDate(form.fecha);
     setEditingId(null);
@@ -180,6 +195,7 @@ export default function ControlCitas({ onBack }) {
     const next = citas.filter((c) => c.id !== id);
     setCitas(next);
     saveCitas(next);
+    deleteCitaCompartida(id);
     if (editingId === id) {
       setEditingId(null);
       setShowForm(false);
@@ -580,6 +596,12 @@ export default function ControlCitas({ onBack }) {
                 <div>
                   <p className="text-sm font-medium text-gray-800">
                     {c.tipo} {c.compartirPartner && <span title="Compartida con partner">👥</span>}
+                    {c.compartirPartner && rsvpMap[c.id] === "puede" && (
+                      <span title="Tu partner puede ir"> 👍</span>
+                    )}
+                    {c.compartirPartner && rsvpMap[c.id] === "no_puede" && (
+                      <span title="Tu partner no puede ir"> 👎</span>
+                    )}
                   </p>
                   <p className="text-xs text-gray-500">
                     {c.fecha} {c.hora && `· ${c.hora}`} {c.lugar && `· ${c.lugar}`}
