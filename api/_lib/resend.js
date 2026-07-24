@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-export const CODE_TTL_MINUTES = 10;
+export const CODE_TTL_MINUTES = 5;
 
 export async function sendOtpEmail(to, code) {
   const apiKey = process.env.RESEND_API_KEY;
