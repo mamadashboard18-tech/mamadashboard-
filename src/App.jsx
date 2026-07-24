@@ -54,6 +54,7 @@ export default function App() {
 
     return onAuthChange((session) => {
       if (session) {
+        if (getPartnerInviteToken()) return;
         enterApp(session);
       } else {
         setUser(null);
@@ -86,7 +87,13 @@ export default function App() {
     return (
       <PartnerJoinScreen
         token={getPartnerInviteToken()}
-        onJoined={() => getSession().then((session) => session && enterApp(session))}
+        onJoined={() => {
+          const params = new URLSearchParams(window.location.search);
+          params.delete("partner_invite");
+          const query = params.toString();
+          window.history.replaceState({}, "", window.location.pathname + (query ? `?${query}` : ""));
+          getSession().then((session) => session && enterApp(session));
+        }}
       />
     );
   }
