@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchPartnerData, sendRsvp } from "../../data/partner";
 import { citaInfoPorTipo, citaInfoPorDefecto } from "../../data/partnerCitaInfo";
 import { iconoSintoma, consejoPartnerSintoma } from "../../data/sintomas";
+import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
 import { logout } from "../../data/auth";
 
 function formatFecha(iso) {
@@ -60,6 +61,23 @@ function CitaCard({ cita, onRsvp }) {
   );
 }
 
+function SemanaCard({ semana }) {
+  const info = getWeekData(semana);
+  return (
+    <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm mb-6">
+      <p className="text-sm font-semibold text-gray-900">
+        Va por la semana {semana} de {totalWeeks}
+      </p>
+      {info.size && (
+        <p className="text-sm text-gray-700 mt-1">
+          {info.size.emoji} Esta semana el bebé tiene aproximadamente el tamaño de {info.size.name}.
+        </p>
+      )}
+      {info.milestone && <p className="text-xs text-gray-500 mt-2">{info.milestone}</p>}
+    </div>
+  );
+}
+
 export default function PartnerDashboard() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
@@ -112,6 +130,8 @@ export default function PartnerDashboard() {
       </header>
 
       <main className="max-w-2xl mx-auto p-6">
+        {data.semanaActual && <SemanaCard semana={data.semanaActual} />}
+
         <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
           Próximas citas
         </p>

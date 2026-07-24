@@ -31,7 +31,12 @@ export default async function handler(req, res) {
   const todayISO = new Date().toISOString().slice(0, 10);
   const catorceDiasAtras = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-  const [{ data: citas }, { data: sintomas }, { data: notas }] = await Promise.all([
+  const [{ data: perfil }, { data: citas }, { data: sintomas }, { data: notas }] = await Promise.all([
+    supabaseAdmin
+      .from("profiles")
+      .select("semana_actual")
+      .eq("id", link.mother_id)
+      .maybeSingle(),
     supabaseAdmin
       .from("citas_compartidas")
       .select("id, fecha, hora, tipo, medico, lugar, partner_rsvp")
@@ -54,6 +59,7 @@ export default async function handler(req, res) {
 
   res.status(200).json({
     motherNombre,
+    semanaActual: perfil?.semana_actual || null,
     citas: citas || [],
     sintomas: sintomas || [],
     notas: notas || [],
