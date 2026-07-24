@@ -16,6 +16,7 @@ export default function PartnerManagement({ onBack }) {
   const [nota, setNota] = useState("");
   const [notas, setNotas] = useState([]);
   const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState("");
 
   const refresh = () => {
     getPartnerStatus().then(setStatus);
@@ -30,10 +31,15 @@ export default function PartnerManagement({ onBack }) {
   }, [status?.hasPartner]);
 
   const handleGenerarLink = async () => {
+    setError("");
     setCreating(true);
     const result = await createInvite();
     setCreating(false);
-    if (result.ok) refresh();
+    if (result.ok) {
+      refresh();
+    } else {
+      setError(result.error || "No se pudo generar el link.");
+    }
   };
 
   const handleCopiar = () => {
@@ -144,6 +150,7 @@ export default function PartnerManagement({ onBack }) {
               >
                 {creating ? "Generando…" : "Generar link de invitación"}
               </button>
+              {error && <p className="text-sm text-red-500 mt-3">{error}</p>}
             </div>
           )}
         </div>

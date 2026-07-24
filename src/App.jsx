@@ -41,13 +41,15 @@ export default function App() {
   };
 
   useEffect(() => {
+    const inviteToken = getPartnerInviteToken();
+
     getSession().then((session) => {
-      if (session) {
+      if (session && !inviteToken) {
         enterApp(session);
         return;
       }
       setUser(null);
-      setMode(getPartnerInviteToken() ? "partner-join" : "landing");
+      setMode(inviteToken ? "partner-join" : "landing");
     });
 
     return onAuthChange((session) => {
