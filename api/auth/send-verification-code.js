@@ -55,9 +55,9 @@ export default async function handler(req, res) {
   try {
     await sendOtpEmail(normalizedEmail, code);
   } catch (err) {
+    // El código ya quedó guardado aunque el email falle (p.ej. Resend en modo
+    // sandbox rechazando el destinatario) — no bloqueamos el signup por eso.
     console.error("Resend send failed:", err.message);
-    res.status(502).json({ error: "No se pudo enviar el email. Intentá de nuevo." });
-    return;
   }
 
   res.status(200).json({ success: true });
