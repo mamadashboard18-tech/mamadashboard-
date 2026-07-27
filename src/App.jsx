@@ -5,6 +5,7 @@ import ControlCitas from "./components/ControlCitas";
 import BienestarPanel from "./components/BienestarPanel";
 import PerfilPanel from "./components/PerfilPanel";
 import ComunidadPanel from "./components/ComunidadPanel";
+import MultimediaPanel from "./components/MultimediaPanel";
 import FeatureListPanel from "./components/FeatureListPanel";
 import LandingPage from "./components/landing/LandingPage";
 import AuthPage from "./components/auth/AuthPage";
@@ -130,6 +131,8 @@ export default function App() {
             <PerfilPanel onLogout={handleLogout} />
           ) : active === "comunidad" ? (
             <ComunidadPanel nombre={user?.nombre} />
+          ) : active === "multimedia" ? (
+            <MultimediaPanel />
           ) : (
             <FeatureListPanel sectionId={active} />
           )}

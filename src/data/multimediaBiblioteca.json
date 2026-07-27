@@ -1,0 +1,938 @@
+[
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "plantilla",
+    "titulo": "Plan de Parto y Nacimiento",
+    "autor": "Ministerio de Sanidad de España",
+    "link": "https://www.sanidad.gob.es/organizacion/sns/planCalidadSNS/pdf/equidad/planPartoNacimiento.pdf",
+    "descripcion": "Formulario oficial para registrar tus preferencias sobre el parto y el nacimiento antes de llegar al hospital.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "guia",
+    "titulo": "Guía OMS de cuidados durante el trabajo de parto: manual del usuario",
+    "autor": "Organización Mundial de la Salud (OMS)",
+    "link": "https://iris.who.int/server/api/core/bitstreams/7f978b53-99c0-42ca-9b8e-c0adb24132a8/content",
+    "descripcion": "Recomendaciones basadas en evidencia sobre los distintos tipos de atención durante el trabajo de parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "guia",
+    "titulo": "Guía de Práctica Clínica sobre la Atención al Parto Normal (versión resumida)",
+    "autor": "Ministerio de Sanidad de España",
+    "link": "https://www.sanidad.gob.es/fr/organizacion/sns/planCalidadSNS/pdf/equidad/guiaPracticaClinicaParto.pdf",
+    "descripcion": "Resumen de recomendaciones clínicas oficiales sobre el manejo del parto normal.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "video",
+    "titulo": "Tipos de parto",
+    "autor": "Georgina Martínez Vidal, obstetra",
+    "link": "https://www.youtube.com/watch?v=VDv3IzPy2uQ",
+    "descripcion": "Una obstetra explica en pocos minutos las diferencias entre parto vaginal, cesárea e instrumental.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "video",
+    "titulo": "Parto: entendiendo su proceso natural",
+    "autor": "Clínica Alemana - Dra. Bernardita Walker, ginecóloga",
+    "link": "https://www.youtube.com/watch?v=SMyGUFZRr2Q",
+    "descripcion": "Entrevista donde una ginecóloga explica el proceso fisiológico del parto natural.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "libro",
+    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
+    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
+    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
+    "descripcion": "Guía con base científica y enfoque respetuoso que repasa todas las opciones de parto sin sesgos.",
+    "gratis": false
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "podcast",
+    "titulo": "Tu Mejor Parto - Parto Vaginal Después de Cesárea (PVDC)",
+    "autor": "myBabymyBirth®",
+    "link": "https://www.mybabymybirth.com/podcast/72.-parto-vaginal-despu%C3%A9s-de-ces%C3%A1rea-(pvdc)",
+    "descripcion": "Episodio con profesionales de la salud sobre el parto vaginal después de una cesárea.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "articulo",
+    "titulo": "El parto instrumental",
+    "autor": "El Parto es Nuestro",
+    "link": "https://www.elpartoesnuestro.es/informacion/parto/intervenciones-medicas/el-parto-instrumental",
+    "descripcion": "Explica con claridad cuándo y cómo se usan fórceps, ventosa o espátulas durante el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "frase",
+    "titulo": "Cada parto es único: no hay una sola forma correcta de traer una vida al mundo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para recordar que todas las formas de parir son válidas.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "frase",
+    "titulo": "Tu cuerpo sabe cómo hacerlo, y si necesita ayuda, eso también es parte del proceso.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de aliento sobre confiar en el cuerpo y aceptar la ayuda médica cuando hace falta.",
+    "gratis": true
+  },
+  {
+    "categoria": "tipos_de_parto",
+    "tipo": "frase",
+    "titulo": "Naciste para dar a luz de la manera que tu bebé y vos necesiten.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase que valida distintos tipos de parto sin juicio.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "articulo",
+    "titulo": "¿Cómo es la preparación al parto? Teoría y práctica",
+    "autor": "Reproducción Asistida ORG",
+    "link": "https://www.reproduccionasistida.org/preparacion-parto/",
+    "descripcion": "Explica en qué consisten las clases de preparación al parto y cuándo conviene comenzarlas.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "guia",
+    "titulo": "Clases prenatales",
+    "autor": "Kaiser Permanente en español",
+    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/healtharticle.prenatal-classes",
+    "descripcion": "Qué esperar de las clases prenatales y cómo elegir la más adecuada para vos.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "video",
+    "titulo": "Cómo respirar el día del parto",
+    "autor": "Actualidad Matrona",
+    "link": "https://www.youtube.com/watch?v=ry_kweOxcO4",
+    "descripcion": "Una matrona responde preguntas frecuentes sobre cómo respirar durante el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "video",
+    "titulo": "Técnicas de respiración para un parto más fácil",
+    "autor": "Canal especializado en preparación al parto",
+    "link": "https://www.youtube.com/watch?v=9HmrTywffm4",
+    "descripcion": "Recorrido por las técnicas de respiración recomendadas en cada etapa del parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "libro",
+    "titulo": "Hipnoparto: preparación para un parto positivo",
+    "autor": "Carmen Moreno, educadora prenatal especializada en hipnoparto",
+    "link": "https://partopositivo.org/producto/libro-de-hipnoparto/",
+    "descripcion": "Libro con 21 capítulos y ejercicios prácticos, basado en evidencia, para prepararse para un parto positivo.",
+    "gratis": false
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "podcast",
+    "titulo": "Tu Mejor Parto",
+    "autor": "myBabymyBirth®",
+    "link": "https://www.mybabymybirth.com/podcast",
+    "descripcion": "Podcast con matronas, obstetras, doulas y psicólogas sobre cómo prepararse para el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "plantilla",
+    "titulo": "Qué llevar en la bolsa del hospital para el parto (lista descargable)",
+    "autor": "Guiainfantil.com",
+    "link": "https://www.guiainfantil.com/embarazo/parto/que-llevar-en-la-bolsa-del-hospital-para-el-parto-lista-para-descargarse/",
+    "descripcion": "Checklist imprimible con todo lo necesario para la maleta del hospital, para vos, el bebé y tu acompañante.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "guia",
+    "titulo": "Guía de Práctica Clínica sobre la Atención al Parto Normal (versión completa)",
+    "autor": "Ministerio de Sanidad de España",
+    "link": "https://www.sanidad.gob.es/areas/calidadAsistencial/estrategias/atencionPartoNormal/docs/guiaPracClinPartoCompleta.pdf",
+    "descripcion": "Guía extensa con toda la evidencia científica disponible para prepararse para un parto respetado.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "frase",
+    "titulo": "Prepararte para el parto no es controlarlo todo: es llegar con más herramientas y menos miedo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase sobre el verdadero sentido de la preparación al parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "frase",
+    "titulo": "Respirá. Tu cuerpo y tu bebé están trabajando juntos.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase breve para repetir durante los ejercicios de respiración.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "frase",
+    "titulo": "No necesitás ser valiente, necesitás estar acompañada e informada.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase que resta presión a la idea de tener que 'aguantar' el parto sola.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "guia",
+    "titulo": "Guía de Práctica Clínica sobre lactancia materna",
+    "autor": "Ministerio de Sanidad de España / GuíaSalud",
+    "link": "https://www.sanidad.gob.es/organizacion/sns/planCalidadSNS/docs/GPC_560_Lactancia_Osteba_compl-1.pdf",
+    "descripcion": "Guía oficial con recomendaciones basadas en evidencia sobre lactancia materna.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "guia",
+    "titulo": "Guía familiar de lactancia materna y alimentación complementaria",
+    "autor": "UNICEF",
+    "link": "https://www.unicef.org/panama/media/2636/file/LACTANCIA%20MATERNA%20GU%C3%8DA%20.pdf",
+    "descripcion": "Guía práctica pensada para familias sobre lactancia y alimentación complementaria.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "articulo",
+    "titulo": "Alimentación del lactante y del niño pequeño",
+    "autor": "Organización Mundial de la Salud (OMS)",
+    "link": "https://www.who.int/es/news-room/fact-sheets/detail/infant-and-young-child-feeding",
+    "descripcion": "Ficha informativa oficial de la OMS sobre lactancia materna exclusiva y alimentación complementaria.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "libro",
+    "titulo": "Un regalo para toda la vida: guía de la lactancia materna",
+    "autor": "Carlos González, pediatra",
+    "link": "https://www.casadellibro.com/libro-un-regalo-para-toda-la-vida-guia-de-la-lactancia-materna/9788484605539/1079315",
+    "descripcion": "Guía clásica y accesible sobre la fisiología de la lactancia y cómo resolver las dudas más comunes.",
+    "gratis": false
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "podcast",
+    "titulo": "Lactando",
+    "autor": "Asociación Lactando, con Almudena Pernas (matrona e IBCLC)",
+    "link": "https://open.spotify.com/show/3yLyQBjK9IeVUDP0pqdRJa",
+    "descripcion": "Podcast con matronas y consultoras certificadas en lactancia que comparten experiencias y consejos.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "podcast",
+    "titulo": "La Primera Leche",
+    "autor": "Vanessa, consultora certificada IBCLC",
+    "link": "https://podcasts.apple.com/es/podcast/la-primera-leche/id1484215816",
+    "descripcion": "Historias de lactancia y consejos prácticos de la mano de una consultora certificada en lactancia.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "plantilla",
+    "titulo": "Hoja de registro de lactancia",
+    "autor": "Pediatría Humanizada",
+    "link": "https://pediatriahumanizada.com/hoja-de-registro-de-lactancia/",
+    "descripcion": "Plantilla descargable para anotar horario, duración y lado de cada toma.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "articulo",
+    "titulo": "Documentos sobre lactancia materna",
+    "autor": "Asociación IHAN (Iniciativa para la Humanización de la Asistencia al Nacimiento y la Lactancia)",
+    "link": "https://www.ihan.es/recursos/documentos-sobre-lactancia-materna/",
+    "descripcion": "Recopilación de documentos y recursos oficiales sobre lactancia materna avalados por IHAN.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "frase",
+    "titulo": "No hay leche mala: hay lactancias distintas y todas merecen apoyo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para visibilizar que no existe una única forma correcta de amamantar.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "frase",
+    "titulo": "Amamantar se aprende: no es un instinto perfecto desde el primer día.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase que normaliza las dificultades iniciales de la lactancia.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "frase",
+    "titulo": "Pedir ayuda con la lactancia es un acto de amor, no de fracaso.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para animar a buscar apoyo profesional en lactancia.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "articulo",
+    "titulo": "Postparto: claves para la rehabilitación del suelo pélvico",
+    "autor": "Núria Caballé, fisioterapeuta especializada en suelo pélvico",
+    "link": "https://nuriacaballe.com/blog/article/23&lang=esp",
+    "descripcion": "Explica el proceso de recuperación del suelo pélvico tras el parto y cuándo acudir a fisioterapia.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "guia",
+    "titulo": "Guía de Ejercicios Postparto",
+    "autor": "Suelo Pélvico Valencia (clínica especializada)",
+    "link": "https://www.suelopelvico.eu/guia-de-ejercicios-postparto/",
+    "descripcion": "Guía con ejercicios seguros y progresivos para la recuperación del suelo pélvico y el abdomen tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "articulo",
+    "titulo": "Ejercicios para el piso pélvico para después del parto",
+    "autor": "Kaiser Permanente en español",
+    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/health-encyclopedia/he.ejercicios-para-el-piso-p%C3%A9lvico-para-despu%C3%A9s-del-parto.acn5187",
+    "descripcion": "Recomendaciones médicas sobre ejercicios de suelo pélvico recomendados tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "podcast",
+    "titulo": "Pélvium, tu podcast sobre suelo pélvico",
+    "autor": "Fisioterapeutas especializadas en suelo pélvico",
+    "link": "https://podcasts.apple.com/es/podcast/p%C3%A9lvium-tu-podcast-sobre-suelo-p%C3%A9lvico/id1470902032",
+    "descripcion": "Podcast dedicado a la salud del suelo pélvico, con episodios sobre diástasis y recuperación postparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "articulo",
+    "titulo": "Diástasis abdominal postparto después del embarazo",
+    "autor": "En Suelo Firme (fisioterapia especializada)",
+    "link": "https://www.ensuelofirme.com/diastasis-abdominal-postparto/",
+    "descripcion": "Explica qué es la diástasis abdominal y cómo abordarla de forma segura tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "plantilla",
+    "titulo": "Posparto: ahora que ha dado a luz (folleto de recuperación)",
+    "autor": "UCSF Women's Health (versión en español)",
+    "link": "https://womenshealth.ucsf.edu/sites/womenshealth.ucsf.edu/files/spanish_pp_booklet.pdf",
+    "descripcion": "Folleto informativo con pautas de autocuidado físico para las primeras semanas de posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "articulo",
+    "titulo": "Cuidados y recuperación postparto",
+    "autor": "Instituto de Suelo Pélvico",
+    "link": "https://www.institutosuelopelvico.es/isp-cuidados-postparto/",
+    "descripcion": "Recomendaciones sobre gimnasia abdominal hipopresiva y recuperación física tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "libro",
+    "titulo": "Fisioterapia del suelo pélvico: manual para la prevención y el tratamiento en la mujer, el hombre y la infancia",
+    "autor": "Obra colectiva especializada en fisioterapia uroginecológica",
+    "link": "https://dialnet.unirioja.es/servlet/libro?codigo=970125",
+    "descripcion": "Manual de referencia técnica sobre fisioterapia del suelo pélvico, incluido el abordaje postparto.",
+    "gratis": false
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "frase",
+    "titulo": "Tu cuerpo cargó una vida durante nueve meses: dale tiempo para recuperarse.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para bajar la exigencia sobre el ritmo de recuperación física.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "frase",
+    "titulo": "La cuarentena no es una carrera: es un proceso de sanación.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase sobre el descanso activo en las primeras semanas de postparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "frase",
+    "titulo": "Cuidar tu suelo pélvico hoy es cuidar tu cuerpo por el resto de tu vida.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para motivar la consulta con fisioterapia de suelo pélvico.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "libro",
+    "titulo": "Psicología del posparto",
+    "autor": "Esther Ramírez Matos, Instituto Europeo de Salud Mental Perinatal",
+    "link": "https://iboneolza.org/2020/09/07/psicologia-del-posparto-de-esther-ramirez-matos/",
+    "descripcion": "Libro sobre los procesos psicológicos y emocionales que atraviesa la mujer en el posparto.",
+    "gratis": false
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "libro",
+    "titulo": "Parir",
+    "autor": "Ibone Olza, psiquiatra infantil y perinatal",
+    "link": "https://iboneolza.org/en/publicaciones/",
+    "descripcion": "Libro que aborda la psicología del parto y su impacto emocional en la mujer.",
+    "gratis": false
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "articulo",
+    "titulo": "Publicaciones de Ibone Olza sobre salud mental perinatal",
+    "autor": "Ibone Olza, psiquiatra perinatal",
+    "link": "https://iboneolza.org/en/publicaciones/",
+    "descripcion": "Recopilación de artículos sobre depresión posparto y estrés postraumático posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "podcast",
+    "titulo": "Bienestar emocional en embarazo y posparto",
+    "autor": "Especialista en psiquiatría perinatal",
+    "link": "https://open.spotify.com/show/48XX6JntF5QBfZ89aev3CF",
+    "descripcion": "Podcast centrado en el cuidado de la salud mental durante el embarazo y el posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "podcast",
+    "titulo": "La vida secreta de las madres",
+    "autor": "Andrea Ros (comunicadora perinatal) y Paola Roig (psicóloga perinatal)",
+    "link": "https://podimo.com/es/shows/la-vida-secreta-de-las-madres",
+    "descripcion": "Conversaciones honestas sobre carga mental, posparto y salud mental materna.",
+    "gratis": false
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "podcast",
+    "titulo": "Sonidos de Psicología: Psicología Perinatal Preventiva y e-Health",
+    "autor": "Infocop, Consejo General de la Psicología de España",
+    "link": "https://www.infocop.es/podcast-sonidos-de-psicologia-psicologia-perinatal-preventiva-y-e-health/",
+    "descripcion": "Episodio sobre el cuidado emocional desde la concepción hasta el primer año del bebé.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "guia",
+    "titulo": "Nuestros libros de psicología perinatal",
+    "autor": "Instituto Europeo de Salud Mental Perinatal",
+    "link": "https://saludmentalperinatal.es/nuestros-libros-de-psicologia-perinatal/",
+    "descripcion": "Recopilación de recursos y libros sobre salud mental perinatal recomendados por especialistas.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "frase",
+    "titulo": "Lo que sentís después de tener un bebé también importa, y no tenés que atravesarlo sola.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para validar las emociones difíciles del posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "frase",
+    "titulo": "Pedir ayuda psicológica en el posparto no es debilidad, es cuidado.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para reducir el estigma de buscar apoyo en salud mental perinatal.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "frase",
+    "titulo": "No sos una mala madre por sentirte triste o abrumada: sos una madre humana.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de contención frente a la culpa asociada a las emociones difíciles del posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "articulo",
+    "titulo": "Recomendaciones de sueño en lactantes",
+    "autor": "Asociación Española de Pediatría (AEP)",
+    "link": "https://www.aeped.es/enfamilia/salud-en-familia/recomendaciones-de-sueno-en-lactantes",
+    "descripcion": "Recomendaciones oficiales de pediatras sobre el sueño seguro de bebés y lactantes.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "articulo",
+    "titulo": "¿Qué debemos saber sobre el sueño del recién nacido?",
+    "autor": "HM Nens (hospital)",
+    "link": "https://www.hmhospitales.com/hm-nens/blog/sueno-y-recien-nacido/",
+    "descripcion": "Explica los patrones normales de sueño del recién nacido durante los primeros meses.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "articulo",
+    "titulo": "Lactancia materna y sueño",
+    "autor": "Alba Lactancia Materna",
+    "link": "https://albalactanciamaterna.org/lactancia/tema-6-lactancia-y-crianza/lactancia-materna-y-sueno/",
+    "descripcion": "Explica la relación entre la lactancia materna y los patrones de sueño del bebé.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "guia",
+    "titulo": "Sueño seguro, lactancia y colecho",
+    "autor": "Sociedad Uruguaya de Pediatría (SUP)",
+    "link": "https://www.sup.org.uy/wp-content/uploads/2021/12/Recomendaciones-sueno-seguro-y-lactancia.pdf",
+    "descripcion": "Recomendaciones oficiales sobre cómo practicar el colecho de la forma más segura posible.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "libro",
+    "titulo": "Dormir sin lágrimas: dejarle llorar no es la solución",
+    "autor": "Rosa Jové, psicóloga infantil",
+    "link": "https://www.casadellibro.com/libro-dormir-sin-lagrimas-dejarle-llorar-no-es-la-solucion/9788497346474/1141288",
+    "descripcion": "Libro de referencia sobre el sueño infantil desde una mirada respetuosa, sin métodos de adiestramiento.",
+    "gratis": false
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "plantilla",
+    "titulo": "Rutina modelo para bebés de 4-5 meses",
+    "autor": "The Baby Sleep Club",
+    "link": "https://thebabysleepclub.com/wp-content/uploads/2023/11/Descargable_Rutina-Modelo-4-5M.pdf",
+    "descripcion": "Plantilla descargable con horarios orientativos de sueño y siestas para adaptar en casa.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "plantilla",
+    "titulo": "Rutina modelo para bebés de 6 meses",
+    "autor": "The Baby Sleep Club",
+    "link": "https://thebabysleepclub.com/wp-content/uploads/2023/08/Rutina_Modelo_Bebe_6M.pdf",
+    "descripcion": "Plantilla con horario modelo de sueño y siestas para adaptar según cada familia.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "frase",
+    "titulo": "No existe una fórmula mágica para el sueño de tu bebé: existe su propio ritmo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para bajar la presión sobre los horarios de sueño 'ideales'.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "frase",
+    "titulo": "Despertarse de noche no es un problema a resolver, es una etapa del desarrollo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para normalizar los despertares nocturnos del bebé.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "frase",
+    "titulo": "Dormir mal unas semanas no define cómo va a dormir tu bebé para siempre.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de aliento frente al cansancio de las primeras semanas.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "articulo",
+    "titulo": "Cuidados del cordón umbilical",
+    "autor": "Asociación Española de Pediatría (AEP), Salud en Familia",
+    "link": "https://www.aeped.es/enfamilia/salud-en-familia/cuidados-cordon-umbilical",
+    "descripcion": "Explica cómo cuidar el cordón umbilical del recién nacido de forma segura.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "articulo",
+    "titulo": "Cuidados del bebé recién nacido",
+    "autor": "Asociación Española de Pediatría (AEP), Salud en Familia",
+    "link": "https://www.aeped.es/enfamilia/salud-en-familia/cuidados-bebe-recien-nacido",
+    "descripcion": "Guía general de cuidados básicos del recién nacido avalada por pediatras.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "guia",
+    "titulo": "Cuidados del recién nacido: recomendaciones a seguir tras el alta hospitalaria",
+    "autor": "Servicio Andaluz de Salud",
+    "link": "https://www.sspa.juntadeandalucia.es/servicioandaluzdesalud/hrs3/fileadmin/user_upload/area_medica/obstetricia_ginecologia/cuidados_recien_nacido.pdf",
+    "descripcion": "Guía oficial con recomendaciones para las primeras semanas en casa con el recién nacido.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "video",
+    "titulo": "Cómo cuidar al bebé recién nacido en casa",
+    "autor": "Pediatra (canal de divulgación pediátrica)",
+    "link": "https://www.youtube.com/watch?v=l5EcmjvjjLQ",
+    "descripcion": "Una pediatra responde las dudas más comunes sobre el cuidado del recién nacido en casa.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "video",
+    "titulo": "Cómo y cuándo bañar a un bebé recién nacido",
+    "autor": "Canal de pediatría y crianza",
+    "link": "https://www.youtube.com/watch?v=lJMDbhGdguY",
+    "descripcion": "Explicación paso a paso de cómo dar el primer baño al recién nacido.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "video",
+    "titulo": "Consejos prácticos para cuidar a tu bebé los primeros días",
+    "autor": "Clínica Alemana",
+    "link": "https://www.youtube.com/watch?v=deKKmnLfmYQ",
+    "descripcion": "Recomendaciones médicas sobre el cuidado del bebé en sus primeros días de vida.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "libro",
+    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
+    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
+    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
+    "descripcion": "Incluye una sección dedicada a los cuidados del recién nacido en las primeras semanas.",
+    "gratis": false
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "frase",
+    "titulo": "No necesitás saberlo todo el primer día: vas a aprender junto a tu bebé.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para bajar la ansiedad de las primeras semanas con el recién nacido.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "frase",
+    "titulo": "Cada bebé viene con su propio manual de instrucciones, y lo vas a ir descubriendo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase que valida el proceso de conocer al bebé día a día.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "frase",
+    "titulo": "Confiá en tu instinto: nadie conoce a tu bebé como vos.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de aliento para fortalecer la confianza materna.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "articulo",
+    "titulo": "El rol de los acompañantes en el parto",
+    "autor": "LacTed",
+    "link": "https://www.lacted.com/post/el-rol-de-los-acompa%C3%B1antes-en-el-parto",
+    "descripcion": "Explica la importancia y las funciones concretas del acompañante durante el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "articulo",
+    "titulo": "El papel del padre en el parto: acompañar sin entorpecer",
+    "autor": "Instituto Europeo de Salud Mental Perinatal",
+    "link": "https://saludmentalperinatal.es/el-papel-del-padre-en-el-parto-acompanar-sin-entorpecer/",
+    "descripcion": "Reflexión desde la psicología perinatal sobre el rol del padre o acompañante durante el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "articulo",
+    "titulo": "El rol de la pareja en el postparto",
+    "autor": "Casa de Parto",
+    "link": "https://casadeparto.cl/blogs/news/el-rol-de-la-pareja-en-el-postparto",
+    "descripcion": "Aborda cómo la pareja puede apoyar de forma activa durante la etapa del posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "articulo",
+    "titulo": "La pareja en el parto: ¿acompañante ideal o estorbo?",
+    "autor": "Psicología para Todos",
+    "link": "https://www.psicologiaparatodos.org/la-pareja-en-el-parto-acompanante-ideal-o-estorbo/",
+    "descripcion": "Analiza, desde la psicología, cómo puede la pareja acompañar de forma efectiva durante el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "podcast",
+    "titulo": "La Magia y el Caos de ser Padres - Paternidad Activa: Rol del Papá en el Parto y la Crianza",
+    "autor": "Podcast de paternidad",
+    "link": "https://open.spotify.com/episode/6qXdsSY4MVmrxc0xox9DGI",
+    "descripcion": "Tres padres comparten sus experiencias acompañando el parto y los primeros tiempos de crianza.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "podcast",
+    "titulo": "La Figura del Padre. Paternidad a Tope",
+    "autor": "Podcast de paternidad",
+    "link": "https://podcasts.apple.com/us/podcast/la-figura-del-padre-paternidad-a-tope/id1581176052",
+    "descripcion": "Podcast pensado para acompañar a los padres antes y después del nacimiento.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "articulo",
+    "titulo": "Acompañamiento al parto",
+    "autor": "Zona Hospitalaria",
+    "link": "https://zonahospitalaria.com/acompanamiento-al-parto/",
+    "descripcion": "Información práctica sobre qué implica ser la persona de acompañamiento durante el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "frase",
+    "titulo": "Acompañar no es tener todas las respuestas, es estar presente.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase sobre el verdadero rol del acompañante en el parto y el posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "frase",
+    "titulo": "El posparto también se vive en pareja: cuídense mutuamente.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase que invita a sostener el vínculo de pareja durante el posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "frase",
+    "titulo": "Preguntale a tu pareja cómo puede ayudar, no asumas que ya lo sabe.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase práctica para mejorar la comunicación en pareja durante la crianza temprana.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "guia",
+    "titulo": "Guía de alimentación para embarazadas",
+    "autor": "SEEDO, Sociedad Española para el Estudio de la Obesidad",
+    "link": "https://www.seedo.es/images/Guia_Alimentacion_Embazaradas_Medicadiet.pdf",
+    "descripcion": "Guía con pautas nutricionales oficiales recomendadas para cada etapa del embarazo.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "guia",
+    "titulo": "Alimentación durante el embarazo",
+    "autor": "UNED, Universidad Nacional de Educación a Distancia",
+    "link": "https://www.uned.es/universidad/dam/inicio/estudios/formacion-permanente/cursos/pea-nutricion-y-dietetica/guia/PDF/Guia-de-Alimentacion-y-Salud---Embarazo.pdf",
+    "descripcion": "Guía académica sobre los requerimientos nutricionales durante el embarazo.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "articulo",
+    "titulo": "Alimentación y nutrición de la madre durante la lactancia",
+    "autor": "Reproducción Asistida ORG",
+    "link": "https://www.reproduccionasistida.org/alimentacion-lactancia/",
+    "descripcion": "Explica qué necesita comer la madre durante la lactancia para una leche de calidad.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "articulo",
+    "titulo": "Alimentación del lactante y del niño pequeño",
+    "autor": "Organización Mundial de la Salud (OMS)",
+    "link": "https://www.who.int/es/news-room/fact-sheets/detail/infant-and-young-child-feeding",
+    "descripcion": "Ficha oficial de la OMS sobre lactancia y alimentación complementaria.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "plantilla",
+    "titulo": "Menús para embarazadas semana a semana",
+    "autor": "Guiainfantil.com",
+    "link": "https://www.guiainfantil.com/articulos/alimentacion/embarazo/menus-para-embarazadas-semana-a-semana/",
+    "descripcion": "Menús elaborados por nutricionistas colaboradores, organizados por semanas de embarazo.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "articulo",
+    "titulo": "Alimentación en el embarazo",
+    "autor": "Mis Matronas",
+    "link": "https://mismatronas.com/wp-content/uploads/2020/02/Alimentaci%C3%B3n-en-el-embarazo.pdf",
+    "descripcion": "Documento elaborado por matronas con recomendaciones nutricionales por trimestre.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "articulo",
+    "titulo": "Nutrición y seguridad alimentaria durante el embarazo",
+    "autor": "UW Medicine (versión en español)",
+    "link": "https://www.uwmedicine.org/sites/stevie/files/2018-11/PatientResources_Forms_Nutrition-Food-Safety-Pregnancy-Spanish.pdf",
+    "descripcion": "Recomendaciones médicas sobre seguridad alimentaria y nutrición durante el embarazo.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "frase",
+    "titulo": "Comer bien en el embarazo no significa comer perfecto, significa comer variado.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para bajar la exigencia sobre la alimentación durante el embarazo.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "frase",
+    "titulo": "Tu cuerpo sabe pedir lo que necesita: aprendé a escucharlo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase sobre la conexión entre antojos y necesidades nutricionales reales.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "frase",
+    "titulo": "La leche materna se hace con lo que comés en general, no con un alimento mágico.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para desmitificar los 'alimentos milagro' para aumentar la producción de leche.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "guia",
+    "titulo": "Guía de Ejercicios Postparto",
+    "autor": "Suelo Pélvico Valencia",
+    "link": "https://www.suelopelvico.eu/guia-de-ejercicios-postparto/",
+    "descripcion": "Guía con una rutina progresiva de ejercicios seguros para retomar la actividad física tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "articulo",
+    "titulo": "Ejercicios de core para reducir la diástasis abdominal postparto",
+    "autor": "ABFIT.ES",
+    "link": "https://abfit.es/ejercicios-de-core-para-reducir-la-diastasis-abdominal-postparto/",
+    "descripcion": "Explica qué ejercicios de core son seguros para trabajar la diástasis abdominal.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "articulo",
+    "titulo": "Diástasis abdominal: ejercicios, qué hacer y qué evitar",
+    "autor": "bhealthy.es",
+    "link": "https://bhealthy.es/ejercicios-para-disminuir-la-diastasis-abdominal/",
+    "descripcion": "Lista de ejercicios recomendados y contraindicados en presencia de diástasis abdominal.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "articulo",
+    "titulo": "Postparto: los secretos para recuperar tu cuerpo, abdomen y suelo pélvico",
+    "autor": "Luce tu Embarazo",
+    "link": "https://lucetuembarazo.com/ejercicios-postparto/",
+    "descripcion": "Guía completa sobre cuándo y cómo retomar el ejercicio físico después del parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "articulo",
+    "titulo": "Ejercicios para el piso pélvico para después del parto",
+    "autor": "Kaiser Permanente en español",
+    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/health-encyclopedia/he.ejercicios-para-el-piso-p%C3%A9lvico-para-despu%C3%A9s-del-parto.acn5187",
+    "descripcion": "Ejercicios recomendados por profesionales médicos para fortalecer el piso pélvico en el postparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "libro",
+    "titulo": "Fisioterapia del suelo pélvico: manual para la prevención y el tratamiento en la mujer, el hombre y la infancia",
+    "autor": "Obra colectiva especializada en fisioterapia uroginecológica",
+    "link": "https://dialnet.unirioja.es/servlet/libro?codigo=970125",
+    "descripcion": "Manual de referencia técnica sobre fisioterapia del suelo pélvico aplicable al ejercicio postparto.",
+    "gratis": false
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "podcast",
+    "titulo": "Pélvium, tu podcast sobre suelo pélvico",
+    "autor": "Fisioterapeutas especializadas en suelo pélvico",
+    "link": "https://podcasts.apple.com/es/podcast/p%C3%A9lvium-tu-podcast-sobre-suelo-p%C3%A9lvico/id1470902032",
+    "descripcion": "Episodios sobre ejercicio seguro y recuperación física progresiva tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "frase",
+    "titulo": "Volver a moverte no es volver a como eras antes, es avanzar desde donde estás ahora.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para replantear la idea de 'recuperar el cuerpo de antes'.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "frase",
+    "titulo": "Antes de hacer abdominales, hacé las paces con tu abdomen.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase que invita a un regreso consciente y gradual al ejercicio postparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "frase",
+    "titulo": "El movimiento suave y constante recupera más que el esfuerzo intenso y esporádico.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase sobre la importancia de la constancia por sobre la intensidad en el postparto.",
+    "gratis": true
+  }
+]
