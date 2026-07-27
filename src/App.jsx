@@ -10,8 +10,15 @@ import FeatureListPanel from "./components/FeatureListPanel";
 import LandingPage from "./components/landing/LandingPage";
 import AuthPage from "./components/auth/AuthPage";
 import OnboardingForm from "./components/onboarding/OnboardingForm";
+import PartnerJoinScreen from "./components/partner/PartnerJoinScreen";
+import PartnerDashboard from "./components/partner/PartnerDashboard";
 import { getSession, logout, onAuthChange } from "./data/auth";
 import { loadPerfil } from "./data/perfil";
+import { isPartnerSession } from "./data/partner";
+
+function getPartnerInviteToken() {
+  return new URLSearchParams(window.location.search).get("partner_invite");
+}
 
 export default function App() {
   const [mode, setMode] = useState("loading");
@@ -25,26 +32,36 @@ export default function App() {
 
   const enterApp = async (session) => {
     setUser(session);
+    const esPartner = await isPartnerSession(session.id);
+    if (esPartner) {
+      setMode("partner-dashboard");
+      return;
+    }
     const perfil = await loadPerfil();
     setMode(perfil.onboardingCompleted ? "dashboard" : "onboarding");
   };
 
   useEffect(() => {
+    const inviteToken = getPartnerInviteToken();
+
     getSession().then((session) => {
-      if (session) {
+      if (session && !inviteToken) {
         enterApp(session);
-      } else {
-        setUser(null);
-        setMode("landing");
+        return;
       }
+      setUser(null);
+      setMode(inviteToken ? "partner-join" : "landing");
     });
 
     return onAuthChange((session) => {
       if (session) {
+        if (getPartnerInviteToken()) return;
         enterApp(session);
       } else {
         setUser(null);
-        setMode((current) => (current === "dashboard" || current === "onboarding" ? "landing" : current));
+        setMode((current) =>
+          ["dashboard", "onboarding", "partner-dashboard"].includes(current) ? "landing" : current
+        );
       }
     });
   }, []);
@@ -65,6 +82,25 @@ export default function App() {
 
   if (mode === "loading") {
     return null;
+  }
+
+  if (mode === "partner-join") {
+    return (
+      <PartnerJoinScreen
+        token={getPartnerInviteToken()}
+        onJoined={() => {
+          const params = new URLSearchParams(window.location.search);
+          params.delete("partner_invite");
+          const query = params.toString();
+          window.history.replaceState({}, "", window.location.pathname + (query ? `?${query}` : ""));
+          getSession().then((session) => session && enterApp(session));
+        }}
+      />
+    );
+  }
+
+  if (mode === "partner-dashboard") {
+    return <PartnerDashboard />;
   }
 
   if (mode === "landing") {

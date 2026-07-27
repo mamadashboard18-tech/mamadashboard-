@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   animoOpciones,
   escalaOpciones,
@@ -7,6 +7,7 @@ import {
 } from "../data/registroDiario";
 import { prompts, nuevoPromptAleatorio } from "../data/diarioLibre";
 import { catalogoSintomas as catalogoSintomasEmbarazo, iconoSintoma as iconoSintomaEmbarazo } from "../data/sintomas";
+import { getPartnerStatus, syncSintomasCompartidos } from "../data/partner";
 
 function formatFechaLarga(iso) {
   const d = new Date(iso + "T00:00:00");
@@ -33,6 +34,12 @@ export default function RegistroDiarioModal({
   const [archivos, setArchivos] = useState(existente?.archivos ?? []);
   const [mostrarMasSintomas, setMostrarMasSintomas] = useState(false);
   const [sintomaPropio, setSintomaPropio] = useState("");
+  const [hasPartner, setHasPartner] = useState(false);
+  const [compartirPartner, setCompartirPartner] = useState(existente?.compartirPartner ?? true);
+
+  useEffect(() => {
+    getPartnerStatus().then((status) => setHasPartner(status.hasPartner));
+  }, []);
 
   const toggleSintoma = (s) => {
     setSintomas((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
@@ -95,7 +102,11 @@ export default function RegistroDiarioModal({
       nota: nota.trim(),
       prompt: mostrarConsigna ? prompt : null,
       archivos,
+      compartirPartner,
     });
+    if (hasPartner) {
+      syncSintomasCompartidos(fecha, compartirPartner ? sintomas : []);
+    }
     onSaved?.();
     onClose();
   };
@@ -214,6 +225,18 @@ export default function RegistroDiarioModal({
             {mostrarMasSintomas ? "− Menos síntomas" : "+ Más síntomas"}
           </button>
         </div>
+
+        {hasPartner && (
+          <label className="flex items-center gap-2 mb-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={compartirPartner}
+              onChange={(e) => setCompartirPartner(e.target.checked)}
+              className="accent-rose-500 w-4 h-4"
+            />
+            <span className="text-xs text-gray-600">Compartir estos síntomas con tu partner 👥</span>
+          </label>
+        )}
 
         {mostrarMasSintomas && (
           <div className="bg-rose-50/60 border border-rose-100 rounded-xl p-3 mb-3">
