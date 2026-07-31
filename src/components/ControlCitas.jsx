@@ -53,7 +53,7 @@ export default function ControlCitas({ onBack }) {
   const [nuevaPregunta, setNuevaPregunta] = useState("");
   const [googleConnected, setGoogleConnected] = useState(false);
   const [googleEvents, setGoogleEvents] = useState([]);
-  const [googleMsg, setGoogleMsg] = useState(null);
+  const [showGoogleModal, setShowGoogleModal] = useState(false);
   const [rsvpMap, setRsvpMap] = useState({});
 
   useEffect(() => {
@@ -62,23 +62,13 @@ export default function ControlCitas({ onBack }) {
     setMarcadas(data.marcadas);
     setPropias(data.propias);
 
-    const params = new URLSearchParams(window.location.search);
-    const googleParam = params.get("google_calendar");
-    if (googleParam) {
-      setGoogleMsg(googleParam === "connected" ? "success" : "error");
-      params.delete("google_calendar");
-      const query = params.toString();
-      window.history.replaceState({}, "", window.location.pathname + (query ? `?${query}` : ""));
-    }
-
-    getGoogleCalendarStatus()
-      .then((s) => {
-        setGoogleConnected(s.connected);
-        if (!s.connected && !localStorage.getItem(GOOGLE_PROMPT_KEY)) {
-          localStorage.setItem(GOOGLE_PROMPT_KEY, "1");
-          connectGoogleCalendar();
-        }
-      });
+    getGoogleCalendarStatus().then((s) => {
+      setGoogleConnected(s.connected);
+      if (!s.connected && !localStorage.getItem(GOOGLE_PROMPT_KEY)) {
+        localStorage.setItem(GOOGLE_PROMPT_KEY, "1");
+        setShowGoogleModal(true);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -173,7 +163,7 @@ export default function ControlCitas({ onBack }) {
       createGoogleCalendarEvent(guardada).then((r) => {
         if (!r.created && (r.reason === "reauth_required" || r.reason === "not_connected")) {
           setGoogleConnected(false);
-          connectGoogleCalendar();
+          setShowGoogleModal(true);
         }
       });
     }
@@ -446,20 +436,6 @@ export default function ControlCitas({ onBack }) {
         </button>
       </div>
 
-      {googleMsg && (
-        <div
-          className={`mb-4 text-sm rounded-xl px-4 py-2 ${
-            googleMsg === "success"
-              ? "bg-green-50 text-green-700 border border-green-100"
-              : "bg-red-50 text-red-600 border border-red-100"
-          }`}
-        >
-          {googleMsg === "success"
-            ? "✓ Google Calendar conectado."
-            : "No se pudo conectar tu Google Calendar. Intentá de nuevo."}
-        </div>
-      )}
-
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start">
       <div>
       <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm max-w-xl">
@@ -626,6 +602,42 @@ export default function ControlCitas({ onBack }) {
             onClick={(e) => e.stopPropagation()}
           >
             {renderCitaForm(true)}
+          </div>
+        </div>
+      )}
+
+      {showGoogleModal && (
+        <div
+          className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 z-50"
+          onClick={() => setShowGoogleModal(false)}
+        >
+          <div
+            className="bg-white rounded-2xl border border-rose-100 p-6 shadow-lg w-full max-w-sm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-sm font-semibold text-gray-800 mb-2">
+              📅 Conectá tu calendario
+            </p>
+            <p className="text-sm text-gray-500 mb-5">
+              Iniciá sesión con Google para conectar con tu calendario y sincronizar tus citas automáticamente.
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  setShowGoogleModal(false);
+                  connectGoogleCalendar();
+                }}
+                className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+              >
+                Conectar
+              </button>
+              <button
+                onClick={() => setShowGoogleModal(false)}
+                className="text-sm text-gray-500 hover:text-rose-500"
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         </div>
       )}

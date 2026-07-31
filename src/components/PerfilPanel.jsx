@@ -6,6 +6,7 @@ import ContactosMedicos from "./ContactosMedicos";
 import PlanParto from "./PlanParto";
 import ChecklistHospital from "./ChecklistHospital";
 import PartnerManagement from "./partner/PartnerManagement";
+import PrivacidadPanel from "./PrivacidadPanel";
 import { emptyPerfil, loadPerfil, savePerfil } from "../data/perfil";
 import { totalWeeks } from "../data/seguimientoSemanal";
 import { emptyBebe, loadBebe, saveBebe } from "../data/bebe";
@@ -44,11 +45,16 @@ const seccionesTarjetas = [
     desc: "Invitalo para que vea tus citas, síntomas y reciba tus notas",
     view: "partner",
   },
+  {
+    icon: "🔒",
+    title: "Privacidad",
+    desc: "Conectá o desconectá Google Calendar y controlá tus datos compartidos",
+    view: "privacidad",
+  },
 ];
 
 const otrasTarjetas = [
   { icon: "🎧", title: "Preferencias de contenido", desc: "Tipos favoritos, idioma, notificaciones" },
-  { icon: "🔒", title: "Privacidad", desc: "Control total sobre tus datos compartidos" },
 ];
 
 const CANTIDAD_OPTIONS = [
@@ -95,6 +101,10 @@ export default function PerfilPanel({ onLogout }) {
 
   if (view === "partner") {
     return <PartnerManagement onBack={() => setView("list")} />;
+  }
+
+  if (view === "privacidad") {
+    return <PrivacidadPanel onBack={() => setView("list")} />;
   }
 
   const update = (field, value) => {
