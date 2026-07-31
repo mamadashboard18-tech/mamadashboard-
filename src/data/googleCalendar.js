@@ -32,3 +32,15 @@ export async function getGoogleCalendarEvents(dateISO) {
   if (!res.ok) return { connected: false, events: [] };
   return res.json();
 }
+
+export async function createGoogleCalendarEvent(cita) {
+  const headers = await authHeaders();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const res = await fetch("/api/google-calendar/create-event", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...headers },
+    body: JSON.stringify({ ...cita, timeZone }),
+  });
+  if (!res.ok) return { created: false };
+  return res.json();
+}

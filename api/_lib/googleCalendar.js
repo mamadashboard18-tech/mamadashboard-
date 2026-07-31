@@ -2,7 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
-const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.readonly";
+const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar.events";
 const STATE_TTL_MS = 10 * 60 * 1000;
 
 export function getRedirectUri(req) {

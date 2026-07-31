@@ -22,6 +22,7 @@ import {
   connectGoogleCalendar,
   disconnectGoogleCalendar,
   getGoogleCalendarEvents,
+  createGoogleCalendarEvent,
 } from "../data/googleCalendar";
 import { syncCitaCompartida, deleteCitaCompartida, fetchCitasRsvp } from "../data/partner";
 
@@ -46,7 +47,6 @@ export default function ControlCitas({ onBack }) {
   const [selectedDate, setSelectedDate] = useState(toISODate(today));
   const [form, setForm] = useState({ ...emptyForm, fecha: toISODate(today) });
   const [editingId, setEditingId] = useState(null);
-  const [saved, setSaved] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [marcadas, setMarcadas] = useState([]);
   const [propias, setPropias] = useState([]);
@@ -147,7 +147,6 @@ export default function ControlCitas({ onBack }) {
   const abrirFormNuevo = (fecha) => {
     setEditingId(null);
     setForm({ ...emptyForm, fecha: fecha || selectedDate });
-    setSaved(false);
     setShowForm(true);
   };
 
@@ -160,7 +159,6 @@ export default function ControlCitas({ onBack }) {
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-    setSaved(false);
   };
 
   const handleGuardar = () => {
@@ -177,9 +175,12 @@ export default function ControlCitas({ onBack }) {
     setCitas(next);
     saveCitas(next);
     syncCitaCompartida(guardada);
-    setSaved(true);
+    if (googleConnected) {
+      createGoogleCalendarEvent(guardada).catch(() => {});
+    }
     setSelectedDate(form.fecha);
     setEditingId(null);
+    setForm({ ...emptyForm, fecha: form.fecha });
     setShowForm(false);
   };
 
@@ -187,7 +188,6 @@ export default function ControlCitas({ onBack }) {
     setForm({ ...cita });
     setEditingId(cita.id);
     setSelectedDate(cita.fecha);
-    setSaved(false);
     setShowForm(true);
   };
 
@@ -400,24 +400,13 @@ export default function ControlCitas({ onBack }) {
         >
           {editingId ? "Guardar cambios" : "Agregar cita"}
         </button>
-        <button
-          onClick={() => (isModal ? setShowForm(false) : abrirFormNuevo())}
-          className="text-sm text-gray-500 hover:text-rose-500"
-        >
-          {isModal ? "Cancelar" : "Limpiar"}
-        </button>
-        {saved && (
-          <span className="text-sm text-green-600 flex items-center gap-2">
-            Guardado ✓
-            <a
-              href={buildGoogleCalendarUrl(form)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-rose-500 hover:underline"
-            >
-              📅 Agregar a Google Calendar
-            </a>
-          </span>
+        {isModal && (
+          <button
+            onClick={() => setShowForm(false)}
+            className="text-sm text-gray-500 hover:text-rose-500"
+          >
+            Cancelar
+          </button>
         )}
       </div>
     </>
