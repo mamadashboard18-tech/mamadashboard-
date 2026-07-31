@@ -78,6 +78,11 @@ export default async function handler(req, res) {
   );
 
   if (!gRes.ok) {
+    if (gRes.status === 401 || gRes.status === 403) {
+      await supabaseAdmin.from("google_calendar_tokens").delete().eq("user_id", user.id);
+      res.status(200).json({ created: false, reason: "reauth_required" });
+      return;
+    }
     res.status(200).json({ created: false, reason: "google_error" });
     return;
   }

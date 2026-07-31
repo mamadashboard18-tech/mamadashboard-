@@ -20,13 +20,13 @@ import {
 import {
   getGoogleCalendarStatus,
   connectGoogleCalendar,
-  disconnectGoogleCalendar,
   getGoogleCalendarEvents,
   createGoogleCalendarEvent,
 } from "../data/googleCalendar";
 import { syncCitaCompartida, deleteCitaCompartida, fetchCitasRsvp } from "../data/partner";
 
 const TIPO_PRIMERA_CONSULTA_POSTPARTO = "Primera consulta postparto";
+const GOOGLE_PROMPT_KEY = "mama-dashboard:google-calendar-prompted";
 
 const emptyForm = {
   fecha: "",
@@ -52,7 +52,6 @@ export default function ControlCitas({ onBack }) {
   const [propias, setPropias] = useState([]);
   const [nuevaPregunta, setNuevaPregunta] = useState("");
   const [googleConnected, setGoogleConnected] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(true);
   const [googleEvents, setGoogleEvents] = useState([]);
   const [googleMsg, setGoogleMsg] = useState(null);
   const [rsvpMap, setRsvpMap] = useState({});
@@ -73,8 +72,13 @@ export default function ControlCitas({ onBack }) {
     }
 
     getGoogleCalendarStatus()
-      .then((s) => setGoogleConnected(s.connected))
-      .finally(() => setGoogleLoading(false));
+      .then((s) => {
+        setGoogleConnected(s.connected);
+        if (!s.connected && !localStorage.getItem(GOOGLE_PROMPT_KEY)) {
+          localStorage.setItem(GOOGLE_PROMPT_KEY, "1");
+          connectGoogleCalendar();
+        }
+      });
   }, []);
 
   useEffect(() => {
@@ -84,16 +88,6 @@ export default function ControlCitas({ onBack }) {
     }
     getGoogleCalendarEvents(selectedDate).then((r) => setGoogleEvents(r.events || []));
   }, [googleConnected, selectedDate]);
-
-  const handleConectarGoogle = () => {
-    connectGoogleCalendar();
-  };
-
-  const handleDesconectarGoogle = async () => {
-    await disconnectGoogleCalendar();
-    setGoogleConnected(false);
-    setGoogleEvents([]);
-  };
 
   useEffect(() => {
     savePrimeraConsulta({ marcadas, propias });
@@ -176,7 +170,12 @@ export default function ControlCitas({ onBack }) {
     saveCitas(next);
     syncCitaCompartida(guardada);
     if (googleConnected) {
-      createGoogleCalendarEvent(guardada).catch(() => {});
+      createGoogleCalendarEvent(guardada).then((r) => {
+        if (!r.created && (r.reason === "reauth_required" || r.reason === "not_connected")) {
+          setGoogleConnected(false);
+          connectGoogleCalendar();
+        }
+      });
     }
     setSelectedDate(form.fecha);
     setEditingId(null);
@@ -458,29 +457,6 @@ export default function ControlCitas({ onBack }) {
           {googleMsg === "success"
             ? "✓ Google Calendar conectado."
             : "No se pudo conectar tu Google Calendar. Intentá de nuevo."}
-        </div>
-      )}
-
-      {!googleLoading && (
-        <div className="flex items-center gap-3 mb-6 text-sm">
-          {googleConnected ? (
-            <>
-              <span className="text-gray-600">📅 Google Calendar conectado</span>
-              <button
-                onClick={handleDesconectarGoogle}
-                className="text-gray-400 hover:text-red-500 hover:underline"
-              >
-                Desconectar
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={handleConectarGoogle}
-              className="text-rose-500 hover:underline"
-            >
-              📅 Conectar Google Calendar (para ver cuándo estás ocupada)
-            </button>
-          )}
         </div>
       )}
 
