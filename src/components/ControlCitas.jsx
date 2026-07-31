@@ -612,7 +612,7 @@ export default function ControlCitas({ onBack }) {
           onClick={() => setShowGoogleModal(false)}
         >
           <div
-            className="bg-white rounded-2xl border border-rose-100 p-6 shadow-lg w-full max-w-sm"
+            className="bg-white rounded-2xl border border-rose-100 p-6 shadow-lg w-full max-w-sm text-center"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-sm font-semibold text-gray-800 mb-2">
@@ -621,7 +621,13 @@ export default function ControlCitas({ onBack }) {
             <p className="text-sm text-gray-500 mb-5">
               Iniciá sesión con Google para conectar con tu calendario y sincronizar tus citas automáticamente.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => setShowGoogleModal(false)}
+                className="text-sm text-gray-500 hover:text-rose-500"
+              >
+                Cancelar
+              </button>
               <button
                 onClick={() => {
                   setShowGoogleModal(false);
@@ -630,12 +636,6 @@ export default function ControlCitas({ onBack }) {
                 className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
               >
                 Conectar
-              </button>
-              <button
-                onClick={() => setShowGoogleModal(false)}
-                className="text-sm text-gray-500 hover:text-rose-500"
-              >
-                Cancelar
               </button>
             </div>
           </div>
