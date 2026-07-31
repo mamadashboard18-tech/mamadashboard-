@@ -86,6 +86,30 @@ async function refreshAccessToken(refreshToken) {
   return res.json();
 }
 
+export async function listCalendarEvents(accessToken, timeMin, timeMax) {
+  const params = new URLSearchParams({
+    timeMin,
+    timeMax,
+    singleEvents: "true",
+    orderBy: "startTime",
+  });
+
+  const res = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?${params.toString()}`,
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (!res.ok) return null;
+
+  const data = await res.json();
+  return (data.items || []).map((ev) => ({
+    id: ev.id,
+    title: ev.summary || "(Sin título)",
+    start: ev.start?.dateTime || ev.start?.date,
+    end: ev.end?.dateTime || ev.end?.date,
+    allDay: !ev.start?.dateTime,
+  }));
+}
+
 export async function getValidAccessToken(userId, supabaseAdmin) {
   const { data: record } = await supabaseAdmin
     .from("google_calendar_tokens")

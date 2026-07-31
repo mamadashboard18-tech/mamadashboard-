@@ -10,7 +10,6 @@ import {
   getMonthGrid,
   weekdayLabels,
   monthLabels,
-  buildGoogleCalendarUrl,
 } from "../data/citas";
 import {
   preguntasSugeridas,
@@ -21,6 +20,7 @@ import {
   getGoogleCalendarStatus,
   connectGoogleCalendar,
   getGoogleCalendarEvents,
+  getUpcomingGoogleCalendarEvents,
   createGoogleCalendarEvent,
 } from "../data/googleCalendar";
 import { syncCitaCompartida, deleteCitaCompartida, fetchCitasRsvp } from "../data/partner";
@@ -53,6 +53,7 @@ export default function ControlCitas({ onBack }) {
   const [nuevaPregunta, setNuevaPregunta] = useState("");
   const [googleConnected, setGoogleConnected] = useState(false);
   const [googleEvents, setGoogleEvents] = useState([]);
+  const [googleUpcoming, setGoogleUpcoming] = useState([]);
   const [showGoogleModal, setShowGoogleModal] = useState(false);
   const [rsvpMap, setRsvpMap] = useState({});
 
@@ -78,6 +79,14 @@ export default function ControlCitas({ onBack }) {
     }
     getGoogleCalendarEvents(selectedDate).then((r) => setGoogleEvents(r.events || []));
   }, [googleConnected, selectedDate]);
+
+  useEffect(() => {
+    if (!googleConnected) {
+      setGoogleUpcoming([]);
+      return;
+    }
+    getUpcomingGoogleCalendarEvents().then((r) => setGoogleUpcoming(r.events || []));
+  }, [googleConnected]);
 
   useEffect(() => {
     savePrimeraConsulta({ marcadas, propias });
@@ -128,6 +137,30 @@ export default function ControlCitas({ onBack }) {
       .sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora));
   }, [citas, today]);
 
+  const agenda = useMemo(() => {
+    const todayISO = toISODate(today);
+    const appItems = proximas.map((c) => ({
+      id: `app-${c.id}`,
+      source: "app",
+      dateISO: c.fecha,
+      timeStr: c.hora || "",
+      cita: c,
+    }));
+    const googleItems = googleUpcoming
+      .map((ev) => {
+        const start = new Date(ev.start);
+        const dateISO = ev.allDay ? ev.start.slice(0, 10) : toISODate(start);
+        const timeStr = ev.allDay
+          ? ""
+          : `${String(start.getHours()).padStart(2, "0")}:${String(start.getMinutes()).padStart(2, "0")}`;
+        return { id: `google-${ev.id}`, source: "google", dateISO, timeStr, title: ev.title };
+      })
+      .filter((ev) => ev.dateISO >= todayISO);
+    return [...appItems, ...googleItems].sort((a, b) =>
+      (a.dateISO + (a.timeStr || "00:00")).localeCompare(b.dateISO + (b.timeStr || "00:00"))
+    );
+  }, [proximas, googleUpcoming, today]);
+
   const abrirFormNuevo = (fecha) => {
     setEditingId(null);
     setForm({ ...emptyForm, fecha: fecha || selectedDate });
@@ -164,6 +197,8 @@ export default function ControlCitas({ onBack }) {
         if (!r.created && (r.reason === "reauth_required" || r.reason === "not_connected")) {
           setGoogleConnected(false);
           setShowGoogleModal(true);
+        } else if (r.created) {
+          getUpcomingGoogleCalendarEvents().then((res) => setGoogleUpcoming(res.events || []));
         }
       });
     }
@@ -524,55 +559,75 @@ export default function ControlCitas({ onBack }) {
         )}
 
         <div className="mt-5">
-          <p className="text-sm font-medium text-gray-700 mb-2">Próximas citas</p>
-          {proximas.length === 0 && (
-            <p className="text-sm text-gray-400">No tenés citas agendadas todavía.</p>
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm font-medium text-gray-700">Tu agenda</p>
+            {googleConnected && (
+              <div className="flex items-center gap-3 text-xs text-gray-400">
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-rose-400" /> Mamá App
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-blue-400" /> Google
+                </span>
+              </div>
+            )}
+          </div>
+          {agenda.length === 0 && (
+            <p className="text-sm text-gray-400">No tenés citas ni eventos agendados todavía.</p>
           )}
           <ul className="space-y-2">
-            {proximas.map((c) => (
-              <li
-                key={c.id}
-                className="flex items-center justify-between bg-rose-50 border border-rose-100 rounded-xl px-3 py-2"
-              >
-                <div>
-                  <p className="text-sm font-medium text-gray-800">
-                    {c.tipo} {c.compartirPartner && <span title="Compartida con partner">👥</span>}
-                    {c.compartirPartner && rsvpMap[c.id] === "puede" && (
-                      <span title="Tu partner puede ir"> 👍</span>
-                    )}
-                    {c.compartirPartner && rsvpMap[c.id] === "no_puede" && (
-                      <span title="Tu partner no puede ir"> 👎</span>
-                    )}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {c.fecha} {c.hora && `· ${c.hora}`} {c.lugar && `· ${c.lugar}`}
-                  </p>
-                </div>
-                <div className="flex gap-2 text-xs">
-                  <a
-                    href={buildGoogleCalendarUrl(c)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-rose-500 hover:underline whitespace-nowrap"
-                    title="Agregar a Google Calendar"
-                  >
-                    📅 Google
-                  </a>
-                  <button
-                    onClick={() => handleEditar(c)}
-                    className="text-rose-500 hover:underline"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleEliminar(c.id)}
-                    className="text-gray-400 hover:text-red-500 hover:underline"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </li>
-            ))}
+            {agenda.map((item) =>
+              item.source === "app" ? (
+                <li
+                  key={item.id}
+                  className="flex items-center justify-between bg-rose-50 border border-rose-100 rounded-xl px-3 py-2"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">
+                      {item.cita.tipo}{" "}
+                      {item.cita.compartirPartner && <span title="Compartida con partner">👥</span>}
+                      {item.cita.compartirPartner && rsvpMap[item.cita.id] === "puede" && (
+                        <span title="Tu partner puede ir"> 👍</span>
+                      )}
+                      {item.cita.compartirPartner && rsvpMap[item.cita.id] === "no_puede" && (
+                        <span title="Tu partner no puede ir"> 👎</span>
+                      )}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {item.cita.fecha} {item.cita.hora && `· ${item.cita.hora}`}{" "}
+                      {item.cita.lugar && `· ${item.cita.lugar}`}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 text-xs">
+                    <button
+                      onClick={() => handleEditar(item.cita)}
+                      className="text-rose-500 hover:underline"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleEliminar(item.cita.id)}
+                      className="text-gray-400 hover:text-red-500 hover:underline"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
+              ) : (
+                <li
+                  key={item.id}
+                  className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-xl px-3 py-2"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-blue-900">{item.title}</p>
+                    <p className="text-xs text-blue-500">
+                      {item.dateISO} {item.timeStr && `· ${item.timeStr}`}
+                    </p>
+                  </div>
+                  <span className="text-xs text-blue-400 whitespace-nowrap">Google Calendar</span>
+                </li>
+              )
+            )}
           </ul>
         </div>
       </div>

@@ -33,6 +33,13 @@ export async function getGoogleCalendarEvents(dateISO) {
   return res.json();
 }
 
+export async function getUpcomingGoogleCalendarEvents() {
+  const headers = await authHeaders();
+  const res = await fetch("/api/google-calendar/upcoming", { headers });
+  if (!res.ok) return { connected: false, events: [] };
+  return res.json();
+}
+
 export async function createGoogleCalendarEvent(cita) {
   const headers = await authHeaders();
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
