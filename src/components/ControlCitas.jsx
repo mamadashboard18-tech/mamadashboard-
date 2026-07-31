@@ -161,6 +161,11 @@ export default function ControlCitas({ onBack }) {
     );
   }, [proximas, googleUpcoming, today]);
 
+  const agendaHoy = useMemo(() => {
+    const todayISO = toISODate(today);
+    return agenda.filter((item) => item.dateISO === todayISO);
+  }, [agenda, today]);
+
   const abrirFormNuevo = (fecha) => {
     setEditingId(null);
     setForm({ ...emptyForm, fecha: fecha || selectedDate });
@@ -237,6 +242,54 @@ export default function ControlCitas({ onBack }) {
   };
 
   const todayISO = toISODate(today);
+
+  const renderAgendaItem = (item) =>
+    item.source === "app" ? (
+      <li
+        key={item.id}
+        className="flex items-center justify-between bg-rose-50 border border-rose-100 rounded-xl px-3 py-2"
+      >
+        <div>
+          <p className="text-sm font-medium text-gray-800">
+            {item.cita.tipo}{" "}
+            {item.cita.compartirPartner && <span title="Compartida con partner">👥</span>}
+            {item.cita.compartirPartner && rsvpMap[item.cita.id] === "puede" && (
+              <span title="Tu partner puede ir"> 👍</span>
+            )}
+            {item.cita.compartirPartner && rsvpMap[item.cita.id] === "no_puede" && (
+              <span title="Tu partner no puede ir"> 👎</span>
+            )}
+          </p>
+          <p className="text-xs text-gray-500">
+            {item.cita.fecha} {item.cita.hora && `· ${item.cita.hora}`}{" "}
+            {item.cita.lugar && `· ${item.cita.lugar}`}
+          </p>
+        </div>
+        <div className="flex gap-2 text-xs">
+          <button onClick={() => handleEditar(item.cita)} className="text-rose-500 hover:underline">
+            Editar
+          </button>
+          <button
+            onClick={() => handleEliminar(item.cita.id)}
+            className="text-gray-400 hover:text-red-500 hover:underline"
+          >
+            Eliminar
+          </button>
+        </div>
+      </li>
+    ) : (
+      <li
+        key={item.id}
+        className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-xl px-3 py-2"
+      >
+        <div>
+          <p className="text-sm font-medium text-blue-900">{item.title}</p>
+          <p className="text-xs text-blue-500">
+            {item.dateISO} {item.timeStr && `· ${item.timeStr}`}
+          </p>
+        </div>
+      </li>
+    );
 
   const renderCitaForm = (isModal) => (
     <>
@@ -560,7 +613,7 @@ export default function ControlCitas({ onBack }) {
 
         <div className="mt-5">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium text-gray-700">Tu agenda</p>
+            <p className="text-sm font-medium text-gray-700">Hoy</p>
             {googleConnected && (
               <div className="flex items-center gap-3 text-xs text-gray-400">
                 <span className="flex items-center gap-1">
@@ -572,63 +625,20 @@ export default function ControlCitas({ onBack }) {
               </div>
             )}
           </div>
-          {agenda.length === 0 && (
-            <p className="text-sm text-gray-400">No tenés citas ni eventos agendados todavía.</p>
+          {agendaHoy.length === 0 ? (
+            <p className="text-sm text-gray-400">No tenés nada agendado para hoy.</p>
+          ) : (
+            <ul className="space-y-2">{agendaHoy.map((item) => renderAgendaItem(item))}</ul>
           )}
-          <ul className="space-y-2">
-            {agenda.map((item) =>
-              item.source === "app" ? (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between bg-rose-50 border border-rose-100 rounded-xl px-3 py-2"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">
-                      {item.cita.tipo}{" "}
-                      {item.cita.compartirPartner && <span title="Compartida con partner">👥</span>}
-                      {item.cita.compartirPartner && rsvpMap[item.cita.id] === "puede" && (
-                        <span title="Tu partner puede ir"> 👍</span>
-                      )}
-                      {item.cita.compartirPartner && rsvpMap[item.cita.id] === "no_puede" && (
-                        <span title="Tu partner no puede ir"> 👎</span>
-                      )}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {item.cita.fecha} {item.cita.hora && `· ${item.cita.hora}`}{" "}
-                      {item.cita.lugar && `· ${item.cita.lugar}`}
-                    </p>
-                  </div>
-                  <div className="flex gap-2 text-xs">
-                    <button
-                      onClick={() => handleEditar(item.cita)}
-                      className="text-rose-500 hover:underline"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleEliminar(item.cita.id)}
-                      className="text-gray-400 hover:text-red-500 hover:underline"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </li>
-              ) : (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-xl px-3 py-2"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-blue-900">{item.title}</p>
-                    <p className="text-xs text-blue-500">
-                      {item.dateISO} {item.timeStr && `· ${item.timeStr}`}
-                    </p>
-                  </div>
-                  <span className="text-xs text-blue-400 whitespace-nowrap">Google Calendar</span>
-                </li>
-              )
-            )}
-          </ul>
+        </div>
+
+        <div className="mt-5">
+          <p className="text-sm font-medium text-gray-700 mb-2">Próxima cita</p>
+          {agenda.length === 0 ? (
+            <p className="text-sm text-gray-400">No tenés citas ni eventos agendados todavía.</p>
+          ) : (
+            <ul className="space-y-2">{renderAgendaItem(agenda[0])}</ul>
+          )}
         </div>
       </div>
 
