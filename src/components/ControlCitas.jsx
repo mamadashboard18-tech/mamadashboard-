@@ -166,6 +166,11 @@ export default function ControlCitas({ onBack }) {
     return agenda.filter((item) => item.dateISO === todayISO);
   }, [agenda, today]);
 
+  const proximaCita = useMemo(() => {
+    const todayISO = toISODate(today);
+    return agenda.find((item) => item.dateISO > todayISO) || null;
+  }, [agenda, today]);
+
   const abrirFormNuevo = (fecha) => {
     setEditingId(null);
     setForm({ ...emptyForm, fecha: fecha || selectedDate });
@@ -634,10 +639,10 @@ export default function ControlCitas({ onBack }) {
 
         <div className="mt-5">
           <p className="text-sm font-medium text-gray-700 mb-2">Próxima cita</p>
-          {agenda.length === 0 ? (
-            <p className="text-sm text-gray-400">No tenés citas ni eventos agendados todavía.</p>
+          {proximaCita === null ? (
+            <p className="text-sm text-gray-400">No tenés más citas ni eventos agendados.</p>
           ) : (
-            <ul className="space-y-2">{renderAgendaItem(agenda[0])}</ul>
+            <ul className="space-y-2">{renderAgendaItem(proximaCita)}</ul>
           )}
         </div>
       </div>
