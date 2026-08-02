@@ -197,15 +197,8 @@ export async function fetchPartnerData() {
 }
 
 export async function sendRsvp(citaId, respuesta) {
-  return authFetch("/api/partner/rsvp", {
+  return authFetch("/api/partner/data", {
     method: "POST",
     body: JSON.stringify({ citaId, respuesta }),
-  });
-}
-
-export async function marcarNotaLeida(notaId) {
-  return authFetch("/api/partner/mark-note-read", {
-    method: "POST",
-    body: JSON.stringify({ notaId }),
   });
 }

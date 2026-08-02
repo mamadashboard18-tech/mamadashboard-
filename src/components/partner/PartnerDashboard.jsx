@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchPartnerData, sendRsvp, marcarNotaLeida } from "../../data/partner";
+import { fetchPartnerData, sendRsvp } from "../../data/partner";
 import { logout } from "../../data/auth";
 import PartnerSidebar from "./PartnerSidebar";
 import PartnerInicio from "./PartnerInicio";
@@ -34,14 +34,6 @@ export default function PartnerDashboard() {
     await sendRsvp(citaId, respuesta);
   };
 
-  const handleMarcarNotaLeida = async (notaId) => {
-    setData((prev) => ({
-      ...prev,
-      notas: prev.notas.map((n) => (n.id === notaId ? { ...n, leida_at: new Date().toISOString() } : n)),
-    }));
-    await marcarNotaLeida(notaId);
-  };
-
   if (loading) return null;
 
   if (error) {
@@ -69,7 +61,7 @@ export default function PartnerDashboard() {
         ) : active === "multimedia" ? (
           <PartnerMultimedia />
         ) : (
-          <PartnerInicio data={data} onMarcarNotaLeida={handleMarcarNotaLeida} />
+          <PartnerInicio data={data} />
         )}
       </main>
     </div>

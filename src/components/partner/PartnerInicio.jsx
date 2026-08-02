@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { iconoSintoma, consejoPartnerSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
 
@@ -7,18 +6,7 @@ function formatFecha(iso) {
   return d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
 }
 
-export default function PartnerInicio({ data, onMarcarNotaLeida }) {
-  const marcadas = useRef(new Set());
-
-  useEffect(() => {
-    data.notas.forEach((nota) => {
-      if (!nota.leida_at && !marcadas.current.has(nota.id)) {
-        marcadas.current.add(nota.id);
-        onMarcarNotaLeida(nota.id);
-      }
-    });
-  }, [data.notas, onMarcarNotaLeida]);
-
+export default function PartnerInicio({ data }) {
   const info = data.semanaActual ? getWeekData(data.semanaActual) : null;
 
   return (
