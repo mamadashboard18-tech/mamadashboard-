@@ -51,7 +51,7 @@ export default async function handler(req, res) {
       .order("fecha", { ascending: false }),
     supabaseAdmin
       .from("partner_notes")
-      .select("id, texto, created_at")
+      .select("id, texto, created_at, leida_at")
       .eq("mother_id", link.mother_id)
       .order("created_at", { ascending: false })
       .limit(20),

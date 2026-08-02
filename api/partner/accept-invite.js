@@ -4,6 +4,18 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+async function findUserByEmail(supabaseAdmin, email) {
+  const perPage = 1000;
+  for (let page = 1; page <= 20; page++) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
+    if (error || !data?.users?.length) return null;
+    const match = data.users.find((u) => u.email?.toLowerCase() === email);
+    if (match) return match;
+    if (data.users.length < perPage) return null;
+  }
+  return null;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Método no permitido." });
@@ -52,14 +64,53 @@ export default async function handler(req, res) {
     user_metadata: { nombre: nombre.trim(), rol: "partner" },
   });
 
+  let partnerUserId;
+
   if (createError) {
-    res.status(400).json({ error: createError.message });
-    return;
+    const yaRegistrado = /already.*registered|already.*exists/i.test(createError.message);
+    if (!yaRegistrado) {
+      res.status(400).json({ error: "No se pudo crear la cuenta. Intentá de nuevo." });
+      return;
+    }
+
+    // El email ya existe en Auth: puede ser un ex-partner (removido previamente) que vuelve
+    // a ser invitado con el mismo email. Si no está vinculado a ninguna mamá, reusamos la
+    // cuenta en vez de bloquear la invitación.
+    const existingUser = await findUserByEmail(supabaseAdmin, normalizedEmail);
+    if (!existingUser) {
+      res.status(400).json({ error: "Ya existe una cuenta con ese email. Usá otro email para el partner." });
+      return;
+    }
+
+    const { data: yaEsPartnerActivo } = await supabaseAdmin
+      .from("partners")
+      .select("mother_id")
+      .eq("partner_user_id", existingUser.id)
+      .maybeSingle();
+
+    if (yaEsPartnerActivo) {
+      res.status(400).json({ error: "Ese email ya está vinculado como partner de otra cuenta. Usá otro email." });
+      return;
+    }
+
+    const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+      password,
+      user_metadata: { nombre: nombre.trim(), rol: "partner" },
+    });
+
+    if (updateError) {
+      res.status(400).json({ error: "No se pudo crear la cuenta. Intentá de nuevo." });
+      return;
+    }
+
+    partnerUserId = existingUser.id;
+  } else {
+    partnerUserId = created.user.id;
   }
 
   const { error: partnerError } = await supabaseAdmin.from("partners").insert({
     mother_id: invite.mother_id,
-    partner_user_id: created.user.id,
+    partner_user_id: partnerUserId,
     nombre: nombre.trim(),
     email: normalizedEmail,
   });

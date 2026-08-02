@@ -5,7 +5,8 @@ const VENTANA_MIN_MINUTOS = 20;
 const VENTANA_MAX_MINUTOS = 40;
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
+  // Vercel Cron llama a este endpoint con GET; también aceptamos POST para disparos manuales.
+  if (req.method !== "GET" && req.method !== "POST") {
     res.status(405).json({ error: "Método no permitido." });
     return;
   }
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
 
   const { data: citas, error } = await supabaseAdmin
     .from("citas_compartidas")
-    .select("id, mother_id, fecha, hora, tipo, medico, lugar")
+    .select("id, mother_id, fecha, hora, tipo, medico, lugar, partner_rsvp")
     .is("reminder_sent_at", null)
     .not("hora", "is", null);
 

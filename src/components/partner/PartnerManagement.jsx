@@ -42,10 +42,14 @@ export default function PartnerManagement({ onBack }) {
     }
   };
 
-  const handleCopiar = () => {
-    navigator.clipboard.writeText(status.pendingInvite.url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopiar = async () => {
+    try {
+      await navigator.clipboard.writeText(status.pendingInvite.url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError("No se pudo copiar el link. Seleccionalo y copialo manualmente.");
+    }
   };
 
   const handleRevocar = async () => {
@@ -54,6 +58,9 @@ export default function PartnerManagement({ onBack }) {
   };
 
   const handleQuitarPartner = async () => {
+    if (!window.confirm(`¿Quitar a ${status.nombre} como partner? Va a dejar de ver tus citas, síntomas y notas.`)) {
+      return;
+    }
     await removePartner();
     refresh();
   };
@@ -136,6 +143,7 @@ export default function PartnerManagement({ onBack }) {
               >
                 Revocar este link
               </button>
+              {error && <p className="text-sm text-red-500 mt-3">{error}</p>}
             </div>
           ) : (
             <div>
@@ -183,9 +191,14 @@ export default function PartnerManagement({ onBack }) {
                 {notas.map((n) => (
                   <li
                     key={n.id}
-                    className="bg-rose-50 border border-rose-100 rounded-xl px-3 py-2 text-sm text-gray-700"
+                    className="bg-rose-50 border border-rose-100 rounded-xl px-3 py-2 text-sm text-gray-700 flex items-center justify-between gap-3"
                   >
-                    {n.texto}
+                    <span>{n.texto}</span>
+                    <span
+                      className={`text-xs whitespace-nowrap ${n.leida_at ? "text-gray-400" : "text-rose-500 font-medium"}`}
+                    >
+                      {n.leida_at ? "Leída ✓" : "No leída"}
+                    </span>
                   </li>
                 ))}
               </ul>

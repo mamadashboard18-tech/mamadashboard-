@@ -14,18 +14,31 @@ export async function sendCitaReminderEmail(to, cita) {
   const detalleMedico = cita.medico ? ` con ${cita.medico}` : "";
   const detalleLugar = cita.lugar ? ` en ${cita.lugar}` : "";
 
-  const { error } = await resend.emails.send({
-    from,
-    to: [to],
-    subject: `En 30 min: ${cita.tipo} de ${cita.motherNombre}`,
-    html: `
+  const noAsiste = cita.partner_rsvp === "no_puede";
+
+  const html = noAsiste
+    ? `
+      <p>Hola,</p>
+      <p><strong>${cita.motherNombre}</strong> tiene en 30 minutos: <strong>${cita.tipo}</strong>${detalleMedico}${detalleLugar}, a las ${cita.hora}. Marcaste que no ibas a poder ir.</p>
+      <p>Acordate de preguntarle más tarde cómo le fue 💛</p>
+      <p><strong>De qué se trataba:</strong> ${info.descripcion}</p>
+    `
+    : `
       <p>Hola,</p>
       <p><strong>${cita.motherNombre}</strong> tiene una cita en 30 minutos: <strong>${cita.tipo}</strong>${detalleMedico}${detalleLugar}, a las ${cita.hora}.</p>
       <p>Es un buen momento para desearle buena suerte 💛</p>
       <p><strong>Qué se va a realizar:</strong> ${info.descripcion}</p>
       <p><strong>Preguntas que podrías hacer si la acompañás:</strong></p>
       <ul>${preguntasHtml}</ul>
-    `,
+    `;
+
+  const { error } = await resend.emails.send({
+    from,
+    to: [to],
+    subject: noAsiste
+      ? `En 30 min: ${cita.tipo} de ${cita.motherNombre} (no vas a poder ir)`
+      : `En 30 min: ${cita.tipo} de ${cita.motherNombre}`,
+    html,
   });
 
   if (error) {

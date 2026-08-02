@@ -39,7 +39,7 @@ export default function PartnerJoinScreen({ token, onJoined }) {
             notas que te quiera mandar.
           </p>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div className="mb-3">
               <label className="text-xs text-gray-500 block mb-1">Tu nombre</label>
               <input
@@ -48,6 +48,8 @@ export default function PartnerJoinScreen({ token, onJoined }) {
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="Tu nombre"
                 className={inputClass}
+                autoComplete="off"
+                name="partner-nombre"
               />
             </div>
 
@@ -59,6 +61,8 @@ export default function PartnerJoinScreen({ token, onJoined }) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
                 className={inputClass}
+                autoComplete="off"
+                name="partner-email"
               />
               <p className="text-xs text-gray-400 mt-1">Acá te van a llegar los avisos y recordatorios.</p>
             </div>
@@ -71,6 +75,8 @@ export default function PartnerJoinScreen({ token, onJoined }) {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className={inputClass}
+                autoComplete="new-password"
+                name="partner-password"
               />
               <p className="text-xs text-gray-400 mt-1">Al menos 6 caracteres.</p>
             </div>

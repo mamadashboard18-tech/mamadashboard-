@@ -100,7 +100,7 @@ export async function listPartnerNotes() {
   if (!userData.user) return [];
   const { data } = await supabase
     .from("partner_notes")
-    .select("id, texto, created_at")
+    .select("id, texto, created_at, leida_at")
     .eq("mother_id", userData.user.id)
     .order("created_at", { ascending: false })
     .limit(20);
@@ -200,5 +200,12 @@ export async function sendRsvp(citaId, respuesta) {
   return authFetch("/api/partner/rsvp", {
     method: "POST",
     body: JSON.stringify({ citaId, respuesta }),
+  });
+}
+
+export async function marcarNotaLeida(notaId) {
+  return authFetch("/api/partner/mark-note-read", {
+    method: "POST",
+    body: JSON.stringify({ notaId }),
   });
 }

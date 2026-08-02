@@ -256,19 +256,22 @@ export default function ControlCitas({ onBack }) {
       >
         <div>
           <p className="text-sm font-medium text-gray-800">
-            {item.cita.tipo}{" "}
-            {item.cita.compartirPartner && <span title="Compartida con partner">👥</span>}
-            {item.cita.compartirPartner && rsvpMap[item.cita.id] === "puede" && (
-              <span title="Tu partner puede ir"> 👍</span>
-            )}
-            {item.cita.compartirPartner && rsvpMap[item.cita.id] === "no_puede" && (
-              <span title="Tu partner no puede ir"> 👎</span>
-            )}
+            {item.cita.tipo} {item.cita.compartirPartner && <span title="Compartida con partner">👥</span>}
           </p>
           <p className="text-xs text-gray-500">
             {item.cita.fecha} {item.cita.hora && `· ${item.cita.hora}`}{" "}
             {item.cita.lugar && `· ${item.cita.lugar}`}
           </p>
+          {item.cita.compartirPartner && rsvpMap[item.cita.id] === "puede" && (
+            <span className="inline-block mt-1.5 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5">
+              👍 Tu partner va a poder ir
+            </span>
+          )}
+          {item.cita.compartirPartner && rsvpMap[item.cita.id] === "no_puede" && (
+            <span className="inline-block mt-1.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
+              👎 Tu partner no va a poder ir
+            </span>
+          )}
         </div>
         <div className="flex gap-2 text-xs">
           <button onClick={() => handleEditar(item.cita)} className="text-rose-500 hover:underline">
