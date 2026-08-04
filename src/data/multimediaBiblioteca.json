@@ -109,15 +109,6 @@
   },
   {
     "categoria": "preparacion_parto",
-    "tipo": "guia",
-    "titulo": "Clases prenatales",
-    "autor": "Kaiser Permanente en español",
-    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/healtharticle.prenatal-classes",
-    "descripcion": "Qué esperar de las clases prenatales y cómo elegir la más adecuada para vos.",
-    "gratis": true
-  },
-  {
-    "categoria": "preparacion_parto",
     "tipo": "video",
     "titulo": "Cómo respirar el día del parto",
     "autor": "Actualidad Matrona",
@@ -142,15 +133,6 @@
     "link": "https://partopositivo.org/producto/libro-de-hipnoparto/",
     "descripcion": "Libro con 21 capítulos y ejercicios prácticos, basado en evidencia, para prepararse para un parto positivo.",
     "gratis": false
-  },
-  {
-    "categoria": "preparacion_parto",
-    "tipo": "podcast",
-    "titulo": "Tu Mejor Parto",
-    "autor": "myBabymyBirth®",
-    "link": "https://www.mybabymybirth.com/podcast",
-    "descripcion": "Podcast con matronas, obstetras, doulas y psicólogas sobre cómo prepararse para el parto.",
-    "gratis": true
   },
   {
     "categoria": "preparacion_parto",
@@ -316,15 +298,6 @@
   },
   {
     "categoria": "recuperacion_fisica_postparto",
-    "tipo": "articulo",
-    "titulo": "Ejercicios para el piso pélvico para después del parto",
-    "autor": "Kaiser Permanente en español",
-    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/health-encyclopedia/he.ejercicios-para-el-piso-p%C3%A9lvico-para-despu%C3%A9s-del-parto.acn5187",
-    "descripcion": "Recomendaciones médicas sobre ejercicios de suelo pélvico recomendados tras el parto.",
-    "gratis": true
-  },
-  {
-    "categoria": "recuperacion_fisica_postparto",
     "tipo": "podcast",
     "titulo": "Pélvium, tu podcast sobre suelo pélvico",
     "autor": "Fisioterapeutas especializadas en suelo pélvico",
@@ -339,15 +312,6 @@
     "autor": "En Suelo Firme (fisioterapia especializada)",
     "link": "https://www.ensuelofirme.com/diastasis-abdominal-postparto/",
     "descripcion": "Explica qué es la diástasis abdominal y cómo abordarla de forma segura tras el parto.",
-    "gratis": true
-  },
-  {
-    "categoria": "recuperacion_fisica_postparto",
-    "tipo": "plantilla",
-    "titulo": "Posparto: ahora que ha dado a luz (folleto de recuperación)",
-    "autor": "UCSF Women's Health (versión en español)",
-    "link": "https://womenshealth.ucsf.edu/sites/womenshealth.ucsf.edu/files/spanish_pp_booklet.pdf",
-    "descripcion": "Folleto informativo con pautas de autocuidado físico para las primeras semanas de posparto.",
     "gratis": true
   },
   {
@@ -879,15 +843,6 @@
     "autor": "Luce tu Embarazo",
     "link": "https://lucetuembarazo.com/ejercicios-postparto/",
     "descripcion": "Guía completa sobre cuándo y cómo retomar el ejercicio físico después del parto.",
-    "gratis": true
-  },
-  {
-    "categoria": "ejercicio_postparto",
-    "tipo": "articulo",
-    "titulo": "Ejercicios para el piso pélvico para después del parto",
-    "autor": "Kaiser Permanente en español",
-    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/health-encyclopedia/he.ejercicios-para-el-piso-p%C3%A9lvico-para-despu%C3%A9s-del-parto.acn5187",
-    "descripcion": "Ejercicios recomendados por profesionales médicos para fortalecer el piso pélvico en el postparto.",
     "gratis": true
   },
   {

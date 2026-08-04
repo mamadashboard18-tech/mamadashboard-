@@ -852,16 +852,6 @@
   {
     "semana": 29,
     "etapa": "embarazo",
-    "tipo": "podcast",
-    "titulo": "Tu Mejor Parto",
-    "autor": "myBabymyBirth®",
-    "link": "https://www.mybabymybirth.com/podcast",
-    "descripcion": "Podcast con matronas, obstetras y doulas sobre cómo prepararse física y emocionalmente para el parto.",
-    "gratis": true
-  },
-  {
-    "semana": 29,
-    "etapa": "embarazo",
     "tipo": "frase",
     "titulo": "No hace falta tenerlo todo listo, hace falta estar en paz con lo que sí podés controlar.",
     "autor": "Anónimo",
@@ -877,16 +867,6 @@
     "autor": "KidsHealth - Hospital Sant Joan de Déu",
     "link": "https://kidshealth.org/HospitalSantJoandeDeu/es/parents/week30.html",
     "descripcion": "Calendario semanal ilustrado con el desarrollo del bebé y los cambios en el cuerpo de la madre en la semana 30 de gestación.",
-    "gratis": true
-  },
-  {
-    "semana": 30,
-    "etapa": "embarazo",
-    "tipo": "podcast",
-    "titulo": "Tu Mejor Parto",
-    "autor": "myBabymyBirth®",
-    "link": "https://www.mybabymybirth.com/podcast",
-    "descripcion": "Podcast con matronas, obstetras y doulas sobre cómo prepararse física y emocionalmente para el parto.",
     "gratis": true
   },
   {
@@ -912,16 +892,6 @@
   {
     "semana": 31,
     "etapa": "embarazo",
-    "tipo": "podcast",
-    "titulo": "Tu Mejor Parto",
-    "autor": "myBabymyBirth®",
-    "link": "https://www.mybabymybirth.com/podcast",
-    "descripcion": "Podcast con matronas, obstetras y doulas sobre cómo prepararse física y emocionalmente para el parto.",
-    "gratis": true
-  },
-  {
-    "semana": 31,
-    "etapa": "embarazo",
     "tipo": "frase",
     "titulo": "No hace falta tenerlo todo listo, hace falta estar en paz con lo que sí podés controlar.",
     "autor": "Anónimo",
@@ -937,16 +907,6 @@
     "autor": "KidsHealth - Hospital Sant Joan de Déu",
     "link": "https://kidshealth.org/HospitalSantJoandeDeu/es/parents/week32.html",
     "descripcion": "Calendario semanal ilustrado con el desarrollo del bebé y los cambios en el cuerpo de la madre en la semana 32 de gestación.",
-    "gratis": true
-  },
-  {
-    "semana": 32,
-    "etapa": "embarazo",
-    "tipo": "podcast",
-    "titulo": "Tu Mejor Parto",
-    "autor": "myBabymyBirth®",
-    "link": "https://www.mybabymybirth.com/podcast",
-    "descripcion": "Podcast con matronas, obstetras y doulas sobre cómo prepararse física y emocionalmente para el parto.",
     "gratis": true
   },
   {
