@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { acceptInvite } from "../../data/partner";
+import { PasswordInput, PasswordChecklist, PASSWORD_RULES } from "../auth/PasswordInput";
 
 const inputClass =
   "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
@@ -14,6 +15,12 @@ export default function PartnerJoinScreen({ token, onJoined }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (!PASSWORD_RULES.every((rule) => rule.test(password))) {
+      setError("La contraseña no cumple con todos los requisitos.");
+      return;
+    }
+
     setLoading(true);
     const result = await acceptInvite({ token, nombre, email, password });
     setLoading(false);
@@ -69,16 +76,14 @@ export default function PartnerJoinScreen({ token, onJoined }) {
 
             <div className="mb-3">
               <label className="text-xs text-gray-500 block mb-1">Elegí una contraseña</label>
-              <input
-                type="password"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className={inputClass}
                 autoComplete="new-password"
                 name="partner-password"
               />
-              <p className="text-xs text-gray-400 mt-1">Al menos 6 caracteres.</p>
+              {password && <PasswordChecklist password={password} />}
             </div>
 
             {error && <p className="text-xs text-red-500 mb-3">{error}</p>}
