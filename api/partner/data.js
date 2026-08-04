@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from "../_lib/supabaseAdmin.js";
 import { getUserFromRequest } from "../_lib/googleCalendar.js";
+import { sendRsvpNotificationEmail } from "../_lib/partnerEmails.js";
 
 async function handleRsvp(req, res, supabaseAdmin, link) {
   const { citaId, respuesta } = req.body || {};
@@ -10,7 +11,7 @@ async function handleRsvp(req, res, supabaseAdmin, link) {
 
   const { data: cita } = await supabaseAdmin
     .from("citas_compartidas")
-    .select("id, mother_id")
+    .select("id, mother_id, fecha, hora, tipo")
     .eq("id", citaId)
     .maybeSingle();
 
@@ -23,6 +24,24 @@ async function handleRsvp(req, res, supabaseAdmin, link) {
     .from("citas_compartidas")
     .update({ partner_rsvp: respuesta, partner_rsvp_at: new Date().toISOString() })
     .eq("id", citaId);
+
+  const [{ data: motherUser }, { data: partnerRow }] = await Promise.all([
+    supabaseAdmin.auth.admin.getUserById(link.mother_id),
+    supabaseAdmin.from("partners").select("nombre").eq("mother_id", link.mother_id).maybeSingle(),
+  ]);
+
+  const motherEmail = motherUser?.user?.email;
+  if (motherEmail) {
+    try {
+      await sendRsvpNotificationEmail(motherEmail, {
+        cita,
+        respuesta,
+        partnerNombre: partnerRow?.nombre || "Tu partner",
+      });
+    } catch (err) {
+      console.error("No se pudo avisar a la mamá del RSVP:", err.message);
+    }
+  }
 
   res.status(200).json({ success: true });
 }

@@ -45,3 +45,37 @@ export async function sendCitaReminderEmail(to, cita) {
     throw new Error(error.message);
   }
 }
+
+export async function sendRsvpNotificationEmail(to, { cita, respuesta, partnerNombre }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY no configurada");
+  }
+  const resend = new Resend(apiKey);
+  const from = process.env.RESEND_FROM_EMAIL || "Mamá App <onboarding@resend.dev>";
+
+  const puede = respuesta === "puede";
+  const fechaFormateada = new Date(cita.fecha + "T00:00:00").toLocaleDateString("es-AR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  const detalleHora = cita.hora ? ` a las ${cita.hora}` : "";
+
+  const { error } = await resend.emails.send({
+    from,
+    to: [to],
+    subject: puede
+      ? `${partnerNombre} puede acompañarte a tu cita`
+      : `${partnerNombre} no va a poder ir a tu cita`,
+    html: `
+      <p>Hola,</p>
+      <p><strong>${partnerNombre}</strong> respondió sobre tu cita de <strong>${cita.tipo}</strong> el ${fechaFormateada}${detalleHora}:</p>
+      <p style="font-size:18px;font-weight:bold;">${puede ? "Puede acompañarte 👍" : "No va a poder ir 👎"}</p>
+    `,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
