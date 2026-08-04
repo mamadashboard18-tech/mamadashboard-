@@ -1432,16 +1432,6 @@
   {
     "semana": 7,
     "etapa": "postparto",
-    "tipo": "libro",
-    "titulo": "Dormir sin lágrimas: dejarle llorar no es la solución",
-    "autor": "Rosa Jové, psicóloga infantil",
-    "link": "https://www.casadellibro.com/libro-dormir-sin-lagrimas-dejarle-llorar-no-es-la-solucion/9788497346474/1141288",
-    "descripcion": "Libro de referencia sobre el sueño infantil desde una mirada respetuosa, sin métodos de adiestramiento.",
-    "gratis": false
-  },
-  {
-    "semana": 7,
-    "etapa": "postparto",
     "tipo": "podcast",
     "titulo": "Lactando",
     "autor": "Asociación Lactando, con Almudena Pernas (matrona e IBCLC)",
@@ -1468,16 +1458,6 @@
     "link": "https://www.aeped.es/enfamilia/salud-en-familia/recomendaciones-de-sueno-en-lactantes",
     "descripcion": "Recomendaciones oficiales de pediatras sobre el sueño seguro de bebés y lactantes.",
     "gratis": true
-  },
-  {
-    "semana": 8,
-    "etapa": "postparto",
-    "tipo": "libro",
-    "titulo": "Dormir sin lágrimas: dejarle llorar no es la solución",
-    "autor": "Rosa Jové, psicóloga infantil",
-    "link": "https://www.casadellibro.com/libro-dormir-sin-lagrimas-dejarle-llorar-no-es-la-solucion/9788497346474/1141288",
-    "descripcion": "Libro de referencia sobre el sueño infantil desde una mirada respetuosa, sin métodos de adiestramiento.",
-    "gratis": false
   },
   {
     "semana": 8,
@@ -1602,16 +1582,6 @@
   {
     "semana": 11,
     "etapa": "postparto",
-    "tipo": "libro",
-    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
-    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
-    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
-    "descripcion": "Incluye una sección sobre el cierre del cuarto trimestre y la vuelta gradual a la rutina.",
-    "gratis": false
-  },
-  {
-    "semana": 11,
-    "etapa": "postparto",
     "tipo": "frase",
     "titulo": "El cuarto trimestre se cierra, pero seguís teniendo derecho a pedir ayuda.",
     "autor": "Anónimo",
@@ -1638,16 +1608,6 @@
     "link": "https://casadeparto.cl/blogs/news/el-rol-de-la-pareja-en-el-postparto",
     "descripcion": "Aborda cómo la pareja puede seguir apoyando activamente al cierre del cuarto trimestre.",
     "gratis": true
-  },
-  {
-    "semana": 12,
-    "etapa": "postparto",
-    "tipo": "libro",
-    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
-    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
-    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
-    "descripcion": "Incluye una sección sobre el cierre del cuarto trimestre y la vuelta gradual a la rutina.",
-    "gratis": false
   },
   {
     "semana": 12,

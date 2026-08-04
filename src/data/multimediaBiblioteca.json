@@ -46,15 +46,6 @@
   },
   {
     "categoria": "tipos_de_parto",
-    "tipo": "libro",
-    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
-    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
-    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
-    "descripcion": "Guía con base científica y enfoque respetuoso que repasa todas las opciones de parto sin sesgos.",
-    "gratis": false
-  },
-  {
-    "categoria": "tipos_de_parto",
     "tipo": "podcast",
     "titulo": "Tu Mejor Parto - Parto Vaginal Después de Cesárea (PVDC)",
     "autor": "myBabymyBirth®",
@@ -127,15 +118,6 @@
   },
   {
     "categoria": "preparacion_parto",
-    "tipo": "libro",
-    "titulo": "Hipnoparto: preparación para un parto positivo",
-    "autor": "Carmen Moreno, educadora prenatal especializada en hipnoparto",
-    "link": "https://partopositivo.org/producto/libro-de-hipnoparto/",
-    "descripcion": "Libro con 21 capítulos y ejercicios prácticos, basado en evidencia, para prepararse para un parto positivo.",
-    "gratis": false
-  },
-  {
-    "categoria": "preparacion_parto",
     "tipo": "plantilla",
     "titulo": "Qué llevar en la bolsa del hospital para el parto (lista descargable)",
     "autor": "Guiainfantil.com",
@@ -205,15 +187,6 @@
     "link": "https://www.who.int/es/news-room/fact-sheets/detail/infant-and-young-child-feeding",
     "descripcion": "Ficha informativa oficial de la OMS sobre lactancia materna exclusiva y alimentación complementaria.",
     "gratis": true
-  },
-  {
-    "categoria": "lactancia",
-    "tipo": "libro",
-    "titulo": "Un regalo para toda la vida: guía de la lactancia materna",
-    "autor": "Carlos González, pediatra",
-    "link": "https://www.casadellibro.com/libro-un-regalo-para-toda-la-vida-guia-de-la-lactancia-materna/9788484605539/1079315",
-    "descripcion": "Guía clásica y accesible sobre la fisiología de la lactancia y cómo resolver las dudas más comunes.",
-    "gratis": false
   },
   {
     "categoria": "lactancia",
@@ -325,15 +298,6 @@
   },
   {
     "categoria": "recuperacion_fisica_postparto",
-    "tipo": "libro",
-    "titulo": "Fisioterapia del suelo pélvico: manual para la prevención y el tratamiento en la mujer, el hombre y la infancia",
-    "autor": "Obra colectiva especializada en fisioterapia uroginecológica",
-    "link": "https://dialnet.unirioja.es/servlet/libro?codigo=970125",
-    "descripcion": "Manual de referencia técnica sobre fisioterapia del suelo pélvico, incluido el abordaje postparto.",
-    "gratis": false
-  },
-  {
-    "categoria": "recuperacion_fisica_postparto",
     "tipo": "frase",
     "titulo": "Tu cuerpo cargó una vida durante nueve meses: dale tiempo para recuperarse.",
     "autor": "Anónimo",
@@ -361,24 +325,6 @@
   },
   {
     "categoria": "salud_mental_postparto",
-    "tipo": "libro",
-    "titulo": "Psicología del posparto",
-    "autor": "Esther Ramírez Matos, Instituto Europeo de Salud Mental Perinatal",
-    "link": "https://iboneolza.org/2020/09/07/psicologia-del-posparto-de-esther-ramirez-matos/",
-    "descripcion": "Libro sobre los procesos psicológicos y emocionales que atraviesa la mujer en el posparto.",
-    "gratis": false
-  },
-  {
-    "categoria": "salud_mental_postparto",
-    "tipo": "libro",
-    "titulo": "Parir",
-    "autor": "Ibone Olza, psiquiatra infantil y perinatal",
-    "link": "https://iboneolza.org/en/publicaciones/",
-    "descripcion": "Libro que aborda la psicología del parto y su impacto emocional en la mujer.",
-    "gratis": false
-  },
-  {
-    "categoria": "salud_mental_postparto",
     "tipo": "articulo",
     "titulo": "Publicaciones de Ibone Olza sobre salud mental perinatal",
     "autor": "Ibone Olza, psiquiatra perinatal",
@@ -394,15 +340,6 @@
     "link": "https://open.spotify.com/show/48XX6JntF5QBfZ89aev3CF",
     "descripcion": "Podcast centrado en el cuidado de la salud mental durante el embarazo y el posparto.",
     "gratis": true
-  },
-  {
-    "categoria": "salud_mental_postparto",
-    "tipo": "podcast",
-    "titulo": "La vida secreta de las madres",
-    "autor": "Andrea Ros (comunicadora perinatal) y Paola Roig (psicóloga perinatal)",
-    "link": "https://podimo.com/es/shows/la-vida-secreta-de-las-madres",
-    "descripcion": "Conversaciones honestas sobre carga mental, posparto y salud mental materna.",
-    "gratis": false
   },
   {
     "categoria": "salud_mental_postparto",
@@ -484,15 +421,6 @@
     "link": "https://www.sup.org.uy/wp-content/uploads/2021/12/Recomendaciones-sueno-seguro-y-lactancia.pdf",
     "descripcion": "Recomendaciones oficiales sobre cómo practicar el colecho de la forma más segura posible.",
     "gratis": true
-  },
-  {
-    "categoria": "sueno",
-    "tipo": "libro",
-    "titulo": "Dormir sin lágrimas: dejarle llorar no es la solución",
-    "autor": "Rosa Jové, psicóloga infantil",
-    "link": "https://www.casadellibro.com/libro-dormir-sin-lagrimas-dejarle-llorar-no-es-la-solucion/9788497346474/1141288",
-    "descripcion": "Libro de referencia sobre el sueño infantil desde una mirada respetuosa, sin métodos de adiestramiento.",
-    "gratis": false
   },
   {
     "categoria": "sueno",
@@ -592,15 +520,6 @@
     "link": "https://www.youtube.com/watch?v=deKKmnLfmYQ",
     "descripcion": "Recomendaciones médicas sobre el cuidado del bebé en sus primeros días de vida.",
     "gratis": true
-  },
-  {
-    "categoria": "cuidados_recien_nacido",
-    "tipo": "libro",
-    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
-    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
-    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
-    "descripcion": "Incluye una sección dedicada a los cuidados del recién nacido en las primeras semanas.",
-    "gratis": false
   },
   {
     "categoria": "cuidados_recien_nacido",
@@ -844,15 +763,6 @@
     "link": "https://lucetuembarazo.com/ejercicios-postparto/",
     "descripcion": "Guía completa sobre cuándo y cómo retomar el ejercicio físico después del parto.",
     "gratis": true
-  },
-  {
-    "categoria": "ejercicio_postparto",
-    "tipo": "libro",
-    "titulo": "Fisioterapia del suelo pélvico: manual para la prevención y el tratamiento en la mujer, el hombre y la infancia",
-    "autor": "Obra colectiva especializada en fisioterapia uroginecológica",
-    "link": "https://dialnet.unirioja.es/servlet/libro?codigo=970125",
-    "descripcion": "Manual de referencia técnica sobre fisioterapia del suelo pélvico aplicable al ejercicio postparto.",
-    "gratis": false
   },
   {
     "categoria": "ejercicio_postparto",
