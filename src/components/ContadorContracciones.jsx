@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
-import Header from "./Header";
-import {
-  loadContracciones,
-  guardarContraccion,
-  limpiarContracciones,
-  formatearDuracion,
-} from "../data/contracciones";
+import { User, ChevronLeft, Timer } from "lucide-react";
+import { loadContracciones, guardarContraccion, limpiarContracciones } from "../data/contracciones";
 import { regla511 } from "../data/estoyDeParto";
 
-export default function ContadorContracciones({ onBack }) {
+function pad2(n) {
+  return String(n).padStart(2, "0");
+}
+
+function formatMMSS(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}:${pad2(s)}`;
+}
+
+export default function ContadorContracciones({ onBack, onNavigate }) {
   const [contracciones, setContracciones] = useState([]);
   const [enCurso, setEnCurso] = useState(false);
   const [inicio, setInicio] = useState(null);
-  const [segundos, setSegundos] = useState(0);
+  const [ahora, setAhora] = useState(Date.now());
 
   useEffect(() => {
     setContracciones(loadContracciones());
@@ -20,28 +26,29 @@ export default function ContadorContracciones({ onBack }) {
 
   useEffect(() => {
     if (!enCurso) return;
-    const interval = setInterval(() => setSegundos((s) => s + 1), 1000);
+    const interval = setInterval(() => setAhora(Date.now()), 250);
     return () => clearInterval(interval);
   }, [enCurso]);
 
   const iniciarContraccion = () => {
-    setInicio(Date.now());
-    setSegundos(0);
+    const start = Date.now();
+    setInicio(start);
+    setAhora(start);
     setEnCurso(true);
   };
 
   const finalizarContraccion = () => {
+    const fin = Date.now();
     const anterior = contracciones[0];
     const nueva = {
-      id: Date.now().toString(),
-      hora: new Date(inicio).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" }),
+      id: fin.toString(),
+      hora: new Date(inicio).toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", hour12: false }),
       inicio,
-      duracionSeg: segundos,
+      duracionSeg: Math.floor((fin - inicio) / 1000),
       intervaloSeg: anterior ? Math.round((inicio - anterior.inicio) / 1000) : null,
     };
     setContracciones(guardarContraccion(nueva));
     setEnCurso(false);
-    setSegundos(0);
     setInicio(null);
   };
 
@@ -49,90 +56,107 @@ export default function ContadorContracciones({ onBack }) {
     setContracciones(limpiarContracciones());
   };
 
-  const mm = String(Math.floor(segundos / 60)).padStart(2, "0");
-  const ss = String(segundos % 60).padStart(2, "0");
+  const liveElapsed = enCurso ? formatMMSS(ahora - inicio) : "0:00";
 
   return (
-    <div>
+    <div className="max-w-[640px]">
+      <div className="flex items-center justify-end mb-1.5">
+        <button
+          onClick={() => onNavigate?.("perfil")}
+          className="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-ink-muted hover:bg-brand-pink-light/60 hover:text-brand-pink transition-colors cursor-pointer"
+          aria-label="Mi perfil"
+        >
+          <User className="w-5 h-5" strokeWidth={1.7} />
+        </button>
+      </div>
+
       {onBack && (
         <button
           onClick={onBack}
-          className="text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
+          className="inline-flex items-center gap-1.5 text-base text-ink-muted hover:text-brand-pink transition-colors cursor-pointer mb-4"
         >
-          ← Volver a Inicio
+          <ChevronLeft className="w-[15px] h-[15px]" strokeWidth={2.2} />
+          Volver a Inicio
         </button>
       )}
 
-      <Header
-        title="⏱️ Contador de contracciones"
-        subtitle="Cronometrá cada contracción y su intervalo con la anterior"
-      />
+      <h2 className="font-heading text-[26px] font-extrabold text-ink leading-tight mb-2.5">
+        ⏱️ Contador de contracciones
+      </h2>
+      <p className="text-[17px] text-ink-muted leading-relaxed mb-[22px]">
+        Cronometrá cada contracción y su intervalo con la anterior
+      </p>
 
-      <div className="bg-rose-50 border border-rose-200 rounded-2xl p-5 mb-6 max-w-xl">
-        <p className="text-sm font-semibold text-gray-700 mb-1">{regla511.titulo}</p>
-        <p className="text-sm text-gray-600 leading-relaxed">{regla511.desc}</p>
+      <div className="bg-white/60 border border-[rgba(226,111,206,0.25)] rounded-[20px] px-5 py-[18px] mb-5">
+        <p className="text-[17px] font-bold text-ink mb-2">{regla511.titulo}</p>
+        <p className="text-base text-[#6b5f78] leading-relaxed">{regla511.desc}</p>
       </div>
 
-      <div className="bg-gradient-to-br from-rose-500 to-pink-400 rounded-2xl p-6 text-white shadow-sm mb-6 max-w-sm">
-        {!enCurso ? (
-          <div className="text-center">
-            <p className="text-sm opacity-90 mb-4">
-              Tocá el botón apenas empiece la contracción.
+      <div
+        className="relative overflow-hidden rounded-[28px] px-6 py-8 mb-6 text-center"
+        style={{ background: "var(--gradient-hero)", boxShadow: "0 16px 40px rgba(216,109,214,0.3)" }}
+      >
+        {enCurso ? (
+          <>
+            <p className="text-white/85 text-base mb-1.5">Contracción en curso</p>
+            <p className="font-heading text-white text-[44px] font-extrabold tracking-wide mb-[22px]">
+              {liveElapsed}
             </p>
-            <button
-              onClick={iniciarContraccion}
-              className="bg-white text-rose-600 text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-rose-50 transition-colors"
-            >
-              Iniciar contracción
-            </button>
-          </div>
+          </>
         ) : (
-          <div className="text-center">
-            <p className="text-sm opacity-90 mb-1">Duración</p>
-            <p className="text-4xl font-semibold mb-4">{mm}:{ss}</p>
-            <button
-              onClick={finalizarContraccion}
-              className="bg-white text-rose-600 text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-rose-50 transition-colors"
-            >
-              Terminó la contracción
-            </button>
-          </div>
+          <p className="text-white text-[17px] leading-relaxed mb-[22px]">
+            Tocá el botón apenas empiece la contracción.
+          </p>
         )}
+        <button
+          onClick={enCurso ? finalizarContraccion : iniciarContraccion}
+          className={`bg-white px-8 py-3.5 rounded-full text-[17px] font-bold cursor-pointer transition-transform hover:scale-[1.03] active:scale-[0.97] ${
+            enCurso ? "text-[#c81e3a]" : "text-brand-pink"
+          }`}
+        >
+          {enCurso ? "Finalizar contracción" : "Iniciar contracción"}
+        </button>
       </div>
 
-      <div className="flex items-center justify-between mb-3 max-w-sm">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-          Registro de hoy
-        </h3>
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-bold text-[#a89fb0] uppercase tracking-wide">Registro de hoy</p>
         {contracciones.length > 0 && (
           <button
             onClick={handleReiniciar}
-            className="text-xs text-gray-400 hover:text-red-500"
+            className="text-sm text-ink-muted hover:text-brand-pink transition-colors cursor-pointer"
           >
             Reiniciar registro
           </button>
         )}
       </div>
-      <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm max-w-sm">
-        {contracciones.length === 0 ? (
-          <p className="text-sm text-gray-400">Todavía no registraste ninguna contracción.</p>
-        ) : (
-          <ul className="space-y-2">
-            {contracciones.map((c) => (
-              <li
-                key={c.id}
-                className="flex items-center justify-between text-sm border border-rose-100 rounded-xl px-3 py-2"
-              >
-                <span className="text-gray-700">{c.hora}</span>
-                <span className="text-gray-500">
-                  {formatearDuracion(c.duracionSeg)}
-                  {c.intervaloSeg != null && ` · cada ${formatearDuracion(c.intervaloSeg)}`}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+
+      {contracciones.length === 0 ? (
+        <p className="text-base text-ink-muted bg-white border border-[var(--border-soft)] rounded-[20px] p-[18px] shadow-sm">
+          Todavía no registraste ninguna contracción.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-2.5">
+          {contracciones.map((c) => (
+            <div
+              key={c.id}
+              className="bg-white border border-[var(--border-soft)] rounded-[20px] px-4 py-3.5 shadow-sm flex items-center gap-3"
+            >
+              <span className="w-[38px] h-[38px] rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
+                <Timer className="w-[17px] h-[17px]" strokeWidth={1.6} />
+              </span>
+              <span className="flex-1 min-w-0">
+                <p className="text-[17px] font-bold text-brand-pink">Duración {formatMMSS(c.duracionSeg * 1000)}</p>
+                <p className="text-sm text-ink-muted mt-0.5">
+                  {c.intervaloSeg != null
+                    ? `Intervalo desde la anterior: ${formatMMSS(c.intervaloSeg * 1000)}`
+                    : "Primera contracción registrada hoy"}
+                </p>
+              </span>
+              <span className="text-sm text-ink-muted shrink-0">{c.hora}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

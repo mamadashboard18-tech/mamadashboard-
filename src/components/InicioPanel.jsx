@@ -202,7 +202,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
   }
 
   if (view === "contracciones") {
-    return <ContadorContracciones onBack={() => setView("list")} />;
+    return <ContadorContracciones onBack={() => setView("list")} onNavigate={onNavigate} />;
   }
 
   return (
