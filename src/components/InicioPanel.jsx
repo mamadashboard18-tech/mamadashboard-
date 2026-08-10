@@ -101,6 +101,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [contenidoModalAbierto, setContenidoModalAbierto] = useState(false);
   const [bebe, setBebe] = useState(null);
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
     loadPerfil().then((p) => setSemanaActual(p.semanaActual));
@@ -209,10 +210,10 @@ export default function InicioPanel({ nombre, onNavigate }) {
       <AmbientBlobs />
       {/* Encabezado */}
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-heading text-xl font-bold text-ink">Hola, {nombre || "mamá"}</h2>
+        <h2 className="font-heading text-[28px] font-bold text-ink">Hola, {nombre || "mamá"}</h2>
         <div className="flex items-center gap-2">
           {streak > 0 && (
-            <span className="flex items-center gap-1 bg-brand-pink-light/60 text-brand-pink text-xs font-semibold px-3 py-1.5 rounded-full">
+            <span className="flex items-center gap-1 bg-brand-pink-light/60 text-brand-pink text-[15px] font-semibold px-3 py-1.5 rounded-full">
               <Flame className="w-3.5 h-3.5" strokeWidth={2.4} fill="currentColor" />
               {streak} {streak === 1 ? "día seguido" : "días seguidos"}
             </span>
@@ -227,7 +228,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
         </div>
       </div>
 
-      <p className="text-sm font-semibold text-ink mb-3">
+      <p className="text-lg font-semibold text-ink mb-3">
         {capitalizeFirst(diasSemana[0].toLocaleDateString("es-AR", { month: "long", year: "numeric" }))}
       </p>
 
@@ -249,11 +250,11 @@ export default function InicioPanel({ nombre, onNavigate }) {
               <button
                 key={i}
                 onClick={() => setSelectedDate(iso)}
-                className="flex flex-col items-center gap-0.5 py-2.5 px-0.5 rounded-2xl cursor-pointer w-full box-border"
+                className="flex flex-col items-center gap-0.5 py-3 px-0.5 rounded-2xl cursor-pointer w-full box-border"
                 style={isSelected ? { background: "var(--gradient-hero)", boxShadow: "0 4px 12px rgba(216,109,214,0.35)" } : undefined}
               >
                 <span
-                  className={`text-lg leading-none ${
+                  className={`text-[21px] leading-none ${
                     isSelected
                       ? "font-bold text-white"
                       : isToday
@@ -264,7 +265,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
                   {d.getDate()}
                 </span>
                 <span
-                  className={`text-[11px] uppercase tracking-wide ${
+                  className={`text-[15px] uppercase tracking-wide ${
                     isSelected ? "font-bold text-white/85" : "font-semibold text-[#a89fb0]"
                   }`}
                 >
@@ -308,10 +309,10 @@ export default function InicioPanel({ nombre, onNavigate }) {
 
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-white text-sm font-bold">
+            <p className="text-white text-[19px] font-bold">
               Semana {semanaMostrada} de {totalWeeks}
             </p>
-            <span className="bg-white/28 text-white text-xs font-bold px-3 py-1 rounded-full">
+            <span className="bg-white/28 text-white text-[15px] font-bold px-3 py-1 rounded-full">
               {trimesterLabel[data.trimester]}
             </span>
           </div>
@@ -334,26 +335,26 @@ export default function InicioPanel({ nombre, onNavigate }) {
               />
             )}
           </div>
-          <div className="flex justify-between text-xs text-white/75 mt-1 mb-4">
+          <div className="flex justify-between text-[15px] text-white/75 mt-1 mb-4">
             <span>S.1</span>
             <span>S.{Math.round(semanaActual / 2)}</span>
             <span>S.{semanaActual}</span>
           </div>
 
           <div className="flex items-center gap-3 mb-3">
-            <CircularProgress value={porcentaje} size={100} stroke={7}>
-              <span className="font-heading text-2xl font-bold leading-none">{porcentaje}%</span>
-              <span className="text-[10px] uppercase tracking-wide opacity-85 mt-1">Semana {semanaMostrada}</span>
+            <CircularProgress value={porcentaje} size={120} stroke={8}>
+              <span className="font-heading text-[33px] font-bold leading-none">{porcentaje}%</span>
+              <span className="text-[15px] uppercase tracking-wide opacity-85 mt-1">Semana {semanaMostrada}</span>
             </CircularProgress>
 
-            <div className="flex items-center gap-2.5 flex-1 min-w-0">
-              <div className="w-11 h-11 rounded-full bg-white/24 flex items-center justify-center shrink-0">
-                <Sprout className="w-5 h-5 text-white" strokeWidth={1.75} />
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="w-[52px] h-[52px] rounded-full bg-white/24 flex items-center justify-center shrink-0">
+                <Sprout className="w-6 h-6 text-white" strokeWidth={1.75} />
               </div>
               <div className="text-left min-w-0">
-                <p className="text-white text-[13px] opacity-90 leading-tight">Tu bebé es del tamaño de</p>
-                <p className="text-white text-base font-bold leading-tight mt-0.5">{data.size.name}</p>
-                <p className="text-white text-[13px] opacity-90 leading-tight mt-0.5">
+                <p className="text-white text-[17px] opacity-90 leading-tight">Tu bebé es del tamaño de</p>
+                <p className="text-white text-[19px] font-bold leading-tight mt-0.5">{data.size.name}</p>
+                <p className="text-white text-[17px] opacity-90 leading-tight mt-0.5">
                   {data.weight ? `≈ ${data.weight} g` : "—"}
                   {data.length ? ` · ≈ ${data.length} cm` : ""}
                 </p>
@@ -362,8 +363,8 @@ export default function InicioPanel({ nombre, onNavigate }) {
           </div>
 
           <div className="bg-white/20 rounded-[18px] px-4 py-3">
-            <p className="text-[12px] text-white uppercase tracking-wide opacity-85 mb-1">Hito de esta semana</p>
-            <p className="text-[15px] text-white leading-relaxed">{data.milestone}</p>
+            <p className="text-[15px] text-white uppercase tracking-wide opacity-85 mb-1">Hito de esta semana</p>
+            <p className="text-[18px] text-white leading-relaxed">{data.milestone}</p>
           </div>
         </div>
       </div>
@@ -371,12 +372,12 @@ export default function InicioPanel({ nombre, onNavigate }) {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 items-start">
         {/* Columna principal: agenda */}
         <div className="min-w-0">
-          <p className="text-[15px] font-bold text-ink mb-3.5 capitalize">
+          <p className="text-[21px] font-bold text-ink mb-3.5 capitalize">
             {esHoy ? "Hoy" : formatFechaLarga(selectedDate)}
           </p>
 
           {itemsRegistrados.length === 0 && sugerencias.length === 0 && (
-            <p className="text-sm text-ink-muted bg-white border border-[var(--border-soft)] rounded-[20px] p-[18px] shadow-sm">
+            <p className="text-[17px] text-ink-muted bg-white border border-[var(--border-soft)] rounded-[20px] p-[18px] shadow-sm">
               {esFuturo ? "Todavía no tenés nada agendado este día." : "No registraste nada este día."}
             </p>
           )}
@@ -398,7 +399,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
                     <span className="w-[38px] h-[38px] rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
                       <item.icon className="w-[17px] h-[17px]" strokeWidth={1.6} />
                     </span>
-                    <p className="flex-1 min-w-0 text-[15px] font-bold text-brand-pink truncate">{item.title}</p>
+                    <p className="flex-1 min-w-0 text-[18px] font-bold text-brand-pink truncate">{item.title}</p>
                   </button>
                 </li>
               ))}
@@ -407,7 +408,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
 
           {sugerencias.length > 0 && (
             <>
-              <p className="text-xs font-bold text-brand-pink uppercase tracking-wide mt-4 mb-2.5">
+              <p className="text-[15px] font-bold text-brand-pink uppercase tracking-wide mt-4 mb-2.5">
                 Sugerencias para hoy
               </p>
               <div className="flex flex-col gap-2.5">
@@ -428,7 +429,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
                       >
                         <item.icon className="w-4 h-4" strokeWidth={1.6} />
                       </span>
-                      <p className="flex-1 min-w-0 text-[15px] font-bold text-ink truncate">{item.title}</p>
+                      <p className="flex-1 min-w-0 text-[18px] font-bold text-ink truncate">{item.title}</p>
                       <ChevronRight
                         className={`w-4 h-4 shrink-0 ${isPink ? "text-brand-pink" : "text-brand-purple"}`}
                         strokeWidth={2}
@@ -444,7 +445,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
         {/* Columna lateral: próxima cita y alertas */}
         <div className="flex flex-col gap-4">
           <div className="bg-[#fdf9fb] rounded-2xl p-3.5">
-            <p className="text-xs font-bold text-[#a89fb0] uppercase tracking-wide mb-3 px-1.5">
+            <p className="text-[15px] font-bold text-[#a89fb0] uppercase tracking-wide mb-3 px-1.5">
               Próxima cita
             </p>
             {proximaCita ? (
@@ -459,11 +460,11 @@ export default function InicioPanel({ nombre, onNavigate }) {
                   })()}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-base font-bold text-ink truncate">
+                  <p className="text-[21px] font-bold text-ink truncate">
                     {formatFechaCorta(proximaCita.fecha)}
                     {proximaCita.hora && ` · ${proximaCita.hora}`}
                   </p>
-                  <p className="text-[13px] text-ink-muted truncate mt-0.5">{proximaCita.tipo}</p>
+                  <p className="text-[17px] text-ink-muted truncate mt-0.5">{proximaCita.tipo}</p>
                 </div>
               </button>
             ) : (
@@ -471,8 +472,8 @@ export default function InicioPanel({ nombre, onNavigate }) {
                 onClick={() => onNavigate?.("citas")}
                 className="w-full text-left hover:bg-white/70 rounded-xl transition-colors cursor-pointer p-1.5"
               >
-                <p className="text-sm text-ink">No tenés citas agendadas</p>
-                <p className="text-xs text-brand-pink mt-1 flex items-center gap-1">
+                <p className="text-lg text-ink">No tenés citas agendadas</p>
+                <p className="text-[15px] text-brand-pink mt-1 flex items-center gap-1">
                   <Plus className="w-3.5 h-3.5" strokeWidth={2.4} /> Agendar una cita
                 </p>
               </button>
@@ -490,7 +491,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
             <div className="w-10 h-10 rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
               <Timer className="w-[18px] h-[18px]" strokeWidth={1.6} />
             </div>
-            <p className="text-[15px] font-semibold text-ink truncate">Contador de contracciones</p>
+            <p className="text-[18px] font-semibold text-ink truncate">Contador de contracciones</p>
           </button>
 
           {!bebe?.registrado && (
@@ -501,14 +502,14 @@ export default function InicioPanel({ nombre, onNavigate }) {
               <div className="w-10 h-10 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
                 <Baby className="w-[18px] h-[18px]" strokeWidth={1.6} />
               </div>
-              <p className="text-[15px] font-semibold text-ink truncate">¿Ya nació tu bebé?</p>
+              <p className="text-[18px] font-semibold text-ink truncate">¿Ya nació tu bebé?</p>
             </button>
           )}
         </div>
       )}
 
       {sintomasAtencionHoy.length > 0 ? (
-        <div className="bg-brand-purple-light/40 rounded-2xl p-4 text-brand-magenta text-sm mt-6 mb-6 pr-16 lg:pr-4">
+        <div className="bg-brand-purple-light/40 rounded-2xl p-4 text-brand-magenta text-[17px] mt-6 mb-6 pr-16 lg:pr-4">
           <p className="font-medium mb-1 flex items-center gap-1.5">
             <Lightbulb className="w-4 h-4 shrink-0" strokeWidth={2} />
             Vale la pena comentarlo con tu médico
@@ -519,7 +520,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
           </p>
         </div>
       ) : (
-        <p className="flex items-center gap-1.5 text-xs text-ink-muted mt-6 mb-6 pr-16 lg:pr-0">
+        <p className="flex items-center gap-1.5 text-sm text-ink-muted mt-6 mb-6 pr-16 lg:pr-0">
           <ShieldCheck className="w-3.5 h-3.5 shrink-0" strokeWidth={1.6} />
           Sin alertas activas. Todo en orden esta semana.
         </p>
@@ -540,7 +541,11 @@ export default function InicioPanel({ nombre, onNavigate }) {
           fecha={selectedDate}
           sintomasSemana={data.symptoms}
           onClose={() => setModalAbierto(false)}
-          onSaved={() => setRegistros(loadRegistros())}
+          onSaved={() => {
+            setRegistros(loadRegistros());
+            setToast("¡Registrado! Gracias por contarnos cómo estás.");
+            setTimeout(() => setToast(""), 2600);
+          }}
         />
       )}
 
@@ -550,6 +555,12 @@ export default function InicioPanel({ nombre, onNavigate }) {
           sintomas={registros[todayISO]?.sintomas || []}
           onClose={() => setContenidoModalAbierto(false)}
         />
+      )}
+
+      {toast && (
+        <div className="fixed bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 bg-ink text-white text-base px-5 py-3 rounded-2xl shadow-lg z-40 w-[min(90vw,320px)] text-center">
+          {toast}
+        </div>
       )}
     </div>
   );

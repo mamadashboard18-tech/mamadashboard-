@@ -86,6 +86,20 @@ h3,
   display: none;
 }
 
+@keyframes sheetUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.sheet-up {
+  animation: sheetUp 0.25s var(--ease-out);
+}
+
 .range-hero {
   -webkit-appearance: none;
   appearance: none;
