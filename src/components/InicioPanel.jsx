@@ -58,6 +58,11 @@ function formatFechaLarga(iso) {
   return capitalizeFirst(d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" }));
 }
 
+function formatFechaCorta(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("es-AR", { day: "numeric", month: "long" });
+}
+
 function mondayOf(date) {
   const day = date.getDay();
   const diffToMonday = (day + 6) % 7;
@@ -181,25 +186,16 @@ export default function InicioPanel({ nombre, onNavigate }) {
 
   const sugerencias = useMemo(() => {
     if (!esHoy) return [];
-    const items = [];
-    if (!registroDelDia) {
-      items.push({
-        id: "sugerido-registro",
-        icon: NotebookPen,
-        title: "Completá tu registro de hoy",
-        onClick: () => setModalAbierto(true),
-        tint: "purple",
-      });
-    }
-    items.push({
-      id: "sugerido-contenido",
-      icon: Headphones,
-      title: "Contenido diario",
-      onClick: () => setContenidoModalAbierto(true),
-      tint: "pink",
-    });
-    return items;
-  }, [esHoy, registroDelDia, onNavigate, semanaActual]);
+    return [
+      {
+        id: "sugerido-contenido",
+        icon: Headphones,
+        title: "Contenido diario",
+        onClick: () => setContenidoModalAbierto(true),
+        tint: "pink",
+      },
+    ];
+  }, [esHoy]);
 
   if (bebe?.registrado) {
     return <InicioPostparto nombre={nombre} bebe={bebe} onNavigate={onNavigate} />;
@@ -232,19 +228,9 @@ export default function InicioPanel({ nombre, onNavigate }) {
         </div>
       </div>
 
-      <div className="flex items-baseline justify-between mb-3">
-        <p className="text-sm font-semibold text-ink">
-          {capitalizeFirst(diasSemana[0].toLocaleDateString("es-AR", { month: "long", year: "numeric" }))}
-        </p>
-        {!enSemanaActual && (
-          <button
-            onClick={volverAHoy}
-            className="text-brand-pink text-xs font-bold cursor-pointer hover:underline"
-          >
-            Volver a hoy
-          </button>
-        )}
-      </div>
+      <p className="text-sm font-semibold text-ink mb-3">
+        {capitalizeFirst(diasSemana[0].toLocaleDateString("es-AR", { month: "long", year: "numeric" }))}
+      </p>
 
       <div className="flex items-center gap-0.5 mb-6">
         <button
@@ -303,6 +289,16 @@ export default function InicioPanel({ nombre, onNavigate }) {
         >
           <ChevronRight className="w-4 h-4" strokeWidth={2} />
         </button>
+        {!enSemanaActual && (
+          <button
+            onClick={volverAHoy}
+            className="w-8 h-8 rounded-full bg-brand-pink/20 hover:bg-brand-pink/35 flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-0.5"
+            aria-label="Volver a hoy"
+            title="Volver a hoy"
+          >
+            <span className="w-2.5 h-2.5 rounded-full bg-brand-pink" />
+          </button>
+        )}
       </div>
 
       {/* Tarjeta de embarazo: lo más importante, justo debajo de los días */}
@@ -489,7 +485,13 @@ export default function InicioPanel({ nombre, onNavigate }) {
                     return <Icon className="w-[17px] h-[17px]" strokeWidth={1.6} />;
                   })()}
                 </span>
-                <p className="min-w-0 text-[15px] font-semibold text-ink truncate">{proximaCita.tipo}</p>
+                <div className="min-w-0">
+                  <p className="text-base font-bold text-ink truncate">
+                    {formatFechaCorta(proximaCita.fecha)}
+                    {proximaCita.hora && ` · ${proximaCita.hora}`}
+                  </p>
+                  <p className="text-[13px] text-ink-muted truncate mt-0.5">{proximaCita.tipo}</p>
+                </div>
               </button>
             ) : (
               <button
