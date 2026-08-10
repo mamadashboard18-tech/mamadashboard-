@@ -27,7 +27,7 @@ import ContenidoDiarioModal from "./ContenidoDiarioModal";
 import InicioPostparto from "./InicioPostparto";
 import ContadorContracciones from "./ContadorContracciones";
 import AmbientBlobs from "./AmbientBlobs";
-import { getWeekData, totalWeeks, trimesterOf } from "../data/seguimientoSemanal";
+import { getWeekData, totalWeeks } from "../data/seguimientoSemanal";
 import { loadPerfil } from "../data/perfil";
 import { loadCitas, toISODate as toISODateCita } from "../data/citas";
 import { loadRegistros, calcularStreak } from "../data/registroDiario";
@@ -154,7 +154,6 @@ export default function InicioPanel({ nombre, onNavigate }) {
   };
 
   const enSemanaActual = semanaMostrada >= semanaActual;
-  const enTercerTrimestre = trimesterOf(semanaActual) === 3;
 
   const esHoy = selectedDate === todayISO;
   const esFuturo = selectedDate > todayISO;
@@ -289,16 +288,6 @@ export default function InicioPanel({ nombre, onNavigate }) {
         >
           <ChevronRight className="w-4 h-4" strokeWidth={2} />
         </button>
-        {!enSemanaActual && (
-          <button
-            onClick={volverAHoy}
-            className="w-8 h-8 rounded-full bg-brand-pink/20 hover:bg-brand-pink/35 flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-0.5"
-            aria-label="Volver a hoy"
-            title="Volver a hoy"
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-brand-pink" />
-          </button>
-        )}
       </div>
 
       {/* Tarjeta de embarazo: lo más importante, justo debajo de los días */}
@@ -327,14 +316,24 @@ export default function InicioPanel({ nombre, onNavigate }) {
             </span>
           </div>
 
-          <input
-            type="range"
-            min={1}
-            max={semanaActual}
-            value={semanaMostrada}
-            onChange={(e) => handleSliderChange(Number(e.target.value))}
-            className="range-hero w-full block"
-          />
+          <div className="relative">
+            <input
+              type="range"
+              min={1}
+              max={semanaActual}
+              value={semanaMostrada}
+              onChange={(e) => handleSliderChange(Number(e.target.value))}
+              className="range-hero w-full block"
+            />
+            {!enSemanaActual && (
+              <button
+                onClick={volverAHoy}
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white/40 hover:bg-white/60 transition-colors cursor-pointer"
+                aria-label="Volver a hoy"
+                title="Volver a hoy"
+              />
+            )}
+          </div>
           <div className="flex justify-between text-xs text-white/75 mt-1 mb-4">
             <span>S.1</span>
             <span>S.{Math.round(semanaActual / 2)}</span>
@@ -368,32 +367,6 @@ export default function InicioPanel({ nombre, onNavigate }) {
           </div>
         </div>
       </div>
-
-      {enTercerTrimestre && (
-        <div className="bg-white border border-[var(--border-soft)] rounded-[20px] divide-y divide-[var(--border-soft)] mb-6 overflow-hidden shadow-sm">
-          <button
-            onClick={() => setView("contracciones")}
-            className="w-full text-left py-3.5 px-4 hover:bg-[var(--bg)] transition-colors flex items-center gap-3 cursor-pointer"
-          >
-            <div className="w-10 h-10 rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
-              <Timer className="w-[18px] h-[18px]" strokeWidth={1.6} />
-            </div>
-            <p className="text-[15px] font-semibold text-ink truncate">Contador de contracciones</p>
-          </button>
-
-          {!bebe?.registrado && (
-            <button
-              onClick={() => onNavigate?.("perfil")}
-              className="w-full text-left py-3.5 px-4 hover:bg-[var(--bg)] transition-colors flex items-center gap-3 cursor-pointer"
-            >
-              <div className="w-10 h-10 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
-                <Baby className="w-[18px] h-[18px]" strokeWidth={1.6} />
-              </div>
-              <p className="text-[15px] font-semibold text-ink truncate">¿Ya nació tu bebé?</p>
-            </button>
-          )}
-        </div>
-      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 items-start">
         {/* Columna principal: agenda */}
@@ -525,6 +498,32 @@ export default function InicioPanel({ nombre, onNavigate }) {
           )}
         </div>
       </div>
+
+      {data.trimester === 3 && (
+        <div className="bg-white border border-[var(--border-soft)] rounded-[20px] divide-y divide-[var(--border-soft)] mt-6 overflow-hidden shadow-sm">
+          <button
+            onClick={() => setView("contracciones")}
+            className="w-full text-left py-3.5 px-4 hover:bg-[var(--bg)] transition-colors flex items-center gap-3 cursor-pointer"
+          >
+            <div className="w-10 h-10 rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
+              <Timer className="w-[18px] h-[18px]" strokeWidth={1.6} />
+            </div>
+            <p className="text-[15px] font-semibold text-ink truncate">Contador de contracciones</p>
+          </button>
+
+          {!bebe?.registrado && (
+            <button
+              onClick={() => onNavigate?.("perfil")}
+              className="w-full text-left py-3.5 px-4 hover:bg-[var(--bg)] transition-colors flex items-center gap-3 cursor-pointer"
+            >
+              <div className="w-10 h-10 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
+                <Baby className="w-[18px] h-[18px]" strokeWidth={1.6} />
+              </div>
+              <p className="text-[15px] font-semibold text-ink truncate">¿Ya nació tu bebé?</p>
+            </button>
+          )}
+        </div>
+      )}
 
       <button
         onClick={() => setModalAbierto(true)}
