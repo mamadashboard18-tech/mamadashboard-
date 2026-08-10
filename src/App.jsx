@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
+import BottomNav from "./components/BottomNav";
 import InicioPanel from "./components/InicioPanel";
 import ControlCitas from "./components/ControlCitas";
 import BienestarPanel from "./components/BienestarPanel";
@@ -130,15 +131,16 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] flex flex-col">
-      <header className="no-print h-14 shrink-0 flex items-center justify-end px-6 border-b border-rose-100 bg-white">
+    <div className="h-dvh bg-[var(--bg)] flex flex-col">
+      <header className="no-print h-14 shrink-0 flex items-center justify-end px-4 sm:px-6 border-b border-[var(--border-soft)] bg-white/95 backdrop-blur">
         <button
           onClick={() => handleNavigate("perfil")}
-          className={`flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-xl transition-colors ${
+          className={`flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-xl transition-colors cursor-pointer ${
             active === "perfil"
-              ? "bg-rose-500 text-white"
-              : "text-gray-600 hover:bg-rose-50 hover:text-rose-600"
+              ? "text-white"
+              : "text-ink-muted hover:bg-brand-pink-light/40 hover:text-brand-pink"
           }`}
+          style={active === "perfil" ? { background: "var(--gradient-hero)" } : undefined}
         >
           <svg
             viewBox="0 0 24 24"
@@ -151,12 +153,12 @@ export default function App() {
             <circle cx="12" cy="8" r="4" />
             <path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" />
           </svg>
-          Mi Perfil
+          <span className="hidden sm:inline">Mi Perfil</span>
         </button>
       </header>
       <div className="flex flex-1 min-h-0">
         <Sidebar active={active} onSelect={(id) => handleNavigate(id)} onLogout={handleLogout} />
-        <main className="flex-1 p-8 max-w-5xl overflow-y-auto">
+        <main className="flex-1 p-4 pb-28 sm:p-6 lg:p-8 lg:pb-8 max-w-5xl overflow-y-auto">
           {active === "inicio" ? (
             <InicioPanel nombre={user?.nombre} onNavigate={handleNavigate} />
           ) : active === "citas" ? (
@@ -174,6 +176,7 @@ export default function App() {
           )}
         </main>
       </div>
+      <BottomNav active={active} onSelect={(id) => handleNavigate(id)} />
     </div>
   );
 }

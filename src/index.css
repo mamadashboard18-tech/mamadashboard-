@@ -1,16 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 :root {
-  --rose: #f43f8c;
-  --rose-light: #fde7ef;
-  --lavender: #8b6fd9;
-  --bg: #faf8fb;
+  /* Brand palette — restricted to opacities of the hero gradient (#e26fce / #9b5de5) */
+  --brand-pink-light: #fce3f6;
+  --brand-pink: #e26fce;
+  --brand-magenta: #c22ea6;
+  --brand-purple: #9b5de5;
+  --brand-purple-light: #ede1fb;
+  --brand-teal: #2ee6d6;
+
+  /* Legacy aliases kept for components not yet migrated */
+  --rose: #e26fce;
+  --rose-light: #fce3f6;
+  --lavender: #9b5de5;
+
+  /* Surfaces */
+  --bg: #fdf6fa;
+  --surface: #ffffff;
+  --ink: #241d2b;
+  --ink-muted: #71667a;
+  --border-soft: rgba(155, 93, 229, 0.15);
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, #ff6f9f 0%, var(--brand-pink) 50%, #a875ea 100%);
+  --gradient-alt: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-pink) 100%);
+  --gradient-hero-card:
+    radial-gradient(120% 150% at 12% 0%, #ff6f9f 0%, rgba(255, 111, 159, 0) 55%),
+    radial-gradient(130% 130% at 78% 30%, #ff9a6a 0%, rgba(255, 154, 106, 0) 50%),
+    radial-gradient(140% 160% at 90% 100%, #9b5de5 0%, rgba(155, 93, 229, 0) 60%),
+    linear-gradient(160deg, #ff6f9f 0%, var(--brand-pink) 55%, #9b6ee0 100%);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme {
+  --font-heading: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --color-brand-pink-light: #fce3f6;
+  --color-brand-pink: #e26fce;
+  --color-brand-magenta: #c22ea6;
+  --color-brand-purple: #9b5de5;
+  --color-brand-purple-light: #ede1fb;
+  --color-brand-teal: #2ee6d6;
+  --color-ink: #241d2b;
+  --color-ink-muted: #71667a;
 }
 
 body {
   margin: 0;
   background: var(--bg);
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+@supports (padding: max(0px)) {
+  .safe-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
 }
 
 @media print {
@@ -27,4 +84,43 @@ body {
 
 .print-only {
   display: none;
+}
+
+.range-hero {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.range-hero::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.range-hero::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #fff;
+  margin-top: -6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.range-hero::-moz-range-track {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.35);
+}
+.range-hero::-moz-range-progress {
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+}
+.range-hero::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #fff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }

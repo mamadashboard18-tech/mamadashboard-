@@ -57,6 +57,24 @@ export function getBibliotecaPorCategoria(categoria) {
   return biblioteca.filter((item) => item.categoria === categoria);
 }
 
+// Solo mapeamos síntomas a categorías de biblioteca cuyo contenido es realmente
+// sobre el embarazo: "sueno" en la biblioteca es sobre sueño del bebé/lactancia,
+// no sirve para el insomnio de la mamá, así que no se usa acá.
+const SINTOMA_CATEGORIA = {
+  "Náuseas matutinas": "nutricion",
+  "Acidez estomacal": "nutricion",
+  "Aumento del apetito": "nutricion",
+  "Antojos": "nutricion",
+  "Estreñimiento": "nutricion",
+};
+
+export function getRecomendacionesHoy(semana, sintomas = []) {
+  const semanal = getContenidoSemana(semana, "embarazo");
+  const categorias = [...new Set(sintomas.map((s) => SINTOMA_CATEGORIA[s]).filter(Boolean))];
+  const porSintomas = categorias.flatMap((cat) => getBibliotecaPorCategoria(cat)).slice(0, 4);
+  return { semanal, porSintomas };
+}
+
 export { semanal, biblioteca };
 
 // Contenido curado de influencers y famosas hablando de maternidad, embarazo y

@@ -1,9 +1,33 @@
 import { useEffect, useMemo, useState } from "react";
+import {
+  User,
+  Flame,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Timer,
+  Baby,
+  NotebookPen,
+  Headphones,
+  Lightbulb,
+  ShieldCheck,
+  Stethoscope,
+  ScanLine,
+  Droplet,
+  Backpack,
+  Smile,
+  Apple,
+  MessageCircle,
+  CalendarDays,
+  Sprout,
+} from "lucide-react";
 import CircularProgress from "./CircularProgress";
 import RegistroDiarioModal from "./RegistroDiarioModal";
+import ContenidoDiarioModal from "./ContenidoDiarioModal";
 import InicioPostparto from "./InicioPostparto";
 import ContadorContracciones from "./ContadorContracciones";
-import { getWeekData, totalWeeks } from "../data/seguimientoSemanal";
+import AmbientBlobs from "./AmbientBlobs";
+import { getWeekData, totalWeeks, trimesterOf } from "../data/seguimientoSemanal";
 import { loadPerfil } from "../data/perfil";
 import { loadCitas, toISODate as toISODateCita } from "../data/citas";
 import { loadRegistros, calcularStreak } from "../data/registroDiario";
@@ -11,28 +35,27 @@ import { esSintomaDeAtencion } from "../data/sintomas";
 import { loadBebe } from "../data/bebe";
 
 const tipoCitaIconos = {
-  "Control obstétrico": "🩺",
-  "Ecografía": "🖼️",
-  "Análisis de sangre": "🩸",
-  "Curso de preparto": "🎒",
-  "Odontología": "🦷",
-  "Nutrición": "🥗",
-  "Psicología perinatal": "💬",
-  "Otro": "🗓️",
+  "Control obstétrico": Stethoscope,
+  "Ecografía": ScanLine,
+  "Análisis de sangre": Droplet,
+  "Curso de preparto": Backpack,
+  "Odontología": Smile,
+  "Nutrición": Apple,
+  "Psicología perinatal": MessageCircle,
+  "Otro": CalendarDays,
 };
 
 const weekdayLabels = ["L", "M", "X", "J", "V", "S", "D"];
 
 const trimesterLabel = { 1: "1er trimestre", 2: "2do trimestre", 3: "3er trimestre" };
-const trimesterColor = {
-  1: { bg: "#fde7ef", text: "#f43f8c" },
-  2: { bg: "#ede9fe", text: "#8b6fd9" },
-  3: { bg: "#fff4e5", text: "#d97706" },
-};
+
+function capitalizeFirst(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function formatFechaLarga(iso) {
   const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
+  return capitalizeFirst(d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" }));
 }
 
 function mondayOf(date) {
@@ -71,6 +94,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
   const [citas, setCitas] = useState([]);
   const [registros, setRegistros] = useState({});
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [contenidoModalAbierto, setContenidoModalAbierto] = useState(false);
   const [bebe, setBebe] = useState(null);
 
   useEffect(() => {
@@ -110,6 +134,11 @@ export default function InicioPanel({ nombre, onNavigate }) {
     return (registroHoy?.sintomas || []).filter(esSintomaDeAtencion);
   }, [registros, todayISO]);
 
+  const volverAHoy = () => {
+    setRefDate(today);
+    setSelectedDate(todayISO);
+  };
+
   const cambiarSemana = (delta) => {
     setRefDate((prev) => {
       const next = new Date(prev);
@@ -120,6 +149,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
   };
 
   const enSemanaActual = semanaMostrada >= semanaActual;
+  const enTercerTrimestre = trimesterOf(semanaActual) === 3;
 
   const esHoy = selectedDate === todayISO;
   const esFuturo = selectedDate > todayISO;
@@ -131,9 +161,8 @@ export default function InicioPanel({ nombre, onNavigate }) {
     const deCitas = citasDelDia.map((c) => ({
       id: `cita-${c.id}`,
       hora: c.hora || "",
-      icon: tipoCitaIconos[c.tipo] || "🗓️",
+      icon: tipoCitaIconos[c.tipo] || CalendarDays,
       title: c.tipo,
-      subtitle: [c.hora, c.lugar].filter(Boolean).join(" · ") || "Sin hora ni lugar",
       onClick: () => onNavigate?.("citas"),
     }));
     const deRegistro = registroDelDia
@@ -141,11 +170,8 @@ export default function InicioPanel({ nombre, onNavigate }) {
           {
             id: "registro-dia",
             hora: "",
-            icon: "📝",
+            icon: NotebookPen,
             title: "Registro del día",
-            subtitle: registroDelDia.nota
-              ? registroDelDia.nota.slice(0, 60) + (registroDelDia.nota.length > 60 ? "…" : "")
-              : "Ánimo, energía y sueño registrados",
             onClick: () => setModalAbierto(true),
           },
         ]
@@ -159,18 +185,18 @@ export default function InicioPanel({ nombre, onNavigate }) {
     if (!registroDelDia) {
       items.push({
         id: "sugerido-registro",
-        icon: "📝",
+        icon: NotebookPen,
         title: "Completá tu registro de hoy",
-        subtitle: "Todavía no registraste cómo te sentiste hoy",
         onClick: () => setModalAbierto(true),
+        tint: "purple",
       });
     }
     items.push({
       id: "sugerido-contenido",
-      icon: "🎧",
-      title: "Tu contenido de hoy",
-      subtitle: `Podcast y tips pensados para tu semana ${semanaActual}`,
-      onClick: () => onNavigate?.("multimedia"),
+      icon: Headphones,
+      title: "Contenido diario",
+      onClick: () => setContenidoModalAbierto(true),
+      tint: "pink",
     });
     return items;
   }, [esHoy, registroDelDia, onNavigate, semanaActual]);
@@ -184,69 +210,49 @@ export default function InicioPanel({ nombre, onNavigate }) {
   }
 
   return (
-    <div>
+    <div className="relative">
+      <AmbientBlobs />
       {/* Encabezado */}
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-xl font-semibold text-gray-900">Hola, {nombre || "mamá"} 👋</h2>
+        <h2 className="font-heading text-xl font-bold text-ink">Hola, {nombre || "mamá"}</h2>
         <div className="flex items-center gap-2">
           {streak > 0 && (
-            <span className="flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
-              🔥 {streak} {streak === 1 ? "día seguido" : "días seguidos"}
+            <span className="flex items-center gap-1 bg-brand-pink-light/60 text-brand-pink text-xs font-semibold px-3 py-1.5 rounded-full">
+              <Flame className="w-3.5 h-3.5" strokeWidth={2.4} fill="currentColor" />
+              {streak} {streak === 1 ? "día seguido" : "días seguidos"}
             </span>
           )}
-          <button className="w-9 h-9 rounded-full bg-white border border-rose-100 flex items-center justify-center text-gray-400 hover:text-rose-500">
-            🔔
+          <button
+            onClick={() => onNavigate?.("perfil")}
+            className="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-ink-muted hover:bg-brand-pink-light/60 hover:text-brand-pink transition-colors cursor-pointer"
+            aria-label="Mi perfil"
+          >
+            <User className="w-5 h-5" strokeWidth={1.7} />
           </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-sm font-medium text-gray-700">
-            Semana {semanaMostrada} de {totalWeeks}
-          </p>
-          <span
-            className="text-xs px-2 py-0.5 rounded-full font-medium"
-            style={{
-              background: trimesterColor[data.trimester].bg,
-              color: trimesterColor[data.trimester].text,
-            }}
+      <div className="flex items-baseline justify-between mb-3">
+        <p className="text-sm font-semibold text-ink">
+          {capitalizeFirst(diasSemana[0].toLocaleDateString("es-AR", { month: "long", year: "numeric" }))}
+        </p>
+        {!enSemanaActual && (
+          <button
+            onClick={volverAHoy}
+            className="text-brand-pink text-xs font-bold cursor-pointer hover:underline"
           >
-            {trimesterLabel[data.trimester]}
-          </span>
-        </div>
-        <div className="relative flex items-center">
-          <input
-            type="range"
-            min={1}
-            max={semanaActual}
-            value={semanaMostrada}
-            onChange={(e) => handleSliderChange(Number(e.target.value))}
-            className="w-full accent-rose-500"
-          />
-          {!enSemanaActual && (
-            <button
-              onClick={() => handleSliderChange(semanaActual)}
-              className="absolute -right-1 w-3.5 h-3.5 rounded-full bg-gray-300 border-2 border-white hover:bg-gray-400 transition-colors"
-              aria-label={`Volver a tu semana actual (semana ${semanaActual})`}
-              title={`Volver a semana ${semanaActual}`}
-            />
-          )}
-        </div>
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
-          <span>S.1</span>
-          <span>S.{Math.round(semanaActual / 2)}</span>
-          <span>S.{semanaActual}</span>
-        </div>
+            Volver a hoy
+          </button>
+        )}
       </div>
 
-      <p className="text-sm font-semibold text-gray-700 mb-2 capitalize">
-        {diasSemana[0].toLocaleDateString("es-AR", { month: "long", year: "numeric" })}
-      </p>
-
-      <div className="flex items-center gap-2 mb-6">
-        <button onClick={() => cambiarSemana(-1)} className="text-gray-400 hover:text-rose-500 px-1">
-          ←
+      <div className="flex items-center gap-0.5 mb-6">
+        <button
+          onClick={() => cambiarSemana(-1)}
+          className="w-10 h-10 flex items-center justify-center rounded-full text-[#c9c0d0] hover:text-brand-pink hover:bg-brand-purple-light/40 transition-colors cursor-pointer shrink-0"
+          aria-label="Semana anterior"
+        >
+          <ChevronLeft className="w-4 h-4" strokeWidth={2} />
         </button>
         <div className="grid grid-cols-7 gap-1 flex-1">
           {diasSemana.map((d, i) => {
@@ -258,21 +264,31 @@ export default function InicioPanel({ nombre, onNavigate }) {
               <button
                 key={i}
                 onClick={() => setSelectedDate(iso)}
-                className={`relative rounded-xl py-2 flex flex-col items-center transition-colors ${
-                  isSelected
-                    ? "bg-rose-500 text-white"
-                    : isToday
-                    ? "bg-rose-100 text-rose-600 font-semibold"
-                    : "bg-white border border-rose-100 text-gray-600 hover:bg-rose-50"
-                }`}
+                className="flex flex-col items-center gap-0.5 py-2.5 px-0.5 rounded-2xl cursor-pointer w-full box-border"
+                style={isSelected ? { background: "var(--gradient-hero)", boxShadow: "0 4px 12px rgba(216,109,214,0.35)" } : undefined}
               >
-                <span className="text-[10px] uppercase opacity-80">{weekdayLabels[i]}</span>
-                <span className="text-sm font-medium">{d.getDate()}</span>
+                <span
+                  className={`text-lg leading-none ${
+                    isSelected
+                      ? "font-bold text-white"
+                      : isToday
+                      ? "font-bold text-brand-pink"
+                      : "font-semibold text-ink"
+                  }`}
+                >
+                  {d.getDate()}
+                </span>
+                <span
+                  className={`text-[11px] uppercase tracking-wide ${
+                    isSelected ? "font-bold text-white/85" : "font-semibold text-[#a89fb0]"
+                  }`}
+                >
+                  {weekdayLabels[i]}
+                </span>
                 {tieneAlgo && (
                   <span
-                    className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${
-                      isSelected ? "bg-white" : "bg-rose-500"
-                    }`}
+                    className="w-1 h-1 rounded-full mt-0.5"
+                    style={{ background: isSelected ? "rgba(255,255,255,0.85)" : "var(--brand-pink)" }}
                   />
                 )}
               </button>
@@ -282,178 +298,227 @@ export default function InicioPanel({ nombre, onNavigate }) {
         <button
           onClick={() => cambiarSemana(1)}
           disabled={enSemanaActual}
-          className="text-gray-400 hover:text-rose-500 px-1 disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
+          className="w-10 h-10 flex items-center justify-center rounded-full text-[#c9c0d0] hover:text-brand-pink hover:bg-brand-purple-light/40 transition-colors cursor-pointer shrink-0 disabled:opacity-30 disabled:hover:text-[#c9c0d0] disabled:hover:bg-transparent disabled:cursor-not-allowed"
+          aria-label="Semana siguiente"
         >
-          →
+          <ChevronRight className="w-4 h-4" strokeWidth={2} />
         </button>
       </div>
 
       {/* Tarjeta de embarazo: lo más importante, justo debajo de los días */}
-      <div className="bg-gradient-to-br from-rose-500 to-pink-400 rounded-3xl p-6 sm:p-8 shadow-sm mb-6">
-        <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-6 items-center mb-6">
-          <CircularProgress value={porcentaje} size={130} stroke={9}>
-            <span className="text-xl font-semibold">Semana {semanaMostrada}</span>
-            <span className="text-xs opacity-90">{porcentaje}% del camino</span>
-          </CircularProgress>
+      <div
+        className="relative overflow-hidden rounded-[28px] p-5 sm:p-6 mb-6"
+        style={{ background: "var(--gradient-hero-card)", boxShadow: "0 16px 40px rgba(255,138,92,0.25)" }}
+      >
+        <div
+          className="absolute -top-[70px] -right-[60px] w-[300px] h-[300px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%)", filter: "blur(30px)" }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-[90px] -left-[60px] w-[260px] h-[260px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 70%)", filter: "blur(30px)" }}
+          aria-hidden="true"
+        />
 
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl shrink-0">
-              {data.size.emoji}
-            </div>
-            <div>
-              <p className="text-white text-sm opacity-90">Tu bebé es del tamaño de</p>
-              <p className="text-white text-lg font-semibold">{data.size.name}</p>
-              <p className="text-white text-sm opacity-90 mt-1">
-                {data.weight ? `≈ ${data.weight} g` : "—"}
-                {data.length ? ` · ≈ ${data.length} cm` : ""}
-              </p>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-white text-sm font-bold">
+              Semana {semanaMostrada} de {totalWeeks}
+            </p>
+            <span className="bg-white/28 text-white text-xs font-bold px-3 py-1 rounded-full">
+              {trimesterLabel[data.trimester]}
+            </span>
+          </div>
+
+          <input
+            type="range"
+            min={1}
+            max={semanaActual}
+            value={semanaMostrada}
+            onChange={(e) => handleSliderChange(Number(e.target.value))}
+            className="range-hero w-full block"
+          />
+          <div className="flex justify-between text-xs text-white/75 mt-1 mb-4">
+            <span>S.1</span>
+            <span>S.{Math.round(semanaActual / 2)}</span>
+            <span>S.{semanaActual}</span>
+          </div>
+
+          <div className="flex items-center gap-3 mb-3">
+            <CircularProgress value={porcentaje} size={100} stroke={7}>
+              <span className="font-heading text-2xl font-bold leading-none">{porcentaje}%</span>
+              <span className="text-[10px] uppercase tracking-wide opacity-85 mt-1">Semana {semanaMostrada}</span>
+            </CircularProgress>
+
+            <div className="flex items-center gap-2.5 flex-1 min-w-0">
+              <div className="w-11 h-11 rounded-full bg-white/24 flex items-center justify-center shrink-0">
+                <Sprout className="w-5 h-5 text-white" strokeWidth={1.75} />
+              </div>
+              <div className="text-left min-w-0">
+                <p className="text-white text-[13px] opacity-90 leading-tight">Tu bebé es del tamaño de</p>
+                <p className="text-white text-base font-bold leading-tight mt-0.5">{data.size.name}</p>
+                <p className="text-white text-[13px] opacity-90 leading-tight mt-0.5">
+                  {data.weight ? `≈ ${data.weight} g` : "—"}
+                  {data.length ? ` · ≈ ${data.length} cm` : ""}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="bg-white/15 rounded-2xl p-4">
-          <p className="text-xs text-white opacity-80 mb-1">Hito de esta semana</p>
-          <p className="text-sm text-white">{data.milestone}</p>
+          <div className="bg-white/20 rounded-[18px] px-4 py-3">
+            <p className="text-[12px] text-white uppercase tracking-wide opacity-85 mb-1">Hito de esta semana</p>
+            <p className="text-[15px] text-white leading-relaxed">{data.milestone}</p>
+          </div>
         </div>
       </div>
 
-      {semanaActual >= 28 && (
-        <button
-          onClick={() => setView("contracciones")}
-          className="w-full text-left bg-white border border-dashed border-rose-200 rounded-2xl p-4 mb-3 hover:border-rose-400 transition-colors flex items-center justify-between gap-3"
-        >
-          <div>
-            <p className="text-sm font-medium text-gray-900">⏱️ Contador de contracciones</p>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Cronometrá cada contracción y el intervalo con la anterior
-            </p>
-          </div>
-          <span className="text-rose-400 text-sm shrink-0">＋</span>
-        </button>
+      {enTercerTrimestre && (
+        <div className="bg-white border border-[var(--border-soft)] rounded-[20px] divide-y divide-[var(--border-soft)] mb-6 overflow-hidden shadow-sm">
+          <button
+            onClick={() => setView("contracciones")}
+            className="w-full text-left py-3.5 px-4 hover:bg-[var(--bg)] transition-colors flex items-center gap-3 cursor-pointer"
+          >
+            <div className="w-10 h-10 rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
+              <Timer className="w-[18px] h-[18px]" strokeWidth={1.6} />
+            </div>
+            <p className="text-[15px] font-semibold text-ink truncate">Contador de contracciones</p>
+          </button>
+
+          {!bebe?.registrado && (
+            <button
+              onClick={() => onNavigate?.("perfil")}
+              className="w-full text-left py-3.5 px-4 hover:bg-[var(--bg)] transition-colors flex items-center gap-3 cursor-pointer"
+            >
+              <div className="w-10 h-10 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
+                <Baby className="w-[18px] h-[18px]" strokeWidth={1.6} />
+              </div>
+              <p className="text-[15px] font-semibold text-ink truncate">¿Ya nació tu bebé?</p>
+            </button>
+          )}
+        </div>
       )}
 
-      {semanaActual >= 28 && !bebe?.registrado && (
-        <button
-          onClick={() => onNavigate?.("perfil")}
-          className="w-full text-left bg-white border border-dashed border-rose-200 rounded-2xl p-4 mb-6 hover:border-rose-400 transition-colors flex items-center justify-between gap-3"
-        >
-          <div>
-            <p className="text-sm font-medium text-gray-900">¿Ya nació tu bebé?</p>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Registrá el nacimiento para activar tu cuarto trimestre
-            </p>
-          </div>
-          <span className="text-rose-400 text-sm shrink-0">＋</span>
-        </button>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 items-start">
         {/* Columna principal: agenda */}
-        <div>
-          <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-800 capitalize mb-4">
-              {esHoy ? "Hoy" : formatFechaLarga(selectedDate)}
+        <div className="min-w-0">
+          <p className="text-[15px] font-bold text-ink mb-3.5 capitalize">
+            {esHoy ? "Hoy" : formatFechaLarga(selectedDate)}
+          </p>
+
+          {itemsRegistrados.length === 0 && sugerencias.length === 0 && (
+            <p className="text-sm text-ink-muted bg-white border border-[var(--border-soft)] rounded-[20px] p-[18px] shadow-sm">
+              {esFuturo ? "Todavía no tenés nada agendado este día." : "No registraste nada este día."}
             </p>
+          )}
 
-            {itemsRegistrados.length === 0 && sugerencias.length === 0 && (
-              <p className="text-sm text-gray-400">
-                {esFuturo ? "Todavía no tenés nada agendado este día." : "No registraste nada este día."}
+          {itemsRegistrados.length > 0 && (
+            <ul>
+              {itemsRegistrados.map((item, idx) => (
+                <li key={item.id} className="flex gap-2.5 items-stretch mb-2.5">
+                  <div className="w-2 shrink-0 flex flex-col items-center pt-[18px]">
+                    <span className="w-2 h-2 rounded-full bg-brand-pink shrink-0" />
+                    {idx < itemsRegistrados.length - 1 && (
+                      <span className="w-px flex-1 bg-[var(--border-soft)] mt-1" />
+                    )}
+                  </div>
+                  <button
+                    onClick={item.onClick}
+                    className="flex-1 min-w-0 bg-white border border-[var(--border-soft)] rounded-[20px] px-4 py-3.5 shadow-sm flex items-center gap-3 text-left hover:shadow-md transition-shadow cursor-pointer"
+                  >
+                    <span className="w-[38px] h-[38px] rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
+                      <item.icon className="w-[17px] h-[17px]" strokeWidth={1.6} />
+                    </span>
+                    <p className="flex-1 min-w-0 text-[15px] font-bold text-brand-pink truncate">{item.title}</p>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {sugerencias.length > 0 && (
+            <>
+              <p className="text-xs font-bold text-brand-pink uppercase tracking-wide mt-4 mb-2.5">
+                Sugerencias para hoy
               </p>
-            )}
-
-            {itemsRegistrados.length > 0 && (
-              <ul className="space-y-2 mb-4">
-                {itemsRegistrados.map((item) => (
-                  <li key={item.id}>
+              <div className="flex flex-col gap-2.5">
+                {sugerencias.map((item) => {
+                  const isPink = item.tint !== "purple";
+                  return (
                     <button
+                      key={item.id}
                       onClick={item.onClick}
-                      className="w-full flex items-center gap-3 text-left bg-rose-50 border border-rose-100 rounded-xl p-3 hover:border-rose-300 transition-colors"
+                      className={`w-full text-left rounded-[20px] flex items-center gap-3 px-4 py-3.5 cursor-pointer transition-colors ${
+                        isPink ? "bg-brand-pink-light/50 hover:bg-brand-pink-light/80" : "bg-brand-purple-light/60 hover:bg-brand-purple-light"
+                      }`}
                     >
-                      <span className="text-xl shrink-0">{item.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
-                        <p className="text-xs text-gray-500 truncate">{item.subtitle}</p>
-                      </div>
-                      {item.hora && (
-                        <span className="text-xs text-gray-400 shrink-0">{item.hora}</span>
-                      )}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {sugerencias.length > 0 && (
-              <>
-                <p className="text-xs font-semibold text-rose-400 uppercase tracking-wide mb-2">
-                  Sugerencias para hoy
-                </p>
-                <ul className="space-y-2">
-                  {sugerencias.map((item) => (
-                    <li key={item.id}>
-                      <button
-                        onClick={item.onClick}
-                        className="w-full flex items-center gap-3 text-left bg-white border border-dashed border-rose-200 rounded-xl p-3 hover:border-rose-400 transition-colors"
+                      <span
+                        className={`w-[38px] h-[38px] rounded-full bg-white flex items-center justify-center shrink-0 ${
+                          isPink ? "text-brand-pink" : "text-brand-purple"
+                        }`}
                       >
-                        <span className="text-xl shrink-0">{item.icon}</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
-                          <p className="text-xs text-gray-500 truncate">{item.subtitle}</p>
-                        </div>
-                        <span className="text-rose-400 text-sm">＋</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </div>
+                        <item.icon className="w-4 h-4" strokeWidth={1.6} />
+                      </span>
+                      <p className="flex-1 min-w-0 text-[15px] font-bold text-ink truncate">{item.title}</p>
+                      <ChevronRight
+                        className={`w-4 h-4 shrink-0 ${isPink ? "text-brand-pink" : "text-brand-purple"}`}
+                        strokeWidth={2}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Columna lateral: próxima cita y alertas */}
-        <div className="space-y-4">
-          <div className="bg-white border border-rose-100 rounded-2xl p-5 shadow-sm">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div className="flex flex-col gap-4">
+          <div className="bg-[#fdf9fb] rounded-2xl p-3.5">
+            <p className="text-xs font-bold text-[#a89fb0] uppercase tracking-wide mb-3 px-1.5">
               Próxima cita
             </p>
             {proximaCita ? (
               <button
                 onClick={() => onNavigate?.("citas")}
-                className="w-full text-left bg-rose-50 border border-rose-100 rounded-xl p-3 hover:border-rose-300 transition-colors"
+                className="w-full text-left flex items-center gap-3 hover:bg-white/70 rounded-xl transition-colors cursor-pointer p-1.5"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">{tipoCitaIconos[proximaCita.tipo] || "🗓️"}</span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{proximaCita.tipo}</p>
-                    <p className="text-xs text-gray-500 capitalize truncate">
-                      {formatFechaLarga(proximaCita.fecha)}
-                      {proximaCita.hora && ` · ${proximaCita.hora}`}
-                    </p>
-                  </div>
-                </div>
+                <span className="w-[38px] h-[38px] rounded-full bg-brand-purple-light/70 flex items-center justify-center text-ink-muted shrink-0">
+                  {(() => {
+                    const Icon = tipoCitaIconos[proximaCita.tipo] || CalendarDays;
+                    return <Icon className="w-[17px] h-[17px]" strokeWidth={1.6} />;
+                  })()}
+                </span>
+                <p className="min-w-0 text-[15px] font-semibold text-ink truncate">{proximaCita.tipo}</p>
               </button>
             ) : (
               <button
                 onClick={() => onNavigate?.("citas")}
-                className="w-full text-left bg-rose-50 border border-rose-100 rounded-xl p-3 hover:border-rose-300 transition-colors"
+                className="w-full text-left hover:bg-white/70 rounded-xl transition-colors cursor-pointer p-1.5"
               >
-                <p className="text-sm text-gray-700">No tenés citas agendadas</p>
-                <p className="text-xs text-rose-500 mt-1">+ Agendar una cita</p>
+                <p className="text-sm text-ink">No tenés citas agendadas</p>
+                <p className="text-xs text-brand-pink mt-1 flex items-center gap-1">
+                  <Plus className="w-3.5 h-3.5" strokeWidth={2.4} /> Agendar una cita
+                </p>
               </button>
             )}
           </div>
 
           {sintomasAtencionHoy.length > 0 ? (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-800 text-sm">
-              <p className="font-medium mb-1">💡 Vale la pena comentarlo con tu médico</p>
+            <div className="bg-brand-purple-light/50 rounded-2xl p-4 text-brand-magenta text-sm">
+              <p className="font-medium mb-1 flex items-center gap-1.5">
+                <Lightbulb className="w-4 h-4 shrink-0" strokeWidth={2} />
+                Vale la pena comentarlo con tu médico
+              </p>
               <p>
                 Hoy registraste: {sintomasAtencionHoy.join(", ")}. Esto no es un diagnóstico, es
                 solo una sugerencia basada en lo que registraste vos misma.
               </p>
             </div>
           ) : (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-800 text-sm">
-              ⚠️ Sin alertas activas. Todo en orden esta semana.
+            <div className="bg-brand-purple-light/60 rounded-2xl px-[18px] py-4 flex items-center gap-2.5 text-brand-purple text-sm">
+              <ShieldCheck className="w-[18px] h-[18px] shrink-0" strokeWidth={1.6} />
+              Sin alertas activas. Todo en orden esta semana.
             </div>
           )}
         </div>
@@ -461,10 +526,12 @@ export default function InicioPanel({ nombre, onNavigate }) {
 
       <button
         onClick={() => setModalAbierto(true)}
-        className="fixed bottom-8 right-8 flex items-center gap-2 bg-rose-500 text-white pl-5 pr-6 py-4 rounded-full shadow-xl shadow-rose-500/30 hover:bg-rose-600 hover:scale-105 transition-all"
+        className="no-print fixed bottom-24 right-5 lg:bottom-8 lg:right-8 w-14 h-14 flex items-center justify-center text-white rounded-full shadow-xl shadow-brand-pink/30 hover:scale-105 active:scale-100 transition-transform cursor-pointer z-20"
+        style={{ background: "var(--gradient-hero)" }}
+        aria-label="Registrar mi día"
+        title="Registrar mi día"
       >
-        <span className="text-2xl leading-none">+</span>
-        <span className="text-sm font-semibold">Registrar mi día</span>
+        <Plus className="w-6 h-6" strokeWidth={2.6} />
       </button>
 
       {modalAbierto && (
@@ -473,6 +540,14 @@ export default function InicioPanel({ nombre, onNavigate }) {
           sintomasSemana={data.symptoms}
           onClose={() => setModalAbierto(false)}
           onSaved={() => setRegistros(loadRegistros())}
+        />
+      )}
+
+      {contenidoModalAbierto && (
+        <ContenidoDiarioModal
+          semana={semanaActual}
+          sintomas={registros[todayISO]?.sintomas || []}
+          onClose={() => setContenidoModalAbierto(false)}
         />
       )}
     </div>
