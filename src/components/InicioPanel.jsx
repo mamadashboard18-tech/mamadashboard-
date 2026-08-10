@@ -478,24 +478,6 @@ export default function InicioPanel({ nombre, onNavigate }) {
               </button>
             )}
           </div>
-
-          {sintomasAtencionHoy.length > 0 ? (
-            <div className="bg-brand-purple-light/50 rounded-2xl p-4 text-brand-magenta text-sm">
-              <p className="font-medium mb-1 flex items-center gap-1.5">
-                <Lightbulb className="w-4 h-4 shrink-0" strokeWidth={2} />
-                Vale la pena comentarlo con tu médico
-              </p>
-              <p>
-                Hoy registraste: {sintomasAtencionHoy.join(", ")}. Esto no es un diagnóstico, es
-                solo una sugerencia basada en lo que registraste vos misma.
-              </p>
-            </div>
-          ) : (
-            <div className="bg-brand-purple-light/60 rounded-2xl px-[18px] py-4 flex items-center gap-2.5 text-brand-purple text-sm">
-              <ShieldCheck className="w-[18px] h-[18px] shrink-0" strokeWidth={1.6} />
-              Sin alertas activas. Todo en orden esta semana.
-            </div>
-          )}
         </div>
       </div>
 
@@ -523,6 +505,24 @@ export default function InicioPanel({ nombre, onNavigate }) {
             </button>
           )}
         </div>
+      )}
+
+      {sintomasAtencionHoy.length > 0 ? (
+        <div className="bg-brand-purple-light/40 rounded-2xl p-4 text-brand-magenta text-sm mt-6 mb-6 pr-16 lg:pr-4">
+          <p className="font-medium mb-1 flex items-center gap-1.5">
+            <Lightbulb className="w-4 h-4 shrink-0" strokeWidth={2} />
+            Vale la pena comentarlo con tu médico
+          </p>
+          <p>
+            Hoy registraste: {sintomasAtencionHoy.join(", ")}. Esto no es un diagnóstico, es
+            solo una sugerencia basada en lo que registraste vos misma.
+          </p>
+        </div>
+      ) : (
+        <p className="flex items-center gap-1.5 text-xs text-ink-muted mt-6 mb-6 pr-16 lg:pr-0">
+          <ShieldCheck className="w-3.5 h-3.5 shrink-0" strokeWidth={1.6} />
+          Sin alertas activas. Todo en orden esta semana.
+        </p>
       )}
 
       <button
