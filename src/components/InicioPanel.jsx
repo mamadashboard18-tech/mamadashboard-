@@ -316,7 +316,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
             </span>
           </div>
 
-          <div className="relative">
+          <div className="relative h-4 flex items-center">
             <input
               type="range"
               min={1}
@@ -328,7 +328,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
             {!enSemanaActual && (
               <button
                 onClick={volverAHoy}
-                className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white/40 hover:bg-white/60 transition-colors cursor-pointer"
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white/70 hover:bg-white/90 transition-colors cursor-pointer pointer-events-auto"
                 aria-label="Volver a hoy"
                 title="Volver a hoy"
               />
