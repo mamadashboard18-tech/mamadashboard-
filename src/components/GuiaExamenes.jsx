@@ -128,9 +128,11 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
       {onBack && (
         <button
           onClick={onBack}
-          className="lg:hidden inline-flex items-center gap-1.5 text-base text-ink-muted hover:text-brand-pink transition-colors mb-4 cursor-pointer"
+          className="lg:hidden inline-flex items-center gap-2.5 text-base text-ink-muted hover:text-brand-pink transition-colors mb-4 cursor-pointer"
         >
-          <ChevronLeft className="w-[15px] h-[15px]" strokeWidth={1.8} />
+          <span className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0">
+            <ChevronLeft className="w-4 h-4" strokeWidth={2} />
+          </span>
           Volver a Citas
         </button>
       )}
