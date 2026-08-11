@@ -638,33 +638,33 @@ export default function ControlCitas({ onNavigate }) {
 
             <label className="text-xs text-ink-muted block mb-1 px-1">Etiqueta</label>
             <div className="relative mb-4">
-              <button
-                type="button"
-                onClick={() => setEtiquetaAbierta((v) => !v)}
-                className="w-full flex items-center justify-between gap-2 rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-left cursor-pointer"
-              >
-                <span className={`text-[15px] truncate ${draft.tipo ? "text-ink" : "text-ink-muted"}`}>
-                  {draft.tipo || "Elegí o escribí una etiqueta"}
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 text-ink-muted shrink-0 transition-transform ${etiquetaAbierta ? "rotate-180" : ""}`}
-                  strokeWidth={2}
+              <div className="relative z-[57]">
+                <input
+                  type="text"
+                  value={draft.tipo}
+                  onChange={(e) => updateDraft("tipo", e.target.value)}
+                  onFocus={() => setEtiquetaAbierta(true)}
+                  placeholder="Elegí o escribí una etiqueta"
+                  className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white pl-4 pr-11 py-3 text-[15px] text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink box-border"
                 />
-              </button>
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setEtiquetaAbierta((v) => !v)}
+                  aria-label="Ver sugerencias de etiqueta"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-ink-muted cursor-pointer"
+                >
+                  <ChevronDown
+                    className={`w-4 h-4 shrink-0 transition-transform ${etiquetaAbierta ? "rotate-180" : ""}`}
+                    strokeWidth={2}
+                  />
+                </button>
+              </div>
 
               {etiquetaAbierta && (
                 <>
                   <div className="fixed inset-0 z-[55]" onClick={() => setEtiquetaAbierta(false)} />
                   <div className="absolute left-0 right-0 z-[56] mt-2 bg-white border border-[var(--border-soft)] rounded-[20px] shadow-lg p-2.5 max-h-64 overflow-y-auto">
-                    <input
-                      type="text"
-                      value={tiposCita.includes(draft.tipo) ? "" : draft.tipo}
-                      onChange={(e) => updateDraft("tipo", e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && setEtiquetaAbierta(false)}
-                      placeholder="Escribí tu propia etiqueta"
-                      autoFocus
-                      className="w-full rounded-full border border-[rgba(155,93,229,0.15)] bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink box-border mb-2"
-                    />
                     <ul className="space-y-0.5">
                       {tiposCita.map((t) => {
                         const selected = draft.tipo === t;
