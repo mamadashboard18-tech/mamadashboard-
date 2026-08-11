@@ -3,6 +3,7 @@ import {
   User,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   CalendarDays,
   Plus,
   X,
@@ -116,6 +117,7 @@ export default function ControlCitas({ onNavigate }) {
   const [editingId, setEditingId] = useState(null);
   const [draftIso, setDraftIso] = useState(todayISO);
   const [draft, setDraft] = useState(emptyDraft);
+  const [etiquetaAbierta, setEtiquetaAbierta] = useState(false);
 
   const [marcadas, setMarcadas] = useState([]);
   const [propias, setPropias] = useState([]);
@@ -241,6 +243,7 @@ export default function ControlCitas({ onNavigate }) {
     setEditingId(null);
     setDraftIso(iso || selectedDate);
     setDraft(emptyDraft);
+    setEtiquetaAbierta(false);
     setShowModal(true);
   };
 
@@ -257,10 +260,14 @@ export default function ControlCitas({ onNavigate }) {
       compartirPartner: cita.compartirPartner ?? true,
       reminder: cita.reminder ?? true,
     });
+    setEtiquetaAbierta(false);
     setShowModal(true);
   };
 
-  const cerrarModal = () => setShowModal(false);
+  const cerrarModal = () => {
+    setShowModal(false);
+    setEtiquetaAbierta(false);
+  };
 
   const updateDraft = (field, value) => setDraft((prev) => ({ ...prev, [field]: value }));
 
@@ -604,31 +611,8 @@ export default function ControlCitas({ onNavigate }) {
               type="date"
               value={draftIso}
               onChange={(e) => setDraftIso(e.target.value)}
-              className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-[15px] text-ink focus:outline-none focus:border-brand-pink box-border mb-1"
+              className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-[15px] text-ink focus:outline-none focus:border-brand-pink box-border mb-4"
             />
-            <p className="text-sm text-[#8a7f92] mb-5 px-1">{formatFechaLarga(draftIso)}</p>
-
-            <p className="text-sm font-bold text-ink-muted uppercase tracking-wide mb-2">Tipo de cita</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {tiposCita.map((t) => {
-                const selected = draft.tipo === t;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => updateDraft("tipo", t)}
-                    className={`text-sm font-semibold px-4 py-2.5 rounded-full transition-colors cursor-pointer ${
-                      selected
-                        ? "text-white"
-                        : "border-[1.5px] border-dashed border-[rgba(226,111,206,0.45)] bg-[rgba(255,111,159,0.06)] text-ink hover:bg-[rgba(255,111,159,0.12)]"
-                    }`}
-                    style={selected ? { background: "var(--gradient-hero)" } : undefined}
-                  >
-                    {t}
-                  </button>
-                );
-              })}
-            </div>
 
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
@@ -650,6 +634,62 @@ export default function ControlCitas({ onNavigate }) {
                   className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-[15px] text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink box-border"
                 />
               </div>
+            </div>
+
+            <label className="text-xs text-ink-muted block mb-1 px-1">Etiqueta</label>
+            <div className="relative mb-4">
+              <button
+                type="button"
+                onClick={() => setEtiquetaAbierta((v) => !v)}
+                className="w-full flex items-center justify-between gap-2 rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-left cursor-pointer"
+              >
+                <span className={`text-[15px] truncate ${draft.tipo ? "text-ink" : "text-ink-muted"}`}>
+                  {draft.tipo || "Elegí o escribí una etiqueta"}
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-ink-muted shrink-0 transition-transform ${etiquetaAbierta ? "rotate-180" : ""}`}
+                  strokeWidth={2}
+                />
+              </button>
+
+              {etiquetaAbierta && (
+                <>
+                  <div className="fixed inset-0 z-[55]" onClick={() => setEtiquetaAbierta(false)} />
+                  <div className="absolute left-0 right-0 z-[56] mt-2 bg-white border border-[var(--border-soft)] rounded-[20px] shadow-lg p-2.5 max-h-64 overflow-y-auto">
+                    <input
+                      type="text"
+                      value={draft.tipo}
+                      onChange={(e) => updateDraft("tipo", e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && setEtiquetaAbierta(false)}
+                      placeholder="Escribí tu propia etiqueta"
+                      autoFocus
+                      className="w-full rounded-full border border-[rgba(155,93,229,0.15)] bg-[var(--bg)] px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink box-border mb-2"
+                    />
+                    <ul className="space-y-0.5">
+                      {tiposCita.map((t) => {
+                        const selected = draft.tipo === t;
+                        return (
+                          <li key={t}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                updateDraft("tipo", t);
+                                setEtiquetaAbierta(false);
+                              }}
+                              className={`w-full text-left px-3.5 py-2.5 rounded-full text-sm font-semibold cursor-pointer transition-colors ${
+                                selected ? "text-white" : "text-ink hover:bg-brand-pink-light/40"
+                              }`}
+                              style={selected ? { background: "var(--gradient-hero)" } : undefined}
+                            >
+                              {t}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
 
             <label className="text-xs text-ink-muted block mb-1 px-1">Médico / profesional (opcional)</label>
