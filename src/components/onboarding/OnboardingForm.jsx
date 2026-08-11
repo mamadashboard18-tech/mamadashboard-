@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Save } from "lucide-react";
 import { savePerfil } from "../../data/perfil";
 import { totalWeeks } from "../../data/seguimientoSemanal";
 
@@ -150,8 +151,9 @@ export default function OnboardingForm({ nombre, onComplete }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-1.5 bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
             >
+              {!loading && <Save className="w-4 h-4" />}
               {loading ? "Guardando…" : "Guardar y continuar"}
             </button>
           </form>

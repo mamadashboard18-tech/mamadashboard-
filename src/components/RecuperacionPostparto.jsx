@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Save } from "lucide-react";
 import Header from "./Header";
 import {
   getSemanaPostpartoData,
@@ -188,8 +189,9 @@ export default function RecuperacionPostparto({ onBack }) {
         <div className="flex items-center gap-3 mt-4">
           <button
             onClick={handleGuardar}
-            className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+            className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
           >
+            <Save className="w-4 h-4" />
             Guardar registro de la semana
           </button>
           {saved && <span className="text-sm text-green-600">Guardado ✓</span>}

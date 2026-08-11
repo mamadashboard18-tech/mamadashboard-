@@ -509,8 +509,9 @@ export default function DiarioLibre({ onNavigate }) {
                         ev.stopPropagation();
                         setModalFecha(e.fecha);
                       }}
-                      className="text-[15px] font-bold text-brand-pink hover:text-brand-magenta transition-colors mt-2 cursor-pointer"
+                      className="flex items-center gap-1.5 text-[15px] font-bold text-brand-pink hover:text-brand-magenta transition-colors mt-2 cursor-pointer"
                     >
+                      <Pencil className="w-3.5 h-3.5" />
                       Editar entrada
                     </button>
                   </div>

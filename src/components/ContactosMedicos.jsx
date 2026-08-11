@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Save, Pencil, Trash2 } from "lucide-react";
 import Header from "./Header";
 import { loadContactos, saveContactos, rolesSugeridos } from "../data/contactosMedicos";
 
@@ -105,9 +106,16 @@ export default function ContactosMedicos({ onBack }) {
           <div className="flex items-center gap-3">
             <button
               onClick={handleGuardar}
-              className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+              className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
             >
-              {editingId ? "Guardar cambios" : "+ Agregar"}
+              {editingId ? (
+                <>
+                  <Save className="w-4 h-4" />
+                  Guardar cambios
+                </>
+              ) : (
+                "+ Agregar"
+              )}
             </button>
             {editingId && (
               <button
@@ -142,14 +150,16 @@ export default function ContactosMedicos({ onBack }) {
                   <div className="flex gap-2 text-xs">
                     <button
                       onClick={() => handleEditar(c)}
-                      className="text-rose-500 hover:underline"
+                      className="flex items-center gap-1 text-rose-500 hover:underline"
                     >
+                      <Pencil className="w-3.5 h-3.5" />
                       Editar
                     </button>
                     <button
                       onClick={() => handleEliminar(c.id)}
-                      className="text-gray-400 hover:text-red-500 hover:underline"
+                      className="flex items-center gap-1 text-gray-400 hover:text-red-500 hover:underline"
                     >
+                      <Trash2 className="w-3.5 h-3.5" />
                       Eliminar
                     </button>
                   </div>

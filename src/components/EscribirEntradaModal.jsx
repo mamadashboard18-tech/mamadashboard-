@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, BookOpen, Star, MessageCircle, Camera, EyeOff, Lock } from "lucide-react";
+import { X, BookOpen, Star, MessageCircle, Camera, EyeOff, Lock, Save, Trash2, Pencil } from "lucide-react";
 import { loadEntradaDelDia, guardarEntradaDelDia, eliminarEntrada } from "../data/diario";
 import { prompts, nuevoPromptAleatorio, toISODate } from "../data/diarioLibre";
 import {
@@ -238,7 +238,8 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
               <BookOpen className="w-5 h-5" strokeWidth={1.8} />
             </span>
             <div className="min-w-0">
-              <p className="text-sm text-ink-muted truncate">
+              <p className="text-sm text-ink-muted truncate flex items-center gap-1.5">
+                {!esHoy && <Pencil className="w-3.5 h-3.5 shrink-0" />}
                 {esHoy ? "Tu página de hoy" : "Editar entrada"}
               </p>
               <h3 className="font-heading text-[22px] font-extrabold text-ink truncate leading-tight mt-0.5 mb-1.5">
@@ -382,8 +383,9 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
             <button
               type="button"
               onClick={handleEliminar}
-              className="shrink-0 text-brand-pink text-[17px] font-bold px-7 py-3.5 rounded-full border-[1.5px] border-brand-pink cursor-pointer hover:bg-brand-pink-light/40 transition-colors"
+              className="shrink-0 flex items-center justify-center gap-2 text-brand-pink text-[17px] font-bold px-7 py-3.5 rounded-full border-[1.5px] border-brand-pink cursor-pointer hover:bg-brand-pink-light/40 transition-colors"
             >
+              <Trash2 className="w-[18px] h-[18px]" />
               Eliminar
             </button>
           )}
@@ -391,9 +393,10 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
             type="button"
             onClick={handleGuardar}
             disabled={!texto.trim() && archivos.length === 0}
-            className="shrink-0 ml-auto text-white text-[17px] font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+            className="shrink-0 ml-auto flex items-center justify-center gap-2 text-white text-[17px] font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: "var(--gradient-hero)" }}
           >
+            <Save className="w-[18px] h-[18px]" />
             Guardar
           </button>
         </div>

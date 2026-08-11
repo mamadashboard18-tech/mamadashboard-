@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Trash2 } from "lucide-react";
 import Header from "./Header";
 import {
   checklistRecomendado,
@@ -140,8 +141,9 @@ export default function ChecklistHospital({ onBack }) {
                     </button>
                     <button
                       onClick={() => eliminarPropio(p.id)}
-                      className="text-xs text-gray-400 hover:text-red-500"
+                      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500"
                     >
+                      <Trash2 className="w-3.5 h-3.5" />
                       Eliminar
                     </button>
                   </li>

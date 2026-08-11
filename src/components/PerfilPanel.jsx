@@ -10,6 +10,7 @@ import PrivacidadPanel from "./PrivacidadPanel";
 import { emptyPerfil, loadPerfil, savePerfil } from "../data/perfil";
 import { totalWeeks } from "../data/seguimientoSemanal";
 import { emptyBebe, loadBebe, saveBebe } from "../data/bebe";
+import { Save, Pencil } from "lucide-react";
 
 const inputClass =
   "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
@@ -247,8 +248,9 @@ export default function PerfilPanel({ onLogout }) {
         <div className="flex items-center gap-3">
           <button
             onClick={handleGuardar}
-            className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+            className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
           >
+            <Save className="w-4 h-4" />
             Guardar datos
           </button>
           {saved && <span className="text-sm text-green-600">Guardado ✓</span>}
@@ -290,8 +292,9 @@ export default function PerfilPanel({ onLogout }) {
             <div className="flex items-center gap-4 whitespace-nowrap">
               <button
                 onClick={() => setEditandoBebe(true)}
-                className="text-sm text-rose-500 hover:underline"
+                className="flex items-center gap-1 text-sm text-rose-500 hover:underline"
               >
+                <Pencil className="w-3.5 h-3.5" />
                 Editar
               </button>
               <button
@@ -351,8 +354,9 @@ export default function PerfilPanel({ onLogout }) {
               <button
                 onClick={handleGuardarBebe}
                 disabled={!bebe.fechaNacimiento}
-                className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-50"
               >
+                <Save className="w-4 h-4" />
                 Guardar
               </button>
               <button

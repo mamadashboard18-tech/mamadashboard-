@@ -21,6 +21,8 @@ import {
   Apple,
   MessageCircle,
   Baby,
+  Save,
+  Trash2,
 } from "lucide-react";
 import GuiaExamenes from "./GuiaExamenes";
 import ToggleSwitch from "./ToggleSwitch";
@@ -907,8 +909,9 @@ export default function ControlCitas({ onNavigate }) {
                         <button
                           type="button"
                           onClick={() => eliminarPreguntaPropia(p.id)}
-                          className="text-xs text-ink-muted hover:text-red-500 cursor-pointer"
+                          className="flex items-center gap-1 text-xs text-ink-muted hover:text-red-500 cursor-pointer"
                         >
+                          <Trash2 className="w-3.5 h-3.5" />
                           Eliminar
                         </button>
                       </li>
@@ -991,9 +994,10 @@ export default function ControlCitas({ onNavigate }) {
             <button
               type="button"
               onClick={handleGuardar}
-              className="w-full text-white text-[17px] font-bold py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
+              className="w-full flex items-center justify-center gap-2 text-white text-[17px] font-bold py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
               style={{ background: "var(--gradient-hero)" }}
             >
+              <Save className="w-[18px] h-[18px]" />
               Guardar cita
             </button>
 
@@ -1001,8 +1005,9 @@ export default function ControlCitas({ onNavigate }) {
               <button
                 type="button"
                 onClick={handleEliminar}
-                className="w-full text-center text-sm text-ink-muted hover:text-red-500 mt-3 cursor-pointer"
+                className="w-full flex items-center justify-center gap-1.5 text-center text-sm text-ink-muted hover:text-red-500 mt-3 cursor-pointer"
               >
+                <Trash2 className="w-4 h-4" />
                 Eliminar cita
               </button>
             )}

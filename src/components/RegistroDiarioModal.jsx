@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X, Save } from "lucide-react";
 import {
   animoOpciones,
   escalaOpciones,
@@ -371,9 +371,10 @@ export default function RegistroDiarioModal({
           <button
             type="button"
             onClick={handleGuardar}
-            className="shrink-0 text-white text-lg font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="shrink-0 flex items-center justify-center gap-2 text-white text-lg font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
             style={{ background: "var(--gradient-hero)" }}
           >
+            <Save className="w-5 h-5" />
             Guardar
           </button>
         </div>

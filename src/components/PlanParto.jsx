@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Save, Trash2 } from "lucide-react";
 import Header from "./Header";
 import { loadPlan, savePlan, emptyPlan } from "../data/planParto";
 
@@ -317,8 +318,9 @@ export default function PlanParto({ onBack }) {
                     </a>
                     <button
                       onClick={() => eliminarArchivo(a.id)}
-                      className="text-xs text-gray-400 hover:text-red-500 hover:underline whitespace-nowrap"
+                      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 hover:underline whitespace-nowrap"
                     >
+                      <Trash2 className="w-3.5 h-3.5" />
                       Eliminar
                     </button>
                   </li>
@@ -331,8 +333,9 @@ export default function PlanParto({ onBack }) {
         <div className="flex items-center gap-3 mt-6">
           <button
             onClick={handleGuardar}
-            className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+            className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
           >
+            <Save className="w-4 h-4" />
             Guardar plan
           </button>
           <button

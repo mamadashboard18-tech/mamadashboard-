@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { User, ChevronLeft, TestTube2, CalendarPlus, Paperclip, Check, X } from "lucide-react";
+import { User, ChevronLeft, TestTube2, CalendarPlus, Paperclip, Check, X, Pencil, Save } from "lucide-react";
 import {
   examenesPorTrimestre,
   loadRegistroExamenes,
@@ -230,8 +230,9 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
                             </span>
                             <button
                               onClick={() => abrirAgenda(ex, citaVinculada)}
-                              className="text-brand-pink font-semibold hover:underline cursor-pointer"
+                              className="inline-flex items-center gap-1 text-brand-pink font-semibold hover:underline cursor-pointer"
                             >
+                              <Pencil className="w-3.5 h-3.5" />
                               Editar
                             </button>
                             <button
@@ -285,9 +286,10 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
                             <div className="flex items-center gap-4 px-1">
                               <button
                                 onClick={() => guardarAgenda(ex)}
-                                className="text-white text-sm font-bold px-4 py-1.5 rounded-full hover:brightness-95 transition-all cursor-pointer"
+                                className="inline-flex items-center gap-1.5 text-white text-sm font-bold px-4 py-1.5 rounded-full hover:brightness-95 transition-all cursor-pointer"
                                 style={{ background: "var(--gradient-hero)" }}
                               >
+                                <Save className="w-3.5 h-3.5" />
                                 Guardar
                               </button>
                               <button
