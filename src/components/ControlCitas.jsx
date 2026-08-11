@@ -420,17 +420,17 @@ export default function ControlCitas({ onNavigate }) {
 
       <div className="lg:grid lg:grid-cols-[360px_1fr] lg:gap-8 lg:items-start">
         <div className="lg:sticky lg:top-6">
-          <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-[22px] p-4">
-            <div className="flex items-center justify-between mb-3 px-1">
+          <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-[20px] p-3.5">
+            <div className="flex items-center justify-between mb-2.5 px-1">
               <button
                 type="button"
                 onClick={() => changeMonth(-1)}
                 className="text-ink-muted hover:text-brand-pink px-2 py-1 cursor-pointer"
                 aria-label="Mes anterior"
               >
-                <ChevronLeft className="w-4 h-4" strokeWidth={2.2} />
+                <ChevronLeft className="w-3.5 h-3.5" strokeWidth={2.2} />
               </button>
-              <p className="font-heading text-sm font-extrabold text-ink capitalize">
+              <p className="font-heading text-[13px] font-extrabold text-ink capitalize">
                 {monthLabels[cursor.month]} de {cursor.year}
               </p>
               <button
@@ -439,19 +439,19 @@ export default function ControlCitas({ onNavigate }) {
                 className="text-ink-muted hover:text-brand-pink px-2 py-1 cursor-pointer"
                 aria-label="Mes siguiente"
               >
-                <ChevronRight className="w-4 h-4" strokeWidth={2.2} />
+                <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.2} />
               </button>
             </div>
 
-            <div className="grid grid-cols-7 bg-white rounded-full px-1 py-1.5 mb-2">
+            <div className="grid grid-cols-7 bg-white rounded-full px-1 py-1 mb-1.5">
               {weekdayLabels.map((d) => (
-                <span key={d} className="text-center text-[9px] font-bold text-brand-purple uppercase">
+                <span key={d} className="text-center text-[8px] font-bold text-brand-purple uppercase">
                   {d[0]}
                 </span>
               ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-y-1">
+            <div className="grid grid-cols-7 gap-y-0.5">
               {grid.map((date, i) => {
                 if (!date) return <div key={i} />;
                 const iso = toISODate(date);
@@ -460,7 +460,7 @@ export default function ControlCitas({ onNavigate }) {
                 const isSelected = iso === selectedDate;
 
                 let cls =
-                  "relative w-10 h-10 mx-auto rounded-full text-[15px] flex items-center justify-center transition-colors cursor-pointer";
+                  "relative w-8 h-8 mx-auto rounded-full text-[13px] flex items-center justify-center transition-colors cursor-pointer";
                 let style;
                 if (isSelected) {
                   cls += " text-white font-bold";
@@ -482,7 +482,7 @@ export default function ControlCitas({ onNavigate }) {
               })}
             </div>
 
-            <p className="text-xs text-ink-muted mt-3 px-1">Tocá un día para ver o agregar una cita.</p>
+            <p className="text-[11px] text-ink-muted mt-2 px-1">Tocá un día para ver o agregar una cita.</p>
           </div>
 
           {googleConnected && (
