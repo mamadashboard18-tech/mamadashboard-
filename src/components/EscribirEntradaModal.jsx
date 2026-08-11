@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
+import { X, BookOpen, Star, MessageCircle, Camera, EyeOff, Lock } from "lucide-react";
 import { loadEntradaDelDia, guardarEntradaDelDia, eliminarEntrada } from "../data/diario";
-import { prompts, nuevoPromptAleatorio } from "../data/diarioLibre";
+import { prompts, nuevoPromptAleatorio, toISODate } from "../data/diarioLibre";
 import {
   diarioDesbloqueado,
   descifrarConClave,
   cifrarConClave,
   tienePassword,
 } from "../data/diarioSeguridad";
+import { semanaEnFecha, trimesterOf } from "../data/seguimientoSemanal";
+import { loadPerfil } from "../data/perfil";
 import DesbloqueoDiarioModal from "./DesbloqueoDiarioModal";
+import ToggleSwitch from "./ToggleSwitch";
+
+const trimestreLabel = { 1: "1er trimestre", 2: "2do trimestre", 3: "3er trimestre" };
 
 function formatFechaLarga(iso) {
   const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
+  const texto = d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 function parseContenidoCifrado(plano) {
@@ -26,6 +33,7 @@ function parseContenidoCifrado(plano) {
 export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
   const existente = loadEntradaDelDia(fecha);
   const eraPrivada = Boolean(existente?.privada);
+  const esHoy = fecha === toISODate(new Date());
 
   const [bloqueado, setBloqueado] = useState(eraPrivada && !diarioDesbloqueado());
   const [cargando, setCargando] = useState(eraPrivada && diarioDesbloqueado());
@@ -38,6 +46,11 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
   const [oculto, setOculto] = useState(existente?.oculto ?? false);
   const [privada, setPrivada] = useState(eraPrivada);
   const [mostrarDesbloqueo, setMostrarDesbloqueo] = useState(null);
+  const [semanaActual, setSemanaActual] = useState(24);
+
+  useEffect(() => {
+    loadPerfil().then((p) => setSemanaActual(p.semanaActual));
+  }, []);
 
   useEffect(() => {
     if (!eraPrivada || !diarioDesbloqueado()) return;
@@ -49,6 +62,8 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const semana = semanaEnFecha(fecha, semanaActual, new Date());
 
   const toggleConsigna = () => {
     if (!mostrarConsigna) setPrompt((p) => p || prompts[Math.floor(Math.random() * prompts.length)]);
@@ -141,22 +156,31 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
 
   if (bloqueado) {
     return (
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4 z-50">
-        <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 text-center">
-          <p className="text-3xl mb-3">🔒</p>
-          <p className="text-sm text-gray-700 mb-4">
+      <div
+        className="fixed inset-0 bg-[rgba(36,29,43,0.45)] backdrop-blur-sm flex items-center justify-center px-4 z-50"
+        onClick={onClose}
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white rounded-[28px] shadow-lg w-full max-w-sm p-7 text-center"
+        >
+          <span className="w-14 h-14 rounded-full bg-[rgba(155,93,229,0.12)] text-brand-purple flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-6 h-6" strokeWidth={1.8} />
+          </span>
+          <p className="text-base text-ink mb-5 leading-relaxed">
             Esta entrada es privada. Ingresá tu PIN para verla o editarla.
           </p>
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={onClose}
-              className="text-sm text-gray-500 hover:text-gray-700 px-4 py-2"
+              className="text-sm text-ink-muted hover:text-ink px-4 py-2.5 cursor-pointer"
             >
               Cancelar
             </button>
             <button
               onClick={() => setMostrarDesbloqueo("desbloquear")}
-              className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+              className="text-white text-sm font-bold px-5 py-2.5 rounded-full cursor-pointer hover:brightness-105 transition"
+              style={{ background: "var(--gradient-hero)" }}
             >
               Ingresar PIN
             </button>
@@ -185,8 +209,8 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
 
   if (cargando) {
     return (
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4 z-50">
-        <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 text-center text-sm text-gray-400">
+      <div className="fixed inset-0 bg-[rgba(36,29,43,0.45)] backdrop-blur-sm flex items-center justify-center px-4 z-50">
+        <div className="bg-white rounded-[28px] shadow-lg w-full max-w-sm p-7 text-center text-base text-ink-muted">
           Desbloqueando...
         </div>
       </div>
@@ -194,25 +218,57 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center px-4 z-50">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="text-base font-semibold text-gray-900">Tu página de hoy</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-lg leading-none">
-            ×
-          </button>
-        </div>
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-xs text-gray-500 capitalize">{formatFechaLarga(fecha)}</p>
-          <button
-            type="button"
-            onClick={() => setDestacado((v) => !v)}
-            className={`text-lg ${destacado ? "text-amber-400" : "text-gray-300 hover:text-amber-300"}`}
-            aria-label="Marcar como destacada"
-            title="Marcar como destacada"
-          >
-            {destacado ? "★" : "☆"}
-          </button>
+    <div
+      className="fixed inset-0 bg-[rgba(36,29,43,0.45)] backdrop-blur-sm flex items-end justify-center z-50"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="sheet-up bg-white rounded-t-[28px] w-full max-w-[480px] max-h-[90vh] overflow-y-auto shadow-[0_-8px_40px_rgba(0,0,0,0.18)] box-border"
+        style={{ padding: "18px 22px calc(24px + env(safe-area-inset-bottom))" }}
+      >
+        <div className="w-10 h-1 rounded-full bg-[rgba(155,93,229,0.18)] mx-auto mb-4" />
+
+        <div className="flex items-start justify-between gap-3 mb-5">
+          <div className="flex items-center gap-3 min-w-0">
+            <span
+              className="w-[46px] h-[46px] rounded-full flex items-center justify-center text-white shrink-0"
+              style={{ background: "var(--gradient-hero)" }}
+            >
+              <BookOpen className="w-5 h-5" strokeWidth={1.8} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-sm text-ink-muted truncate">
+                {esHoy ? "Tu página de hoy" : "Editar entrada"}
+              </p>
+              <h3 className="font-heading text-[22px] font-extrabold text-ink truncate leading-tight mt-0.5 mb-1.5">
+                {formatFechaLarga(fecha)}
+              </h3>
+              <span className="inline-block text-xs font-bold text-brand-purple bg-[rgba(155,93,229,0.12)] rounded-full px-2.5 py-1">
+                Semana {semana} · {trimestreLabel[trimesterOf(semana)]}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setDestacado((v) => !v)}
+              className={`w-9 h-9 flex items-center justify-center transition-colors cursor-pointer ${
+                destacado ? "text-brand-pink" : "text-ink-muted hover:text-brand-pink"
+              }`}
+              aria-label="Marcar como destacada"
+              title="Marcar como destacada"
+            >
+              <Star className="w-5 h-5" strokeWidth={1.8} fill={destacado ? "currentColor" : "none"} />
+            </button>
+            <button
+              onClick={onClose}
+              aria-label="Cerrar"
+              className="w-9 h-9 rounded-full bg-[rgba(155,93,229,0.15)] flex items-center justify-center text-ink-muted hover:bg-brand-pink-light/60 hover:text-brand-pink transition-colors cursor-pointer shrink-0"
+            >
+              <X className="w-[15px] h-[15px]" strokeWidth={2} />
+            </button>
+          </div>
         </div>
 
         <input
@@ -220,47 +276,45 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
           placeholder="Título (opcional)"
-          className="w-full border border-rose-100 rounded-xl p-2.5 text-sm font-medium text-gray-800 focus:outline-none focus:border-rose-300 mb-3"
+          className="w-full rounded-full border border-[rgba(155,93,229,0.18)] bg-white px-4 py-3 text-base font-bold text-ink placeholder:font-normal placeholder:text-ink-muted focus:outline-none focus:border-brand-pink mb-3"
         />
 
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="relative mb-3">
+          <textarea
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder="Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos..."
+            className="w-full min-h-[260px] rounded-[22px] border border-[rgba(226,111,206,0.2)] bg-white p-5 pb-14 text-base text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink resize-none box-border"
+            style={{ boxShadow: "0 2px 16px rgba(155,93,229,0.08)" }}
+            rows={9}
+            autoFocus
+          />
           <button
             type="button"
             onClick={toggleConsigna}
-            className={`text-xs font-medium px-3 py-1.5 rounded-xl border transition-colors ${
-              mostrarConsigna
-                ? "bg-rose-500 text-white border-rose-500"
-                : "bg-rose-50 text-rose-600 border-rose-100 hover:border-rose-300"
-            }`}
+            className="absolute left-4 bottom-4 inline-flex items-center gap-1.5 text-xs font-bold text-brand-pink border border-dashed border-[rgba(226,111,206,0.5)] rounded-full px-3 py-1.5 bg-white/90 hover:bg-brand-pink-light/40 transition-colors cursor-pointer"
           >
-            💭 {mostrarConsigna ? "Usando una consigna" : "Usar una consigna"}
+            <MessageCircle className="w-3.5 h-3.5" strokeWidth={2} />
+            {mostrarConsigna ? "Usando una consigna" : "Usar una consigna"}
           </button>
         </div>
 
         {mostrarConsigna && (
-          <div className="bg-rose-50 border border-rose-100 rounded-xl p-3 mb-3 flex items-center justify-between gap-3">
-            <p className="text-sm text-gray-800 italic">"{prompt}"</p>
+          <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-2xl p-3.5 mb-3 flex items-center justify-between gap-3">
+            <p className="text-sm text-ink italic">"{prompt}"</p>
             <button
               type="button"
               onClick={() => setPrompt(nuevoPromptAleatorio(prompt))}
-              className="text-xs text-rose-500 hover:underline whitespace-nowrap"
+              className="text-xs text-brand-pink hover:underline whitespace-nowrap shrink-0 cursor-pointer"
             >
               Cambiar
             </button>
           </div>
         )}
 
-        <textarea
-          value={texto}
-          onChange={(e) => setTexto(e.target.value)}
-          placeholder="Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos..."
-          className="w-full border border-rose-100 rounded-xl p-3 text-sm text-gray-700 focus:outline-none focus:border-rose-300 resize-none mb-3"
-          rows={9}
-          autoFocus
-        />
-
-        <label className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-medium px-3 py-2 rounded-xl cursor-pointer hover:bg-rose-100 transition-colors mb-3">
-          📷 Foto / archivo
+        <label className="inline-flex items-center gap-2 bg-[rgba(255,111,159,0.14)] text-brand-pink text-xs font-bold px-3.5 py-2.5 rounded-full cursor-pointer hover:bg-[rgba(255,111,159,0.24)] transition-colors mb-3">
+          <Camera className="w-4 h-4" strokeWidth={1.8} />
+          Foto / archivo
           <input
             type="file"
             multiple
@@ -281,17 +335,17 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
                   <img
                     src={a.dataUrl}
                     alt={a.nombre}
-                    className="w-16 h-16 object-cover rounded-xl border border-rose-100"
+                    className="w-16 h-16 object-cover rounded-xl border border-[var(--border-soft)]"
                   />
                 ) : (
-                  <div className="w-16 h-16 flex items-center justify-center bg-rose-50 border border-rose-100 rounded-xl text-xs text-gray-500 text-center px-1">
+                  <div className="w-16 h-16 flex items-center justify-center bg-[var(--bg)] border border-[var(--border-soft)] rounded-xl text-xs text-ink-muted text-center px-1">
                     📄
                   </div>
                 )}
                 <button
                   type="button"
                   onClick={() => eliminarArchivo(a.id)}
-                  className="absolute -top-1.5 -right-1.5 bg-white border border-rose-200 rounded-full w-5 h-5 flex items-center justify-center text-xs text-gray-500 hover:text-red-500"
+                  className="absolute -top-1.5 -right-1.5 bg-white border border-[var(--border-soft)] rounded-full w-5 h-5 flex items-center justify-center text-xs text-ink-muted hover:text-red-500 cursor-pointer"
                 >
                   ×
                 </button>
@@ -300,55 +354,49 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           </div>
         )}
 
-        <div className="flex flex-wrap gap-2 mb-3">
-          <button
-            type="button"
-            onClick={() => setOculto((v) => !v)}
-            className={`text-xs font-medium px-3 py-1.5 rounded-xl border transition-colors ${
-              oculto
-                ? "bg-gray-700 text-white border-gray-700"
-                : "bg-gray-50 text-gray-600 border-gray-200 hover:border-gray-400"
-            }`}
-            title="La entrada aparece difuminada en la lista hasta que toques el ojo para verla"
-          >
-            {oculto ? "🙈 Oculta por defecto" : "🙈 Ocultar por defecto"}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleTogglePrivada}
-            className={`text-xs font-medium px-3 py-1.5 rounded-xl border transition-colors ${
-              privada
-                ? "bg-amber-500 text-white border-amber-500"
-                : "bg-amber-50 text-amber-700 border-amber-200 hover:border-amber-400"
-            }`}
-            title="El título y el texto se cifran con tu PIN"
-          >
-            {privada ? "🔒 Es privada" : "🔒 Hacerla privada"}
-          </button>
+        <div className="bg-[var(--bg)] rounded-[20px] px-1 mb-4">
+          <div className="flex items-center gap-3 px-3.5 py-3.5">
+            <span className="w-9 h-9 rounded-full bg-[rgba(155,93,229,0.12)] text-brand-purple flex items-center justify-center shrink-0">
+              <EyeOff className="w-4 h-4" strokeWidth={1.8} />
+            </span>
+            <p className="text-base font-bold text-ink flex-1">Ocultar</p>
+            <ToggleSwitch checked={oculto} onChange={() => setOculto((v) => !v)} label="Ocultar" />
+          </div>
+          <div className="h-px bg-[rgba(155,93,229,0.1)] mx-3.5" />
+          <div className="flex items-center gap-3 px-3.5 py-3.5">
+            <span className="w-9 h-9 rounded-full bg-[rgba(155,93,229,0.12)] text-brand-purple flex items-center justify-center shrink-0">
+              <Lock className="w-4 h-4" strokeWidth={1.8} />
+            </span>
+            <p className="text-base font-bold text-ink flex-1">Bloquear</p>
+            <ToggleSwitch checked={privada} onChange={handleTogglePrivada} label="Bloquear" />
+          </div>
         </div>
 
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-xs text-gray-400">🔒 Privado, solo vos podés verlo</p>
+        <p className="text-sm text-[#8a7f92] flex items-center gap-1.5 mb-3">
+          <Lock className="w-3.5 h-3.5" strokeWidth={2} />
+          Privado, solo vos podés verlo
+        </p>
+
+        <div className="flex items-center gap-3">
+          {existente && (
+            <button
+              type="button"
+              onClick={handleEliminar}
+              className="shrink-0 text-brand-pink text-[17px] font-bold px-7 py-3.5 rounded-full border-[1.5px] border-brand-pink cursor-pointer hover:bg-brand-pink-light/40 transition-colors"
+            >
+              Eliminar
+            </button>
+          )}
           <button
             type="button"
             onClick={handleGuardar}
             disabled={!texto.trim() && archivos.length === 0}
-            className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="shrink-0 ml-auto text-white text-[17px] font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ background: "var(--gradient-hero)" }}
           >
             Guardar
           </button>
         </div>
-
-        {existente && (
-          <button
-            type="button"
-            onClick={handleEliminar}
-            className="text-xs text-red-400 hover:text-red-600 hover:underline"
-          >
-            🗑 Eliminar esta entrada
-          </button>
-        )}
       </div>
 
       {mostrarDesbloqueo && (

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const diasSemana = ["L", "M", "X", "J", "V", "S", "D"];
 const meses = [
@@ -32,19 +33,22 @@ export default function CalendarioMensual({
   }, [mes]);
 
   return (
-    <div className="bg-white border border-rose-100 rounded-xl shadow-lg p-3 w-60">
+    <div
+      className="bg-white border border-[var(--border-soft)] rounded-2xl p-3 w-60"
+      style={{ boxShadow: "0 8px 24px rgba(155,93,229,0.18)" }}
+    >
       <div className="flex items-center justify-between mb-2">
         <button
           type="button"
           onClick={() => onCambiarMes(-1)}
-          className="text-gray-400 hover:text-rose-500 px-1 text-xs"
+          className="text-ink-muted hover:text-brand-pink px-1 cursor-pointer"
         >
-          ←
+          <ChevronLeft className="w-3.5 h-3.5" strokeWidth={2.2} />
         </button>
         <button
           type="button"
           onClick={() => onSelectMes(new Date(mes.getFullYear(), mes.getMonth(), 1))}
-          className="text-xs font-semibold text-gray-800 hover:text-rose-500 capitalize transition-colors"
+          className="text-xs font-bold text-ink hover:text-brand-pink capitalize transition-colors cursor-pointer"
           title="Ver todas las entradas de este mes"
         >
           {meses[mes.getMonth()]} {mes.getFullYear()}
@@ -52,12 +56,12 @@ export default function CalendarioMensual({
         <button
           type="button"
           onClick={() => onCambiarMes(1)}
-          className="text-gray-400 hover:text-rose-500 px-1 text-xs"
+          className="text-ink-muted hover:text-brand-pink px-1 cursor-pointer"
         >
-          →
+          <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.2} />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-0.5 text-center text-[9px] text-gray-400 uppercase mb-1">
+      <div className="grid grid-cols-7 gap-0.5 text-center text-[9px] text-ink-muted uppercase mb-1">
         {diasSemana.map((d) => (
           <span key={d}>{d}</span>
         ))}
@@ -72,13 +76,14 @@ export default function CalendarioMensual({
               key={iso}
               type="button"
               onClick={() => onSelect(iso)}
-              className={`aspect-square rounded-md text-[11px] flex items-center justify-center relative transition-colors ${
-                esSeleccionada ? "bg-rose-500 text-white font-semibold" : "text-gray-700 hover:bg-rose-50"
+              className={`aspect-square rounded-md text-[11px] flex items-center justify-center relative transition-colors cursor-pointer ${
+                esSeleccionada ? "text-white font-bold" : "text-ink hover:bg-brand-pink-light/50"
               }`}
+              style={esSeleccionada ? { background: "var(--gradient-hero)" } : undefined}
             >
               {d.getDate()}
               {fechasConEntrada.has(iso) && !esSeleccionada && (
-                <span className="absolute bottom-0.5 w-1 h-1 rounded-full bg-rose-400" />
+                <span className="absolute bottom-0.5 w-1 h-1 rounded-full bg-brand-pink" />
               )}
             </button>
           );

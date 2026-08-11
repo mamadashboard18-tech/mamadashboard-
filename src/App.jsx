@@ -140,7 +140,7 @@ export default function App() {
           ) : active === "citas" ? (
             <ControlCitas onNavigate={handleNavigate} />
           ) : active === "bienestar" ? (
-            <BienestarPanel />
+            <BienestarPanel onNavigate={handleNavigate} />
           ) : active === "perfil" ? (
             <PerfilPanel onLogout={handleLogout} />
           ) : active === "comunidad" ? (
