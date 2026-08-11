@@ -432,25 +432,6 @@ export default function ControlCitas({ onNavigate }) {
 
       <div className="lg:grid lg:grid-cols-[360px_1fr] lg:gap-8 lg:items-start">
         <div className="lg:sticky lg:top-6">
-          <button
-            type="button"
-            onClick={() => {
-              if (!googleConnected) connectGoogleCalendar();
-            }}
-            className={`w-full inline-flex items-center justify-center gap-2 text-[15px] font-bold px-5 py-3.5 rounded-full mb-5 transition-colors ${
-              googleConnected
-                ? "bg-[rgba(255,111,159,0.14)] text-brand-pink cursor-default"
-                : "border-[1.5px] border-dashed border-[rgba(226,111,206,0.45)] bg-[rgba(255,111,159,0.06)] text-brand-pink hover:bg-[rgba(255,111,159,0.12)] cursor-pointer"
-            }`}
-          >
-            {googleConnected ? (
-              <Check className="w-4 h-4" strokeWidth={2.4} />
-            ) : (
-              <Phone className="w-4 h-4" strokeWidth={1.8} />
-            )}
-            {googleConnected ? "Conectado con el calendario de tu teléfono" : "Conectar con el calendario de tu teléfono"}
-          </button>
-
           <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-[22px] p-4">
             <div className="flex items-center justify-between mb-3 px-1">
               <button
@@ -862,7 +843,7 @@ export default function ControlCitas({ onNavigate }) {
                 onClick={() => setShowGoogleModal(false)}
                 className="text-sm text-ink-muted hover:text-brand-pink cursor-pointer"
               >
-                Ahora no
+                Cancelar
               </button>
               <button
                 onClick={() => {
@@ -872,7 +853,7 @@ export default function ControlCitas({ onNavigate }) {
                 className="text-white text-sm font-bold px-5 py-2.5 rounded-full cursor-pointer hover:brightness-105 transition"
                 style={{ background: "var(--gradient-hero)" }}
               >
-                Conectar
+                Permitir
               </button>
             </div>
           </div>
