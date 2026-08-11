@@ -374,6 +374,7 @@ export default function ControlCitas({ onNavigate }) {
   if (view === "examenes") {
     return (
       <GuiaExamenes
+        onNavigate={onNavigate}
         onBack={() => {
           setCitas(loadCitas());
           setView("list");
