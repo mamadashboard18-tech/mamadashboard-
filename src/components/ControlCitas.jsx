@@ -418,13 +418,13 @@ export default function ControlCitas({ onNavigate }) {
           <p className="text-[17px] font-bold text-brand-pink truncate">{item.cita.tipo}</p>
           {item.cita.lugar && <p className="text-sm text-ink-muted truncate mt-0.5">{item.cita.lugar}</p>}
           {rsvp === "puede" && (
-            <span className="inline-block mt-1.5 text-xs font-bold text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5">
-              👍 Tu partner va a poder ir
+            <span className="inline-block mt-1.5 text-xs font-bold text-brand-purple bg-[rgba(155,93,229,0.1)] border border-[rgba(155,93,229,0.25)] rounded-full px-2.5 py-0.5">
+              Tu partner va a poder ir
             </span>
           )}
           {rsvp === "no_puede" && (
             <span className="inline-block mt-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
-              👎 Tu partner no va a poder ir
+              Tu partner no va a poder ir
             </span>
           )}
         </div>
@@ -523,7 +523,7 @@ export default function ControlCitas({ onNavigate }) {
                 Tu Google Calendar el {formatFechaCorta(selectedDate)}
               </p>
               {googleEvents.length === 0 ? (
-                <p className="text-sm text-ink-muted">No estás ocupada ese día 🎉</p>
+                <p className="text-sm text-ink-muted">No estás ocupada ese día</p>
               ) : (
                 <ul className="space-y-1">
                   {googleEvents.map((ev) => (
@@ -593,7 +593,6 @@ export default function ControlCitas({ onNavigate }) {
             </span>
             <div className="min-w-0">
               <p className="text-[17px] font-bold text-ink">Guía de exámenes por semana</p>
-              <p className="text-sm text-[#6b5f78] mt-0.5">Qué estudios suelen pedirse en cada trimestre</p>
             </div>
           </button>
         </div>
