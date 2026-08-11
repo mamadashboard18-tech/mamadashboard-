@@ -9,6 +9,7 @@ import {
   X,
   Phone,
   Check,
+  Clock,
   Bell,
   Users,
   TestTube2,
@@ -54,6 +55,8 @@ import {
 const TIPO_PRIMERA_CONSULTA_POSTPARTO = "Primera consulta postparto";
 const GOOGLE_PROMPT_KEY = "mama-dashboard:google-calendar-prompted";
 const monthShortLabels = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const horasDelDia = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
+const minutosDelDia = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
 
 const tipoIconos = {
   "Control obstétrico": Stethoscope,
@@ -118,6 +121,9 @@ export default function ControlCitas({ onNavigate }) {
   const [draftIso, setDraftIso] = useState(todayISO);
   const [draft, setDraft] = useState(emptyDraft);
   const [etiquetaAbierta, setEtiquetaAbierta] = useState(false);
+  const [fechaAbierta, setFechaAbierta] = useState(false);
+  const [fechaCursor, setFechaCursor] = useState({ year: today.getFullYear(), month: today.getMonth() });
+  const [horaAbierta, setHoraAbierta] = useState(false);
 
   const [marcadas, setMarcadas] = useState([]);
   const [propias, setPropias] = useState([]);
@@ -244,6 +250,8 @@ export default function ControlCitas({ onNavigate }) {
     setDraftIso(iso || selectedDate);
     setDraft(emptyDraft);
     setEtiquetaAbierta(false);
+    setFechaAbierta(false);
+    setHoraAbierta(false);
     setShowModal(true);
   };
 
@@ -261,15 +269,43 @@ export default function ControlCitas({ onNavigate }) {
       reminder: cita.reminder ?? true,
     });
     setEtiquetaAbierta(false);
+    setFechaAbierta(false);
+    setHoraAbierta(false);
     setShowModal(true);
   };
 
   const cerrarModal = () => {
     setShowModal(false);
     setEtiquetaAbierta(false);
+    setFechaAbierta(false);
+    setHoraAbierta(false);
   };
 
   const updateDraft = (field, value) => setDraft((prev) => ({ ...prev, [field]: value }));
+
+  const abrirFechaPicker = () => {
+    if (!fechaAbierta) {
+      const d = new Date(draftIso + "T00:00:00");
+      setFechaCursor({ year: d.getFullYear(), month: d.getMonth() });
+    }
+    setFechaAbierta((v) => !v);
+  };
+
+  const changeFechaCursorMonth = (delta) => {
+    setFechaCursor((prev) => {
+      let month = prev.month + delta;
+      let year = prev.year;
+      if (month < 0) {
+        month = 11;
+        year -= 1;
+      }
+      if (month > 11) {
+        month = 0;
+        year += 1;
+      }
+      return { year, month };
+    });
+  };
 
   const handleDayClick = (date) => {
     if (!date) return;
@@ -605,22 +641,140 @@ export default function ControlCitas({ onNavigate }) {
               </button>
             </div>
             <label className="text-xs text-ink-muted block mb-1 px-1">Fecha</label>
-            <input
-              type="date"
-              value={draftIso}
-              onChange={(e) => setDraftIso(e.target.value)}
-              className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-[15px] text-ink focus:outline-none focus:border-brand-pink box-border mb-4"
-            />
+            <div className="relative mb-4">
+              <button
+                type="button"
+                onClick={abrirFechaPicker}
+                className="w-full flex items-center justify-between gap-2 rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-left cursor-pointer"
+              >
+                <span className="text-[15px] text-ink truncate">{formatFechaLarga(draftIso)}</span>
+                <CalendarDays className="w-4 h-4 text-ink-muted shrink-0" strokeWidth={1.8} />
+              </button>
+
+              {fechaAbierta && (
+                <>
+                  <div className="fixed inset-0 z-[55]" onClick={() => setFechaAbierta(false)} />
+                  <div className="absolute left-0 right-0 z-[56] mt-2 bg-white border border-[var(--border-soft)] rounded-[20px] shadow-lg p-3">
+                    <div className="flex items-center justify-between mb-2 px-1">
+                      <button
+                        type="button"
+                        onClick={() => changeFechaCursorMonth(-1)}
+                        className="text-ink-muted hover:text-brand-pink px-2 py-1 cursor-pointer"
+                        aria-label="Mes anterior"
+                      >
+                        <ChevronLeft className="w-4 h-4" strokeWidth={2.2} />
+                      </button>
+                      <p className="font-heading text-sm font-extrabold text-ink capitalize">
+                        {monthLabels[fechaCursor.month]} de {fechaCursor.year}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => changeFechaCursorMonth(1)}
+                        className="text-ink-muted hover:text-brand-pink px-2 py-1 cursor-pointer"
+                        aria-label="Mes siguiente"
+                      >
+                        <ChevronRight className="w-4 h-4" strokeWidth={2.2} />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-7 mb-1">
+                      {weekdayLabels.map((d) => (
+                        <span key={d} className="text-center text-[10px] font-bold text-brand-purple uppercase py-1">
+                          {d[0]}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-7 gap-y-0.5">
+                      {getMonthGrid(fechaCursor.year, fechaCursor.month).map((date, i) => {
+                        if (!date) return <div key={i} />;
+                        const iso = toISODate(date);
+                        const isSelected = iso === draftIso;
+                        const isToday = iso === todayISO;
+                        return (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={() => {
+                              setDraftIso(iso);
+                              setFechaAbierta(false);
+                            }}
+                            className={`w-8 h-8 mx-auto rounded-full text-[13px] flex items-center justify-center cursor-pointer transition-colors ${
+                              isSelected
+                                ? "text-white font-bold"
+                                : isToday
+                                ? "border-[1.5px] border-brand-pink text-brand-pink font-semibold"
+                                : "text-ink hover:bg-brand-pink-light/40"
+                            }`}
+                            style={isSelected ? { background: "var(--gradient-hero)" } : undefined}
+                          >
+                            {date.getDate()}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <label className="text-xs text-ink-muted block mb-1 px-1">Hora</label>
-                <input
-                  type="time"
-                  value={draft.hora}
-                  onChange={(e) => updateDraft("hora", e.target.value)}
-                  className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-[15px] text-ink focus:outline-none focus:border-brand-pink box-border"
-                />
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setHoraAbierta((v) => !v)}
+                    className="w-full flex items-center justify-between gap-2 rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-left cursor-pointer"
+                  >
+                    <span className={`text-[15px] truncate ${draft.hora ? "text-ink" : "text-ink-muted"}`}>
+                      {draft.hora || "--:--"}
+                    </span>
+                    <Clock className="w-4 h-4 text-ink-muted shrink-0" strokeWidth={1.8} />
+                  </button>
+
+                  {horaAbierta && (
+                    <>
+                      <div className="fixed inset-0 z-[55]" onClick={() => setHoraAbierta(false)} />
+                      <div className="absolute left-0 z-[56] mt-2 w-40 bg-white border border-[var(--border-soft)] rounded-[20px] shadow-lg p-2 flex gap-1">
+                        <div className="flex-1 max-h-48 overflow-y-auto space-y-0.5">
+                          {horasDelDia.map((h) => {
+                            const selected = draft.hora.split(":")[0] === h;
+                            return (
+                              <button
+                                key={h}
+                                type="button"
+                                onClick={() => updateDraft("hora", `${h}:${draft.hora.split(":")[1] || "00"}`)}
+                                className={`w-full text-center px-2 py-1.5 rounded-full text-sm font-semibold cursor-pointer transition-colors ${
+                                  selected ? "text-white" : "text-ink hover:bg-brand-pink-light/40"
+                                }`}
+                                style={selected ? { background: "var(--gradient-hero)" } : undefined}
+                              >
+                                {h}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="flex-1 max-h-48 overflow-y-auto space-y-0.5">
+                          {minutosDelDia.map((m) => {
+                            const selected = draft.hora.split(":")[1] === m;
+                            return (
+                              <button
+                                key={m}
+                                type="button"
+                                onClick={() => updateDraft("hora", `${draft.hora.split(":")[0] || "00"}:${m}`)}
+                                className={`w-full text-center px-2 py-1.5 rounded-full text-sm font-semibold cursor-pointer transition-colors ${
+                                  selected ? "text-white" : "text-ink hover:bg-brand-pink-light/40"
+                                }`}
+                                style={selected ? { background: "var(--gradient-hero)" } : undefined}
+                              >
+                                {m}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="text-xs text-ink-muted block mb-1 px-1">Lugar</label>
