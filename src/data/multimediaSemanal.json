@@ -860,6 +860,16 @@
     "gratis": true
   },
   {
+    "semana": 29,
+    "etapa": "embarazo",
+    "tipo": "podcast",
+    "titulo": "Tu Mejor Parto",
+    "autor": "myBabymyBirth®",
+    "link": "https://www.mybabymybirth.com/podcast",
+    "descripcion": "Podcast con matronas, obstetras y doulas sobre cómo prepararse física y emocionalmente para el parto.",
+    "gratis": true
+  },
+  {
     "semana": 30,
     "etapa": "embarazo",
     "tipo": "articulo",
@@ -1070,6 +1080,16 @@
     "gratis": true
   },
   {
+    "semana": 37,
+    "etapa": "embarazo",
+    "tipo": "articulo",
+    "titulo": "Semana 37 de embarazo: movimiento del bebé, flujo y señales de parto",
+    "autor": "Guiainfantil.com",
+    "link": "https://www.guiainfantil.com/articulos/embarazo/etapas/37-semanas-de-embarazo/",
+    "descripcion": "Explica los signos de que el parto se acerca: tapón mucoso, contracciones y encajamiento del bebé.",
+    "gratis": true
+  },
+  {
     "semana": 38,
     "etapa": "embarazo",
     "tipo": "articulo",
@@ -1160,16 +1180,6 @@
     "gratis": true
   },
   {
-    "semana": 37,
-    "etapa": "embarazo",
-    "tipo": "articulo",
-    "titulo": "Semana 37 de embarazo: movimiento del bebé, flujo y señales de parto",
-    "autor": "Guiainfantil.com",
-    "link": "https://www.guiainfantil.com/articulos/embarazo/etapas/37-semanas-de-embarazo/",
-    "descripcion": "Explica los signos de que el parto se acerca: tapón mucoso, contracciones y encajamiento del bebé.",
-    "gratis": true
-  },
-  {
     "semana": 40,
     "etapa": "embarazo",
     "tipo": "articulo",
@@ -1220,6 +1230,26 @@
     "gratis": true
   },
   {
+    "semana": 1,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Esme, mamá primeriza",
+    "autor": "Esme (canal de YouTube de una mamá primeriza)",
+    "link": "https://www.youtube.com/channel/UCKxuNh34k2nlraogzCfycQw",
+    "descripcion": "Canal de una mamá primeriza que comparte en primera persona su experiencia real con la maternidad y el postparto.",
+    "gratis": true
+  },
+  {
+    "semana": 1,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "No pasa nada si hoy solo lograste sostener a tu bebé y sobrevivir el día: eso también es suficiente.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de contención para las primeras semanas de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 2,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1254,6 +1284,26 @@
     "etapa": "postparto",
     "tipo": "frase",
     "titulo": "Las primeras dos semanas no son para tener todo resuelto: son para conocerse mutuamente.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 2 de postparto.",
+    "gratis": true
+  },
+  {
+    "semana": 2,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Doctora Di Pediatra",
+    "autor": "Diana Álvarez, pediatra",
+    "link": "https://www.youtube.com/c/DoctoraDipediatra",
+    "descripcion": "Videos breves y claros de una pediatra sobre el cuidado del recién nacido en las primeras semanas.",
+    "gratis": true
+  },
+  {
+    "semana": 2,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Preguntarle todo a la pediatra no te hace una madre exagerada: te hace una madre presente.",
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase de acompañamiento para la semana 2 de postparto.",
@@ -1300,6 +1350,26 @@
     "gratis": true
   },
   {
+    "semana": 3,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Duo en Consultorio",
+    "autor": "Lucía de Martin y Maximiliano Álvarez, médicos",
+    "link": "https://www.instagram.com/duoenconsultorio/",
+    "descripcion": "Cuenta de dos médicos que hablan con humor y cercanía sobre el postparto, la paternidad y los primeros meses en familia.",
+    "gratis": true
+  },
+  {
+    "semana": 3,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "El humor también es una forma de atravesar noches sin dormir.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 3 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 4,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1334,6 +1404,26 @@
     "etapa": "postparto",
     "tipo": "frase",
     "titulo": "Si algo te duele el alma en estos días, no es debilidad: es adaptación.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 4 de postparto.",
+    "gratis": true
+  },
+  {
+    "semana": 4,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Matrona Para Mí",
+    "autor": "Carla Quintana, matrona",
+    "link": "https://www.instagram.com/matronaparami/",
+    "descripcion": "Contenido cercano de una matrona sobre la maternidad, el postparto y la crianza de los primeros meses.",
+    "gratis": true
+  },
+  {
+    "semana": 4,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Tener dudas todos los días no significa estar haciendo algo mal: significa que estás aprendiendo.",
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase de acompañamiento para la semana 4 de postparto.",
@@ -1380,6 +1470,26 @@
     "gratis": true
   },
   {
+    "semana": 5,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Duermebel",
+    "autor": "Belén Clemares, coach de sueño infantil certificada",
+    "link": "https://www.instagram.com/duermebel/",
+    "descripcion": "Consejos prácticos y sin juicios sobre el sueño del bebé en las primeras semanas de vida.",
+    "gratis": true
+  },
+  {
+    "semana": 5,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Que tu bebé no duerma 'como dice el libro' no significa que algo esté mal: cada bebé tiene su propio ritmo.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 5 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 6,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1420,6 +1530,26 @@
     "gratis": true
   },
   {
+    "semana": 6,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Psi Florencia Field",
+    "autor": "Florencia Field, psicóloga especializada en salud mental perinatal",
+    "link": "https://www.instagram.com/psiflorenciafield/",
+    "descripcion": "Contenido validante sobre las emociones difíciles del postparto y cuándo pedir ayuda profesional.",
+    "gratis": true
+  },
+  {
+    "semana": 6,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Sentir que no reconocés tu propia vida todavía es parte de este proceso: no estás sola en eso.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 6 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 7,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1450,6 +1580,36 @@
     "gratis": true
   },
   {
+    "semana": 7,
+    "etapa": "postparto",
+    "tipo": "libro",
+    "titulo": "Dormir sin lágrimas: dejarle llorar no es la solución",
+    "autor": "Rosa Jové, psicóloga infantil",
+    "link": "https://www.casadellibro.com/libro-dormir-sin-lagrimas-dejarle-llorar-no-es-la-solucion/9788497346474/1141288",
+    "descripcion": "Libro de referencia sobre el sueño infantil desde una mirada respetuosa, sin métodos de adiestramiento.",
+    "gratis": false
+  },
+  {
+    "semana": 7,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Eliana Marengo - Psiquiatría Perinatal",
+    "autor": "Eliana Marengo, psiquiatra perinatal",
+    "link": "https://www.instagram.com/e.marengo_psiquiatraperinatal/",
+    "descripcion": "Contenido de una psiquiatra especializada en salud mental durante el embarazo y el posparto.",
+    "gratis": true
+  },
+  {
+    "semana": 7,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Dormir poco no te vuelve una mala madre: te vuelve una madre cansada que necesita ayuda.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 7 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 8,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1474,6 +1634,26 @@
     "etapa": "postparto",
     "tipo": "frase",
     "titulo": "No hay una sola forma correcta de ir durmiendo de a poco: la tuya también vale.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 8 de postparto.",
+    "gratis": true
+  },
+  {
+    "semana": 8,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Viviana Fumero Nutrición",
+    "autor": "Viviana Fumero, nutricionista especializada en embarazo, lactancia y posparto",
+    "link": "https://www.instagram.com/vivifumeronutricion/",
+    "descripcion": "Consejos prácticos sobre alimentación de la madre durante la lactancia y el posparto.",
+    "gratis": true
+  },
+  {
+    "semana": 8,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Comer algo rápido y nutritivo hoy también cuenta como cuidarte.",
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase de acompañamiento para la semana 8 de postparto.",
@@ -1520,6 +1700,26 @@
     "gratis": true
   },
   {
+    "semana": 9,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Silvia Soriano Fisioterapia",
+    "autor": "Silvia Soriano, fisioterapeuta especializada en suelo pélvico",
+    "link": "https://www.instagram.com/silviasorianofosas/",
+    "descripcion": "Contenido sobre recuperación del suelo pélvico y ejercicios seguros para retomar el movimiento tras el parto.",
+    "gratis": true
+  },
+  {
+    "semana": 9,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Volver a moverte no tiene apuro: tu cuerpo todavía se está reorganizando.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 9 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 10,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1560,6 +1760,26 @@
     "gratis": true
   },
   {
+    "semana": 10,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "OWA Entrenamiento Mujer",
+    "autor": "Dra. Lidia Romero, entrenamiento en embarazo y postparto",
+    "link": "https://www.instagram.com/owa_entrenamiento_mujer/",
+    "descripcion": "Entrenamiento de embarazo y postparto basado en evidencia científica, con enfoque seguro y progresivo.",
+    "gratis": true
+  },
+  {
+    "semana": 10,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Entrenar con evidencia es más útil que entrenar con culpa.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 10 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 11,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1590,6 +1810,36 @@
     "gratis": true
   },
   {
+    "semana": 11,
+    "etapa": "postparto",
+    "tipo": "libro",
+    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
+    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
+    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
+    "descripcion": "Incluye una sección sobre el cierre del cuarto trimestre y la vuelta gradual a la rutina.",
+    "gratis": false
+  },
+  {
+    "semana": 11,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Entrenadora Embarazo y Postparto Online",
+    "autor": "Lucía Mingorance, entrenadora personal",
+    "link": "https://www.instagram.com/luciamingorance_ep/",
+    "descripcion": "Rutinas seguras de ejercicio pensadas para el cuarto trimestre y la vuelta gradual a la actividad física.",
+    "gratis": true
+  },
+  {
+    "semana": 11,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Retomar el ejercicio no es volver a como eras antes: es empezar de nuevo desde donde estás.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 11 de postparto.",
+    "gratis": true
+  },
+  {
     "semana": 12,
     "etapa": "postparto",
     "tipo": "articulo",
@@ -1614,6 +1864,26 @@
     "etapa": "postparto",
     "tipo": "frase",
     "titulo": "El cuarto trimestre se cierra, pero seguís teniendo derecho a pedir ayuda.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase de acompañamiento para la semana 12 de postparto.",
+    "gratis": true
+  },
+  {
+    "semana": 12,
+    "etapa": "postparto",
+    "tipo": "video",
+    "titulo": "Inma Mellado IBCLC",
+    "autor": "Inma Mellado, consultora certificada en lactancia materna (IBCLC)",
+    "link": "https://www.instagram.com/inmamelladoibclc/",
+    "descripcion": "Contenido de una consultora certificada en lactancia sobre cómo sostener la lactancia al cerrar el cuarto trimestre.",
+    "gratis": true
+  },
+  {
+    "semana": 12,
+    "etapa": "postparto",
+    "tipo": "frase",
+    "titulo": "Llegar al cierre del cuarto trimestre ya es un montón: date crédito por lo que lograste.",
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase de acompañamiento para la semana 12 de postparto.",

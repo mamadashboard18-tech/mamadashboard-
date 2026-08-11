@@ -90,6 +90,15 @@
     "gratis": true
   },
   {
+    "categoria": "tipos_de_parto",
+    "tipo": "libro",
+    "titulo": "Ser mamá. Guía de embarazo, parto y posparto con evidencia y emoción",
+    "autor": "Nazareth Olivera Belart, matrona e IBCLC",
+    "link": "https://www.penguinlibros.com/us/196977-nazareth-olivera-belart",
+    "descripcion": "Guía con base científica y enfoque respetuoso que repasa todas las opciones de parto sin sesgos.",
+    "gratis": false
+  },
+  {
     "categoria": "preparacion_parto",
     "tipo": "articulo",
     "titulo": "¿Cómo es la preparación al parto? Teoría y práctica",
@@ -159,6 +168,33 @@
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase que resta presión a la idea de tener que 'aguantar' el parto sola.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "guia",
+    "titulo": "Clases prenatales",
+    "autor": "Kaiser Permanente en español",
+    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/healtharticle.prenatal-classes",
+    "descripcion": "Qué esperar de las clases prenatales y cómo elegir la más adecuada para vos.",
+    "gratis": true
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "libro",
+    "titulo": "Hipnoparto: preparación para un parto positivo",
+    "autor": "Carmen Moreno, educadora prenatal especializada en hipnoparto",
+    "link": "https://partopositivo.org/producto/libro-de-hipnoparto/",
+    "descripcion": "Libro con 21 capítulos y ejercicios prácticos, basado en evidencia, para prepararse para un parto positivo.",
+    "gratis": false
+  },
+  {
+    "categoria": "preparacion_parto",
+    "tipo": "podcast",
+    "titulo": "Tu Mejor Parto",
+    "autor": "myBabymyBirth®",
+    "link": "https://www.mybabymybirth.com/podcast",
+    "descripcion": "Podcast con matronas, obstetras, doulas y psicólogas sobre cómo prepararse para el parto.",
     "gratis": true
   },
   {
@@ -252,6 +288,33 @@
     "gratis": true
   },
   {
+    "categoria": "lactancia",
+    "tipo": "libro",
+    "titulo": "Un regalo para toda la vida: guía de la lactancia materna",
+    "autor": "Carlos González, pediatra",
+    "link": "https://www.casadellibro.com/libro-un-regalo-para-toda-la-vida-guia-de-la-lactancia-materna/9788484605539/1079315",
+    "descripcion": "Guía clásica y accesible sobre la fisiología de la lactancia y cómo resolver las dudas más comunes.",
+    "gratis": false
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "video",
+    "titulo": "Inma Mellado IBCLC",
+    "autor": "Inma Mellado, consultora certificada en lactancia materna (IBCLC)",
+    "link": "https://www.instagram.com/inmamelladoibclc/",
+    "descripcion": "Contenido de una consultora certificada sobre lactancia materna y resolución de dudas frecuentes.",
+    "gratis": true
+  },
+  {
+    "categoria": "lactancia",
+    "tipo": "frase",
+    "titulo": "Cada gramo de leche que le das a tu bebé: de la forma que sea: viene con amor.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase inclusiva sobre distintas formas de alimentar al bebé.",
+    "gratis": true
+  },
+  {
     "categoria": "recuperacion_fisica_postparto",
     "tipo": "articulo",
     "titulo": "Postparto: claves para la rehabilitación del suelo pélvico",
@@ -324,6 +387,33 @@
     "gratis": true
   },
   {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "articulo",
+    "titulo": "Ejercicios para el piso pélvico para después del parto",
+    "autor": "Kaiser Permanente en español",
+    "link": "https://espanol.kaiserpermanente.org/es/health-wellness/health-encyclopedia/he.ejercicios-para-el-piso-p%C3%A9lvico-para-despu%C3%A9s-del-parto.acn5187",
+    "descripcion": "Recomendaciones médicas sobre ejercicios de suelo pélvico recomendados tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "plantilla",
+    "titulo": "Posparto: ahora que ha dado a luz (folleto de recuperación)",
+    "autor": "UCSF Women's Health (versión en español)",
+    "link": "https://womenshealth.ucsf.edu/sites/womenshealth.ucsf.edu/files/spanish_pp_booklet.pdf",
+    "descripcion": "Folleto informativo con pautas de autocuidado físico para las primeras semanas de posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "recuperacion_fisica_postparto",
+    "tipo": "libro",
+    "titulo": "Fisioterapia del suelo pélvico: manual para la prevención y el tratamiento en la mujer, el hombre y la infancia",
+    "autor": "Obra colectiva especializada en fisioterapia uroginecológica",
+    "link": "https://dialnet.unirioja.es/servlet/libro?codigo=970125",
+    "descripcion": "Manual de referencia técnica sobre fisioterapia del suelo pélvico, incluido el abordaje postparto.",
+    "gratis": false
+  },
+  {
     "categoria": "salud_mental_postparto",
     "tipo": "articulo",
     "titulo": "Publicaciones de Ibone Olza sobre salud mental perinatal",
@@ -384,6 +474,51 @@
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase de contención frente a la culpa asociada a las emociones difíciles del posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "libro",
+    "titulo": "Psicología del posparto",
+    "autor": "Esther Ramírez Matos, Instituto Europeo de Salud Mental Perinatal",
+    "link": "https://iboneolza.org/2020/09/07/psicologia-del-posparto-de-esther-ramirez-matos/",
+    "descripcion": "Libro sobre los procesos psicológicos y emocionales que atraviesa la mujer en el posparto.",
+    "gratis": false
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "podcast",
+    "titulo": "La vida secreta de las madres",
+    "autor": "Andrea Ros (comunicadora perinatal) y Paola Roig (psicóloga perinatal)",
+    "link": "https://podimo.com/es/shows/la-vida-secreta-de-las-madres",
+    "descripcion": "Conversaciones honestas sobre carga mental, posparto y salud mental materna.",
+    "gratis": false
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "video",
+    "titulo": "Psi Florencia Field",
+    "autor": "Florencia Field, psicóloga especializada en salud mental perinatal",
+    "link": "https://www.instagram.com/psiflorenciafield/",
+    "descripcion": "Contenido validante sobre las emociones del embarazo, el puerperio y el duelo perinatal.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "video",
+    "titulo": "Eliana Marengo - Psiquiatría Perinatal",
+    "autor": "Eliana Marengo, psiquiatra perinatal",
+    "link": "https://www.instagram.com/e.marengo_psiquiatraperinatal/",
+    "descripcion": "Contenido de una psiquiatra especializada en salud mental durante el embarazo y el posparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "salud_mental_postparto",
+    "tipo": "frase",
+    "titulo": "Buscar ayuda profesional cuando algo no se siente bien es un acto de amor hacia tu bebé y hacia vos.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para animar a consultar ante señales de malestar emocional persistente.",
     "gratis": true
   },
   {
@@ -468,6 +603,42 @@
     "gratis": true
   },
   {
+    "categoria": "sueno",
+    "tipo": "libro",
+    "titulo": "Dormir sin lágrimas: dejarle llorar no es la solución",
+    "autor": "Rosa Jové, psicóloga infantil",
+    "link": "https://www.casadellibro.com/libro-dormir-sin-lagrimas-dejarle-llorar-no-es-la-solucion/9788497346474/1141288",
+    "descripcion": "Libro de referencia sobre el sueño infantil desde una mirada respetuosa, sin métodos de adiestramiento.",
+    "gratis": false
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "video",
+    "titulo": "Duermebel",
+    "autor": "Belén Clemares, coach de sueño infantil certificada",
+    "link": "https://www.instagram.com/duermebel/",
+    "descripcion": "Consejos prácticos y sin juicios sobre el sueño del bebé en distintas etapas.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "articulo",
+    "titulo": "Sueño seguro: cómo debe dormir el bebé",
+    "autor": "UNICEF Uruguay",
+    "link": "https://www.unicef.org/uruguay/crianza/primeros-anos/sueno-seguro-como-debe-dormir-el-bebe",
+    "descripcion": "Recomendaciones oficiales de UNICEF sobre cómo reducir el riesgo de muerte súbita del lactante durante el sueño.",
+    "gratis": true
+  },
+  {
+    "categoria": "sueno",
+    "tipo": "frase",
+    "titulo": "Un bebé que se despierta buscándote de noche no te está poniendo a prueba: te está buscando.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para resignificar los despertares nocturnos desde el vínculo.",
+    "gratis": true
+  },
+  {
     "categoria": "cuidados_recien_nacido",
     "tipo": "articulo",
     "titulo": "Cuidados del cordón umbilical",
@@ -546,6 +717,24 @@
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase de aliento para fortalecer la confianza materna.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "video",
+    "titulo": "Doctora Di Pediatra",
+    "autor": "Diana Álvarez, pediatra",
+    "link": "https://www.youtube.com/c/DoctoraDipediatra",
+    "descripcion": "Videos breves y claros sobre el cuidado del recién nacido basados en evidencia.",
+    "gratis": true
+  },
+  {
+    "categoria": "cuidados_recien_nacido",
+    "tipo": "frase",
+    "titulo": "No hay una única forma correcta de sostener: cambiar o calmar a un bebé; hay muchas formas que funcionan.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para bajar la presión sobre 'hacerlo perfecto' con el recién nacido.",
     "gratis": true
   },
   {
@@ -639,6 +828,33 @@
     "gratis": true
   },
   {
+    "categoria": "pareja_acompanante",
+    "tipo": "video",
+    "titulo": "Duo en Consultorio",
+    "autor": "Lucía de Martin y Maximiliano Álvarez, médicos",
+    "link": "https://www.instagram.com/duoenconsultorio/",
+    "descripcion": "Contenido con humor y cercanía sobre el postparto y la paternidad en pareja.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "articulo",
+    "titulo": "La pareja en el posparto: una nueva etapa",
+    "autor": "Espacio Mente y Salud (equipo de psicología y terapia de pareja)",
+    "link": "https://espaciomenteysalud.es/la-pareja-en-el-postparto-una-nueva-etapa/",
+    "descripcion": "Aborda desde la psicología los cambios en la relación de pareja tras la llegada de un bebé y cómo comunicarse mejor.",
+    "gratis": true
+  },
+  {
+    "categoria": "pareja_acompanante",
+    "tipo": "frase",
+    "titulo": "No compitan por quién está más cansado: son un equipo y no rivales.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase sobre cómo sostener la alianza de pareja en el posparto.",
+    "gratis": true
+  },
+  {
     "categoria": "nutricion",
     "tipo": "guia",
     "titulo": "Guía de alimentación para embarazadas",
@@ -729,6 +945,24 @@
     "gratis": true
   },
   {
+    "categoria": "nutricion",
+    "tipo": "video",
+    "titulo": "Viviana Fumero Nutrición",
+    "autor": "Viviana Fumero, nutricionista especializada en embarazo, lactancia y posparto",
+    "link": "https://www.instagram.com/vivifumeronutricion/",
+    "descripcion": "Consejos prácticos y accesibles sobre alimentación durante el embarazo y la lactancia.",
+    "gratis": true
+  },
+  {
+    "categoria": "nutricion",
+    "tipo": "frase",
+    "titulo": "No existe un alimento mágico que arregle o arruine tu lactancia: existe la alimentación variada de cada día.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para desmitificar los alimentos 'prohibidos' o 'milagro' en la lactancia.",
+    "gratis": true
+  },
+  {
     "categoria": "ejercicio_postparto",
     "tipo": "guia",
     "titulo": "Guía de Ejercicios Postparto",
@@ -798,6 +1032,42 @@
     "autor": "Anónimo",
     "link": null,
     "descripcion": "Frase sobre la importancia de la constancia por sobre la intensidad en el postparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "video",
+    "titulo": "Entrenadora Embarazo y Postparto Online",
+    "autor": "Lucía Mingorance, entrenadora personal",
+    "link": "https://www.instagram.com/luciamingorance_ep/",
+    "descripcion": "Cuenta especializada en entrenamiento seguro durante el embarazo y el postparto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "video",
+    "titulo": "OWA Entrenamiento Mujer",
+    "autor": "Dra. Lidia Romero, entrenamiento en embarazo y postparto",
+    "link": "https://www.instagram.com/owa_entrenamiento_mujer/",
+    "descripcion": "Entrenamiento postparto basado en evidencia científica con progresión segura.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "video",
+    "titulo": "Silvia Soriano Fisioterapia",
+    "autor": "Silvia Soriano, fisioterapeuta especializada en suelo pélvico",
+    "link": "https://www.instagram.com/silviasorianofosas/",
+    "descripcion": "Contenido sobre ejercicio seguro y recuperación del suelo pélvico tras el parto.",
+    "gratis": true
+  },
+  {
+    "categoria": "ejercicio_postparto",
+    "tipo": "frase",
+    "titulo": "El objetivo no es 'recuperar tu cuerpo': es fortalecer el cuerpo que tenés ahora.",
+    "autor": "Anónimo",
+    "link": null,
+    "descripcion": "Frase para replantear la exigencia estética sobre el ejercicio postparto.",
     "gratis": true
   }
 ]
