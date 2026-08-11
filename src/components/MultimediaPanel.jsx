@@ -1,5 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import Header from "./Header";
+import {
+  Headphones,
+  User,
+  CalendarDays,
+  BookOpen,
+  Heart,
+  FileText,
+  Clapperboard,
+  Quote,
+  NotebookText,
+  ClipboardList,
+  Mic,
+  Tv,
+  Sparkles,
+} from "lucide-react";
 import { loadPerfil } from "../data/perfil";
 import { loadBebe, diasConBebe } from "../data/bebe";
 import {
@@ -7,16 +21,26 @@ import {
   getBibliotecaPorCategoria,
   categoriasOrdenadas,
   categoriaLabel,
-  tipoIcono,
   tipoLabel,
   mamasReales,
 } from "../data/multimedia";
 
 const TABS = [
-  { id: "semana", label: "Tu semana", icon: "🗓️" },
-  { id: "biblioteca", label: "Biblioteca por tema", icon: "📚" },
-  { id: "mamas", label: "Mamás como vos", icon: "💛" },
+  { id: "semana", label: "Tu semana", icon: CalendarDays },
+  { id: "biblioteca", label: "Biblioteca por tema", icon: BookOpen },
+  { id: "mamas", label: "Mamás como vos", icon: Heart },
 ];
+
+const tipoIconoLucide = {
+  articulo: FileText,
+  video: Clapperboard,
+  frase: Quote,
+  guia: NotebookText,
+  libro: BookOpen,
+  plantilla: ClipboardList,
+  podcast: Mic,
+  canal: Tv,
+};
 
 function semanaPostpartoDesde(fechaNacimiento) {
   const dias = diasConBebe(fechaNacimiento);
@@ -24,13 +48,22 @@ function semanaPostpartoDesde(fechaNacimiento) {
 }
 
 function ContenidoCard({ item }) {
-  const icono = tipoIcono[item.tipo] || "✨";
+  const Icono = tipoIconoLucide[item.tipo] || Sparkles;
   const esFrase = item.tipo === "frase";
 
   if (esFrase) {
     return (
-      <div className="bg-rose-50/60 border border-rose-100 rounded-2xl p-4 text-sm text-rose-700 italic">
-        “{item.titulo}”
+      <div
+        className="rounded-[22px] p-5 flex items-start gap-3 border border-[var(--border-soft)]"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(226,111,206,0.10) 0%, rgba(155,93,229,0.10) 100%)",
+        }}
+      >
+        <Quote className="w-5 h-5 text-brand-purple shrink-0 mt-0.5" strokeWidth={1.8} />
+        <p className="text-[15px] text-ink font-semibold italic leading-relaxed">
+          “{item.titulo}”
+        </p>
       </div>
     );
   }
@@ -40,34 +73,39 @@ function ContenidoCard({ item }) {
       href={item.link || undefined}
       target="_blank"
       rel="noopener noreferrer"
-      className={`block bg-white border border-rose-100 rounded-2xl p-4 shadow-sm transition-shadow ${
-        item.link ? "hover:shadow-md hover:border-rose-200" : "cursor-default"
+      className={`block bg-white border border-[rgba(155,93,229,0.14)] rounded-[22px] p-4 transition-shadow ${
+        item.link ? "hover:shadow-md cursor-pointer" : "cursor-default"
       }`}
+      style={{ boxShadow: "0 2px 14px rgba(155,93,229,0.08)" }}
       onClick={(e) => {
         if (!item.link) e.preventDefault();
       }}
     >
       <div className="flex items-start gap-3">
-        <span className="text-lg flex-shrink-0">{icono}</span>
+        <span className="w-9 h-9 rounded-full bg-brand-pink-light/50 flex items-center justify-center shrink-0">
+          <Icono className="w-4 h-4 text-brand-pink" strokeWidth={1.8} />
+        </span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-medium text-rose-500 uppercase tracking-wide">
+            <span className="text-[12px] font-bold text-brand-pink uppercase tracking-wide">
               {tipoLabel[item.tipo] || item.tipo}
             </span>
             <span
-              className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+              className={`text-[11px] px-2.5 py-1 rounded-full font-semibold shrink-0 ${
                 item.gratis
-                  ? "bg-emerald-50 text-emerald-600"
-                  : "bg-amber-50 text-amber-600"
+                  ? "bg-brand-purple-light text-brand-purple"
+                  : "bg-brand-pink-light text-brand-magenta"
               }`}
             >
               {item.gratis ? "Gratis" : "Pago"}
             </span>
           </div>
-          <p className="text-sm font-semibold text-gray-800 mt-1">{item.titulo}</p>
-          {item.autor && <p className="text-xs text-gray-400 mt-0.5">{item.autor}</p>}
+          <p className="text-[15px] font-bold text-ink mt-1 leading-snug">{item.titulo}</p>
+          {item.autor && <p className="text-[13px] text-ink-muted mt-0.5">{item.autor}</p>}
           {item.descripcion && (
-            <p className="text-xs text-gray-500 mt-1.5">{item.descripcion}</p>
+            <p className="text-[13px] text-ink-muted mt-1.5 leading-relaxed">
+              {item.descripcion}
+            </p>
           )}
         </div>
       </div>
@@ -75,7 +113,7 @@ function ContenidoCard({ item }) {
   );
 }
 
-export default function MultimediaPanel() {
+export default function MultimediaPanel({ onNavigate }) {
   const [tab, setTab] = useState("semana");
   const [etapa, setEtapa] = useState("embarazo");
   const [semana, setSemana] = useState(1);
@@ -95,48 +133,69 @@ export default function MultimediaPanel() {
   }, []);
 
   const contenidoSemana = useMemo(() => getContenidoSemana(semana, etapa), [semana, etapa]);
-  const contenidoBiblioteca = useMemo(() => getBibliotecaPorCategoria(categoria), [categoria]);
+  const contenidoBiblioteca = useMemo(
+    () => getBibliotecaPorCategoria(categoria),
+    [categoria]
+  );
 
   return (
-    <div>
-      <Header
-        title="🎧 Multimedia"
-        subtitle="Contenido para tu semana, para lo que necesites resolver y para sentirte acompañada"
-      />
+    <div className="max-w-[680px]">
+      <div className="flex items-center justify-end mb-1.5">
+        <button
+          onClick={() => onNavigate?.("perfil")}
+          className="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-ink-muted hover:bg-brand-pink-light/60 hover:text-brand-pink transition-colors cursor-pointer"
+          aria-label="Mi perfil"
+        >
+          <User className="w-5 h-5" strokeWidth={1.7} />
+        </button>
+      </div>
 
-      <div className="flex gap-2 mb-6 border-b border-rose-100">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${
-              tab === t.id
-                ? "border-rose-500 text-rose-600"
-                : "border-transparent text-gray-500 hover:text-rose-500"
-            }`}
-          >
-            <span>{t.icon}</span>
-            {t.label}
-          </button>
-        ))}
+      <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight flex items-center gap-2.5 mb-2">
+        <Headphones className="w-[26px] h-[26px] text-brand-pink shrink-0" strokeWidth={1.7} />
+        Multimedia
+      </h2>
+      <p className="text-[17px] text-ink-muted leading-relaxed mb-6 max-w-[520px]">
+        Contenido para tu semana, para lo que necesites resolver y para sentirte acompañada
+      </p>
+
+      <div className="flex flex-wrap gap-2 mb-6">
+        {TABS.map((t) => {
+          const Icon = t.icon;
+          const activo = tab === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`inline-flex items-center gap-1.5 text-[15px] font-semibold px-4 py-2.5 rounded-full border transition-colors cursor-pointer ${
+                activo
+                  ? "text-white border-transparent"
+                  : "bg-white border-[var(--border-soft)] text-ink-muted hover:border-brand-pink"
+              }`}
+              style={activo ? { background: "var(--gradient-hero)" } : undefined}
+            >
+              <Icon className="w-4 h-4" strokeWidth={1.8} />
+              {t.label}
+            </button>
+          );
+        })}
       </div>
 
       {tab === "semana" && (
         <div>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-[15px] text-ink-muted mb-4">
             {etapa === "embarazo"
               ? `Contenido pensado para tu semana ${semana} de embarazo`
               : `Contenido pensado para tu semana ${semana} de postparto`}
           </p>
           {contenidoSemana.length === 0 ? (
-            <div className="bg-white border border-rose-100 rounded-2xl p-8 text-center shadow-sm">
-              <span className="text-3xl">🎧</span>
-              <p className="text-sm text-gray-500 mt-2">
+            <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-8 text-center shadow-sm">
+              <Headphones className="w-10 h-10 text-brand-pink mx-auto mb-3" strokeWidth={1.6} />
+              <p className="text-base text-ink-muted leading-relaxed">
                 Todavía no hay contenido cargado para esta semana.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {contenidoSemana.map((item, idx) => (
                 <ContenidoCard key={`${item.titulo}-${idx}`} item={item} />
               ))}
@@ -148,21 +207,25 @@ export default function MultimediaPanel() {
       {tab === "biblioteca" && (
         <div>
           <div className="flex flex-wrap gap-2 mb-5">
-            {categoriasOrdenadas.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategoria(cat)}
-                className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
-                  categoria === cat
-                    ? "bg-rose-500 border-rose-500 text-white"
-                    : "bg-white border-rose-100 text-gray-600 hover:border-rose-300"
-                }`}
-              >
-                {categoriaLabel[cat] || cat}
-              </button>
-            ))}
+            {categoriasOrdenadas.map((cat) => {
+              const activo = categoria === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setCategoria(cat)}
+                  className={`text-[13px] font-semibold px-3.5 py-1.5 rounded-full border transition-colors cursor-pointer ${
+                    activo
+                      ? "text-white border-transparent"
+                      : "bg-white border-[var(--border-soft)] text-ink-muted hover:border-brand-pink"
+                  }`}
+                  style={activo ? { background: "var(--gradient-hero)" } : undefined}
+                >
+                  {categoriaLabel[cat] || cat}
+                </button>
+              );
+            })}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {contenidoBiblioteca.map((item, idx) => (
               <ContenidoCard key={`${item.titulo}-${idx}`} item={item} />
             ))}
@@ -172,11 +235,11 @@ export default function MultimediaPanel() {
 
       {tab === "mamas" && (
         <div>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-[15px] text-ink-muted mb-4">
             Historias reales de famosas e influencers contando cómo viven el embarazo y la
             maternidad, para que te sientas identificada y acompañada.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {mamasReales.map((item) => (
               <ContenidoCard key={item.id} item={item} />
             ))}

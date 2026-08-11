@@ -146,7 +146,7 @@ export default function App() {
           ) : active === "comunidad" ? (
             <ComunidadPanel nombre={user?.nombre} />
           ) : active === "multimedia" ? (
-            <MultimediaPanel />
+            <MultimediaPanel onNavigate={handleNavigate} />
           ) : (
             <FeatureListPanel sectionId={active} />
           )}
