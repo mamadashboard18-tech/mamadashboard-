@@ -365,9 +365,9 @@ export default function ControlCitas({ onNavigate }) {
         key={item.id}
         type="button"
         onClick={() => abrirEditar(item.cita)}
-        className="w-full text-left flex items-center gap-3 bg-[var(--bg)] rounded-[18px] px-4 py-3.5 mb-2.5 hover:brightness-95 transition-colors cursor-pointer"
+        className="w-full text-left flex items-center gap-3 bg-white border border-[var(--border-soft)] rounded-[18px] px-4 py-3.5 mb-2.5 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
       >
-        <span className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-brand-pink shrink-0">
+        <span className="w-11 h-11 rounded-full bg-brand-pink-light/60 flex items-center justify-center text-brand-pink shrink-0">
           <Icon className="w-[18px] h-[18px]" strokeWidth={1.6} />
         </span>
         <div className="min-w-0 flex-1">
@@ -403,15 +403,7 @@ export default function ControlCitas({ onNavigate }) {
         </button>
       </div>
 
-      <button
-        onClick={() => onNavigate?.("inicio")}
-        className="lg:hidden inline-flex items-center gap-1.5 text-base text-ink-muted hover:text-brand-pink transition-colors cursor-pointer mb-4"
-      >
-        <ChevronLeft className="w-[15px] h-[15px]" strokeWidth={2.2} />
-        Volver a Inicio
-      </button>
-
-      <div className="flex items-start justify-between gap-3 flex-wrap mb-2">
+      <div className="flex items-start justify-between gap-3 flex-wrap mb-5">
         <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight flex items-center gap-2.5">
           <CalendarDays className="w-[26px] h-[26px] text-brand-pink shrink-0" strokeWidth={1.8} />
           Control de citas
@@ -425,10 +417,6 @@ export default function ControlCitas({ onNavigate }) {
           Agregar cita
         </button>
       </div>
-
-      <p className="text-[17px] text-ink-muted leading-relaxed mb-5">
-        Agenda, recordatorios y preguntas para el médico — todo en un calendario
-      </p>
 
       <div className="lg:grid lg:grid-cols-[360px_1fr] lg:gap-8 lg:items-start">
         <div className="lg:sticky lg:top-6">
@@ -611,7 +599,14 @@ export default function ControlCitas({ onNavigate }) {
                 <X className="w-[15px] h-[15px]" strokeWidth={2} />
               </button>
             </div>
-            <p className="text-[15px] text-[#8a7f92] mb-5">{formatFechaLarga(draftIso)}</p>
+            <label className="text-xs text-ink-muted block mb-1 px-1">Fecha</label>
+            <input
+              type="date"
+              value={draftIso}
+              onChange={(e) => setDraftIso(e.target.value)}
+              className="w-full rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-3 text-[15px] text-ink focus:outline-none focus:border-brand-pink box-border mb-1"
+            />
+            <p className="text-sm text-[#8a7f92] mb-5 px-1">{formatFechaLarga(draftIso)}</p>
 
             <p className="text-sm font-bold text-ink-muted uppercase tracking-wide mb-2">Tipo de cita</p>
             <div className="flex flex-wrap gap-2 mb-4">
