@@ -131,6 +131,16 @@ export default function PerfilPanel({ onLogout }) {
     setEditandoBebe(false);
   };
 
+  const handleVolverAEmbarazo = () => {
+    if (!window.confirm("Esto borra los datos del nacimiento y te vuelve a la vista de embarazo. ¿Continuar?")) {
+      return;
+    }
+    const next = { ...emptyBebe };
+    setBebe(next);
+    saveBebe(next);
+    setEditandoBebe(false);
+  };
+
   return (
     <div>
       <Header
@@ -277,12 +287,20 @@ export default function PerfilPanel({ onLogout }) {
                 {bebe.proximoControl ? ` · próximo control ${bebe.proximoControl}` : ""}
               </p>
             </div>
-            <button
-              onClick={() => setEditandoBebe(true)}
-              className="text-sm text-rose-500 hover:underline whitespace-nowrap"
-            >
-              Editar
-            </button>
+            <div className="flex items-center gap-4 whitespace-nowrap">
+              <button
+                onClick={() => setEditandoBebe(true)}
+                className="text-sm text-rose-500 hover:underline"
+              >
+                Editar
+              </button>
+              <button
+                onClick={handleVolverAEmbarazo}
+                className="text-sm text-gray-400 hover:text-rose-500 hover:underline"
+              >
+                Volver a modo embarazo
+              </button>
+            </div>
           </div>
         )}
 
