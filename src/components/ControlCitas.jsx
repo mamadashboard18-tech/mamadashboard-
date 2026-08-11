@@ -410,20 +410,10 @@ export default function ControlCitas({ onNavigate }) {
         </button>
       </div>
 
-      <div className="flex items-start justify-between gap-3 flex-wrap mb-5">
-        <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight flex items-center gap-2.5">
-          <CalendarDays className="w-[26px] h-[26px] text-brand-pink shrink-0" strokeWidth={1.8} />
-          Control de citas
-        </h2>
-        <button
-          onClick={() => abrirNuevo(selectedDate)}
-          className="inline-flex items-center gap-1.5 text-white text-sm font-bold px-4 py-2.5 rounded-full whitespace-nowrap cursor-pointer hover:brightness-105 transition shrink-0"
-          style={{ background: "var(--gradient-hero)" }}
-        >
-          <Plus className="w-4 h-4" strokeWidth={2.6} />
-          Agregar cita
-        </button>
-      </div>
+      <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight flex items-center gap-2.5 mb-5">
+        <CalendarDays className="w-[26px] h-[26px] text-brand-pink shrink-0" strokeWidth={1.8} />
+        Control de citas
+      </h2>
 
       <div className="lg:grid lg:grid-cols-[360px_1fr] lg:gap-8 lg:items-start">
         <div className="lg:sticky lg:top-6">
@@ -488,8 +478,6 @@ export default function ControlCitas({ onNavigate }) {
                 );
               })}
             </div>
-
-            <p className="text-[11px] text-ink-muted mt-2 px-1">Tocá un día para ver o agregar una cita.</p>
           </div>
 
           {googleConnected && (
@@ -573,6 +561,16 @@ export default function ControlCitas({ onNavigate }) {
           </button>
         </div>
       </div>
+
+      <button
+        onClick={() => abrirNuevo(selectedDate)}
+        className="no-print fixed bottom-24 right-5 lg:bottom-8 lg:right-8 w-14 h-14 flex items-center justify-center text-white rounded-full shadow-xl shadow-brand-pink/30 hover:scale-105 active:scale-100 transition-transform cursor-pointer z-20"
+        style={{ background: "var(--gradient-hero)" }}
+        aria-label="Agregar cita"
+        title="Agregar cita"
+      >
+        <Plus className="w-6 h-6" strokeWidth={2.6} />
+      </button>
 
       {showModal && (
         <div
