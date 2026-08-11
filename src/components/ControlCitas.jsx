@@ -586,7 +586,7 @@ export default function ControlCitas({ onNavigate }) {
           >
             <div className="w-10 h-1 rounded-full bg-[rgba(155,93,229,0.18)] mx-auto mb-4" />
 
-            <div className="flex items-start justify-between gap-3 mb-1">
+            <div className="flex items-start justify-between gap-3 mb-5">
               <div className="flex items-center gap-3 min-w-0">
                 <span
                   className="w-11 h-11 rounded-full flex items-center justify-center text-white shrink-0"
@@ -658,12 +658,12 @@ export default function ControlCitas({ onNavigate }) {
                   <div className="absolute left-0 right-0 z-[56] mt-2 bg-white border border-[var(--border-soft)] rounded-[20px] shadow-lg p-2.5 max-h-64 overflow-y-auto">
                     <input
                       type="text"
-                      value={draft.tipo}
+                      value={tiposCita.includes(draft.tipo) ? "" : draft.tipo}
                       onChange={(e) => updateDraft("tipo", e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && setEtiquetaAbierta(false)}
                       placeholder="Escribí tu propia etiqueta"
                       autoFocus
-                      className="w-full rounded-full border border-[rgba(155,93,229,0.15)] bg-[var(--bg)] px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink box-border mb-2"
+                      className="w-full rounded-full border border-[rgba(155,93,229,0.15)] bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink box-border mb-2"
                     />
                     <ul className="space-y-0.5">
                       {tiposCita.map((t) => {
@@ -673,8 +673,12 @@ export default function ControlCitas({ onNavigate }) {
                             <button
                               type="button"
                               onClick={() => {
-                                updateDraft("tipo", t);
-                                setEtiquetaAbierta(false);
+                                if (selected) {
+                                  updateDraft("tipo", "");
+                                } else {
+                                  updateDraft("tipo", t);
+                                  setEtiquetaAbierta(false);
+                                }
                               }}
                               className={`w-full text-left px-3.5 py-2.5 rounded-full text-sm font-semibold cursor-pointer transition-colors ${
                                 selected ? "text-white" : "text-ink hover:bg-brand-pink-light/40"
@@ -766,7 +770,7 @@ export default function ControlCitas({ onNavigate }) {
                     onChange={(e) => setNuevaPregunta(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && agregarPreguntaPropia()}
                     placeholder="Ej: ¿es normal esta molestia en...?"
-                    className="flex-1 min-w-0 rounded-full border border-[rgba(155,93,229,0.2)] bg-[var(--bg)] px-4 py-2.5 text-sm text-ink focus:outline-none focus:border-brand-purple box-border"
+                    className="flex-1 min-w-0 rounded-full border border-[rgba(155,93,229,0.2)] bg-white px-4 py-2.5 text-sm text-ink focus:outline-none focus:border-brand-purple box-border"
                   />
                   <button
                     type="button"
@@ -785,7 +789,7 @@ export default function ControlCitas({ onNavigate }) {
                   value={draft.preguntas}
                   onChange={(e) => updateDraft("preguntas", e.target.value)}
                   placeholder="Ej: ¿es normal sentir...?"
-                  className="w-full min-h-[90px] rounded-[16px] bg-[var(--bg)] p-3.5 text-[15px] text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-purple border border-transparent focus:border-brand-purple resize-none box-border mb-4"
+                  className="w-full min-h-[90px] rounded-[16px] bg-white p-3.5 text-[15px] text-ink placeholder:text-ink-muted focus:outline-none border border-[var(--border-soft)] focus:border-brand-purple resize-none box-border mb-4"
                   rows={3}
                 />
               </>
@@ -796,13 +800,13 @@ export default function ControlCitas({ onNavigate }) {
               value={draft.notas}
               onChange={(e) => updateDraft("notas", e.target.value)}
               placeholder="Ej: llevar estudios anteriores"
-              className="w-full min-h-[70px] rounded-[16px] bg-[var(--bg)] p-3.5 text-[15px] text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-purple border border-transparent resize-none box-border mb-4"
+              className="w-full min-h-[70px] rounded-[16px] bg-white p-3.5 text-[15px] text-ink placeholder:text-ink-muted focus:outline-none border border-[var(--border-soft)] focus:border-brand-purple resize-none box-border mb-4"
               rows={2}
             />
 
             {hasPartner && (
-              <div className="bg-[var(--bg)] rounded-[18px] px-4 py-3.5 flex items-center gap-3 mb-3">
-                <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-purple shrink-0">
+              <div className="bg-white border border-[var(--border-soft)] rounded-[18px] px-4 py-3.5 flex items-center gap-3 mb-3">
+                <span className="w-9 h-9 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
                   <Users className="w-4 h-4" strokeWidth={1.8} />
                 </span>
                 <div className="flex-1 min-w-0">
@@ -817,8 +821,8 @@ export default function ControlCitas({ onNavigate }) {
               </div>
             )}
 
-            <div className="bg-[var(--bg)] rounded-[18px] px-4 py-3.5 flex items-center gap-3 mb-5">
-              <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-brand-purple shrink-0">
+            <div className="bg-white border border-[var(--border-soft)] rounded-[18px] px-4 py-3.5 flex items-center gap-3 mb-5">
+              <span className="w-9 h-9 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
                 <Bell className="w-4 h-4" strokeWidth={1.8} />
               </span>
               <div className="flex-1 min-w-0">
