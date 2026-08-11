@@ -343,8 +343,8 @@ export default function InicioPanel({ nombre, onNavigate }) {
 
           <div className="flex items-center gap-3 mb-3">
             <CircularProgress value={porcentaje} size={120} stroke={8}>
-              <span className="font-heading text-[33px] font-bold leading-none">{porcentaje}%</span>
-              <span className="text-[15px] uppercase tracking-wide opacity-85 mt-1">Semana {semanaMostrada}</span>
+              <span className="font-heading text-[26px] font-bold leading-none">{porcentaje}%</span>
+              <span className="text-[11px] uppercase tracking-wide opacity-85 mt-1">Semana {semanaMostrada}</span>
             </CircularProgress>
 
             <div className="flex items-center gap-3 flex-1 min-w-0">
