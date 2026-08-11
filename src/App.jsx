@@ -138,7 +138,7 @@ export default function App() {
           {active === "inicio" ? (
             <InicioPanel nombre={user?.nombre} onNavigate={handleNavigate} />
           ) : active === "citas" ? (
-            <ControlCitas />
+            <ControlCitas onNavigate={handleNavigate} />
           ) : active === "bienestar" ? (
             <BienestarPanel />
           ) : active === "perfil" ? (
