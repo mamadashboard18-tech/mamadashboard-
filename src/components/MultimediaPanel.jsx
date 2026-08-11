@@ -155,7 +155,7 @@ export default function MultimediaPanel({ onNavigate }) {
         Multimedia
       </h2>
       <p className="text-[17px] text-ink-muted leading-relaxed mb-6 max-w-[520px]">
-        Contenido para tu semana, para lo que necesites resolver y para sentirte acompañada
+        Contenido para tu semana
       </p>
 
       <div className="flex flex-wrap gap-2 mb-6">

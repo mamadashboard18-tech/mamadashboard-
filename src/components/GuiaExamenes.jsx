@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { User, ChevronLeft, TestTube2, CalendarPlus, Paperclip, Check, X, Pencil, Save } from "lucide-react";
+import { User, TestTube2, CalendarPlus, Paperclip, Check, X, Pencil, Save } from "lucide-react";
+import BackButton from "./BackButton";
 import {
   examenesPorTrimestre,
   loadRegistroExamenes,
@@ -125,22 +126,14 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
         </button>
       </div>
 
-      {onBack && (
-        <button
-          onClick={onBack}
-          aria-label="Volver a Citas"
-          className="lg:hidden w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center text-ink-muted hover:text-brand-pink transition-colors mb-4 cursor-pointer"
-        >
-          <ChevronLeft className="w-4 h-4" strokeWidth={2} />
-        </button>
-      )}
+      <BackButton onBack={onBack} label="Volver a Citas" className="lg:hidden mb-4" />
 
       <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight flex items-center gap-2.5 mb-2">
         <TestTube2 className="w-[26px] h-[26px] text-brand-pink shrink-0" strokeWidth={1.7} />
         Guía de exámenes por semana
       </h2>
       <p className="text-[17px] text-ink-muted leading-relaxed mb-5 max-w-[520px]">
-        Marcá los que ya te hiciste, guardá el resultado y adjuntá el estudio
+        Marcá los que ya te hiciste
       </p>
 
       <div className="bg-[var(--bg)] border border-[rgba(155,93,229,0.12)] rounded-[22px] px-[22px] py-5 mb-7 shadow-[0_6px_16px_rgba(155,93,229,0.08)]">
@@ -230,10 +223,11 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
                             </span>
                             <button
                               onClick={() => abrirAgenda(ex, citaVinculada)}
-                              className="inline-flex items-center gap-1 text-brand-pink font-semibold hover:underline cursor-pointer"
+                              aria-label="Editar"
+                              title="Editar"
+                              className="text-brand-pink cursor-pointer"
                             >
                               <Pencil className="w-3.5 h-3.5" />
-                              Editar
                             </button>
                             <button
                               onClick={() => quitarAgenda(ex, citaVinculada.id)}
@@ -286,11 +280,12 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
                             <div className="flex items-center gap-4 px-1">
                               <button
                                 onClick={() => guardarAgenda(ex)}
-                                className="inline-flex items-center gap-1.5 text-white text-sm font-bold px-4 py-1.5 rounded-full hover:brightness-95 transition-all cursor-pointer"
+                                aria-label="Guardar"
+                                title="Guardar"
+                                className="flex items-center justify-center w-8 h-8 text-white rounded-full hover:brightness-95 transition-all cursor-pointer"
                                 style={{ background: "var(--gradient-hero)" }}
                               >
                                 <Save className="w-3.5 h-3.5" />
-                                Guardar
                               </button>
                               <button
                                 onClick={cancelarAgenda}

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Trash2 } from "lucide-react";
 import Header from "./Header";
+import BackButton from "./BackButton";
 import {
   checklistRecomendado,
   loadChecklist,
@@ -49,16 +50,11 @@ export default function ChecklistHospital({ onBack }) {
 
   return (
     <div>
-      <button
-        onClick={onBack}
-        className="text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-      >
-        ← Volver a Mi Perfil
-      </button>
+      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
 
       <Header
         title="🎒 Checklist del hospital"
-        subtitle="Bolsa, documentos y contactos — recomendaciones que podés tachar o ampliar"
+        subtitle="Bolsa, documentos y contactos"
       />
 
       <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm mb-6">
@@ -141,10 +137,11 @@ export default function ChecklistHospital({ onBack }) {
                     </button>
                     <button
                       onClick={() => eliminarPropio(p.id)}
-                      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500"
+                      aria-label="Eliminar"
+                      title="Eliminar"
+                      className="text-gray-400 hover:text-red-500"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      Eliminar
                     </button>
                   </li>
                 );

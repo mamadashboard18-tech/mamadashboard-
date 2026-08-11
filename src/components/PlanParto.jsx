@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import Header from "./Header";
+import BackButton from "./BackButton";
 import { loadPlan, savePlan, emptyPlan } from "../data/planParto";
 
 const tipoPartoOpciones = [
@@ -83,17 +84,12 @@ export default function PlanParto({ onBack }) {
 
   return (
     <div>
-      <button
-        onClick={onBack}
-        className="no-print text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-      >
-        ← Volver a Mi Perfil
-      </button>
+      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="no-print mb-4" />
 
       <div className="no-print">
         <Header
           title="📝 Plan de parto interactivo"
-          subtitle="Completá tus preferencias y exportalo en PDF para tu equipo médico"
+          subtitle="Exportable en PDF"
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -318,10 +314,11 @@ export default function PlanParto({ onBack }) {
                     </a>
                     <button
                       onClick={() => eliminarArchivo(a.id)}
-                      className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 hover:underline whitespace-nowrap"
+                      aria-label="Eliminar"
+                      title="Eliminar"
+                      className="text-gray-400 hover:text-red-500 whitespace-nowrap"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      Eliminar
                     </button>
                   </li>
                 ))}
@@ -333,10 +330,11 @@ export default function PlanParto({ onBack }) {
         <div className="flex items-center gap-3 mt-6">
           <button
             onClick={handleGuardar}
-            className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+            aria-label="Guardar plan"
+            title="Guardar plan"
+            className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
           >
             <Save className="w-4 h-4" />
-            Guardar plan
           </button>
           <button
             onClick={handleExportar}

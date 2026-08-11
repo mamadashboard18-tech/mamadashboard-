@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../Header";
+import BackButton from "../BackButton";
 import {
   getPartnerStatus,
   createInvite,
@@ -80,18 +81,11 @@ export default function PartnerManagement({ onBack }) {
 
   return (
     <div>
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-        >
-          ← Volver
-        </button>
-      )}
+      <BackButton onBack={onBack} label="Volver" className="mb-4" />
 
       <Header
         title="👥 Tu partner"
-        subtitle="Invitá a tu acompañante para que vea tus citas, síntomas y reciba tus notas"
+        subtitle="Compartí citas y notas con tu acompañante"
       />
 
       {status.hasPartner ? (

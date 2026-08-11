@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save } from "lucide-react";
 import Header from "./Header";
+import BackButton from "./BackButton";
 import {
   getSemanaPostpartoData,
   totalSemanasPostparto,
@@ -75,16 +76,11 @@ export default function RecuperacionPostparto({ onBack }) {
 
   return (
     <div>
-      <button
-        onClick={onBack}
-        className="text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-      >
-        ← Volver a Inicio
-      </button>
+      <BackButton onBack={onBack} label="Volver a Inicio" className="mb-4" />
 
       <Header
         title="🌱 Recuperación postparto"
-        subtitle="Semana a semana de tu recuperación física, S.1 a S.12"
+        subtitle="Semana a semana, S.1 a S.12"
       />
 
       <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm mb-6">
@@ -189,10 +185,11 @@ export default function RecuperacionPostparto({ onBack }) {
         <div className="flex items-center gap-3 mt-4">
           <button
             onClick={handleGuardar}
-            className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+            aria-label="Guardar registro de la semana"
+            title="Guardar registro de la semana"
+            className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
           >
             <Save className="w-4 h-4" />
-            Guardar registro de la semana
           </button>
           {saved && <span className="text-sm text-green-600">Guardado ✓</span>}
         </div>

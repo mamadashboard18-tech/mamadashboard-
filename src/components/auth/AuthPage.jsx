@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { login, signup, verifySignupCode, resendSignupCode } from "../../data/auth";
 import { PasswordInput, PasswordChecklist, PASSWORD_RULES } from "./PasswordInput";
+import BackButton from "../BackButton";
 
 const inputClass =
   "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
@@ -42,12 +43,7 @@ function VerifyCodeStep({ nombre, email, password, onVerified, onBack }) {
   return (
     <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
-        <button
-          onClick={onBack}
-          className="text-sm text-gray-500 hover:text-rose-500 mb-6 flex items-center gap-1"
-        >
-          ← Volver
-        </button>
+        <BackButton onBack={onBack} label="Volver" className="mb-6" />
 
         <div className="flex items-center gap-2 mb-6">
           <span className="text-xl">🤰</span>
@@ -165,12 +161,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
   return (
     <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
-        <button
-          onClick={onBack}
-          className="text-sm text-gray-500 hover:text-rose-500 mb-6 flex items-center gap-1"
-        >
-          ← Volver
-        </button>
+        <BackButton onBack={onBack} label="Volver" className="mb-6" />
 
         <div className="flex items-center gap-2 mb-6">
           <span className="text-xl">🤰</span>

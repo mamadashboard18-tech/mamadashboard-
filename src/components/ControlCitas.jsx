@@ -909,10 +909,11 @@ export default function ControlCitas({ onNavigate }) {
                         <button
                           type="button"
                           onClick={() => eliminarPreguntaPropia(p.id)}
-                          className="flex items-center gap-1 text-xs text-ink-muted hover:text-red-500 cursor-pointer"
+                          aria-label="Eliminar"
+                          title="Eliminar"
+                          className="text-ink-muted hover:text-red-500 cursor-pointer"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                          Eliminar
                         </button>
                       </li>
                     );
@@ -991,26 +992,29 @@ export default function ControlCitas({ onNavigate }) {
               />
             </div>
 
-            <button
-              type="button"
-              onClick={handleGuardar}
-              className="w-full flex items-center justify-center gap-2 text-white text-[17px] font-bold py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
-              style={{ background: "var(--gradient-hero)" }}
-            >
-              <Save className="w-[18px] h-[18px]" />
-              Guardar cita
-            </button>
-
-            {editingId && (
+            <div className="flex items-center gap-3">
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={handleEliminar}
+                  aria-label="Eliminar cita"
+                  title="Eliminar cita"
+                  className="shrink-0 w-[52px] h-[52px] flex items-center justify-center text-brand-pink rounded-full border-[1.5px] border-brand-pink cursor-pointer hover:bg-brand-pink-light/40 transition-colors"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              )}
               <button
                 type="button"
-                onClick={handleEliminar}
-                className="w-full flex items-center justify-center gap-1.5 text-center text-sm text-ink-muted hover:text-red-500 mt-3 cursor-pointer"
+                onClick={handleGuardar}
+                aria-label="Guardar cita"
+                title="Guardar cita"
+                className="flex-1 flex items-center justify-center text-white py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
+                style={{ background: "var(--gradient-hero)" }}
               >
-                <Trash2 className="w-4 h-4" />
-                Eliminar cita
+                <Save className="w-5 h-5" />
               </button>
-            )}
+            </div>
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { X, BookOpen, Star, MessageCircle, Camera, EyeOff, Lock, Save, Trash2, Pencil } from "lucide-react";
+import { X, BookOpen, Star, MessageCircle, EyeOff, Lock, Save, Trash2, Pencil } from "lucide-react";
+import AttachButtons from "./AttachButtons";
 import { loadEntradaDelDia, guardarEntradaDelDia, eliminarEntrada } from "../data/diario";
 import { prompts, nuevoPromptAleatorio, toISODate } from "../data/diarioLibre";
 import {
@@ -313,20 +314,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           </div>
         )}
 
-        <label className="inline-flex items-center gap-2 bg-[rgba(255,111,159,0.14)] text-brand-pink text-xs font-bold px-3.5 py-2.5 rounded-full cursor-pointer hover:bg-[rgba(255,111,159,0.24)] transition-colors mb-3">
-          <Camera className="w-4 h-4" strokeWidth={1.8} />
-          Foto / archivo
-          <input
-            type="file"
-            multiple
-            accept="image/*,application/pdf"
-            onChange={(e) => {
-              if (e.target.files.length) handleArchivos(e.target.files);
-              e.target.value = "";
-            }}
-            className="hidden"
-          />
-        </label>
+        <AttachButtons onFiles={handleArchivos} className="mb-3" />
 
         {archivos.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
@@ -383,21 +371,23 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
             <button
               type="button"
               onClick={handleEliminar}
-              className="shrink-0 flex items-center justify-center gap-2 text-brand-pink text-[17px] font-bold px-7 py-3.5 rounded-full border-[1.5px] border-brand-pink cursor-pointer hover:bg-brand-pink-light/40 transition-colors"
+              aria-label="Eliminar"
+              title="Eliminar"
+              className="shrink-0 w-[52px] h-[52px] flex items-center justify-center text-brand-pink rounded-full border-[1.5px] border-brand-pink cursor-pointer hover:bg-brand-pink-light/40 transition-colors"
             >
-              <Trash2 className="w-[18px] h-[18px]" />
-              Eliminar
+              <Trash2 className="w-5 h-5" />
             </button>
           )}
           <button
             type="button"
             onClick={handleGuardar}
             disabled={!texto.trim() && archivos.length === 0}
-            className="shrink-0 ml-auto flex items-center justify-center gap-2 text-white text-[17px] font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-label="Guardar"
+            title="Guardar"
+            className="shrink-0 ml-auto w-[52px] h-[52px] flex items-center justify-center text-white rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: "var(--gradient-hero)" }}
           >
-            <Save className="w-[18px] h-[18px]" />
-            Guardar
+            <Save className="w-5 h-5" />
           </button>
         </div>
       </div>

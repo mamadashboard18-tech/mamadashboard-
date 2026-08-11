@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Header from "./Header";
+import BackButton from "./BackButton";
 import { loadRegistros, animoOpciones } from "../data/registroDiario";
 import { iconoSintoma } from "../data/sintomas";
 
@@ -19,20 +20,13 @@ export default function HistorialEmbarazo({ onBack }) {
 
   return (
     <div>
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="no-print text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-        >
-          ← Volver a Mi Perfil
-        </button>
-      )}
+      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="no-print mb-4" />
 
       <div className="no-print">
         <div className="flex items-start justify-between">
           <Header
             title="📖 Historial de mi embarazo"
-            subtitle="Todo lo que fuiste registrando desde Inicio, en un solo lugar"
+            subtitle="Todo lo que fuiste registrando"
           />
           <button
             onClick={handleExportar}

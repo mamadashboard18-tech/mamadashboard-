@@ -3,7 +3,7 @@ import Header from "./Header";
 export default function ComunidadPanel() {
   return (
     <div>
-      <Header title="👥 Comunidad" subtitle="Un espacio para acompañarte y acompañar a otras mamás" />
+      <Header title="👥 Comunidad" subtitle="Conectá con otras mamás" />
 
       <div className="bg-white border border-rose-100 rounded-2xl p-8 shadow-sm text-center">
         <span className="text-4xl">🚧</span>

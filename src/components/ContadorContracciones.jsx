@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { User, ChevronLeft, Timer } from "lucide-react";
+import { User, Timer } from "lucide-react";
+import BackButton from "./BackButton";
 import { loadContracciones, guardarContraccion, limpiarContracciones } from "../data/contracciones";
 import { regla511 } from "../data/estoyDeParto";
 
@@ -70,22 +71,12 @@ export default function ContadorContracciones({ onBack, onNavigate }) {
         </button>
       </div>
 
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-base text-ink-muted hover:text-brand-pink transition-colors cursor-pointer mb-4"
-        >
-          <ChevronLeft className="w-[15px] h-[15px]" strokeWidth={2.2} />
-          Volver a Inicio
-        </button>
-      )}
+      <BackButton onBack={onBack} label="Volver a Inicio" className="mb-4" />
 
       <h2 className="font-heading text-[26px] font-extrabold text-ink leading-tight mb-2.5">
         ⏱️ Contador de contracciones
       </h2>
-      <p className="text-[17px] text-ink-muted leading-relaxed mb-[22px]">
-        Cronometrá cada contracción y su intervalo con la anterior
-      </p>
+      <p className="text-[17px] text-ink-muted leading-relaxed mb-[22px]">Cronometrá cada contracción</p>
 
       <div className="bg-white/60 border border-[rgba(226,111,206,0.25)] rounded-[20px] px-5 py-[18px] mb-5">
         <p className="text-[17px] font-bold text-ink mb-2">{regla511.titulo}</p>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
+import BackButton from "./BackButton";
 import {
   getGoogleCalendarStatus,
   connectGoogleCalendar,
@@ -37,16 +38,11 @@ export default function PrivacidadPanel({ onBack }) {
 
   return (
     <div>
-      <button
-        onClick={onBack}
-        className="text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-      >
-        ← Volver
-      </button>
+      <BackButton onBack={onBack} label="Volver" className="mb-4" />
 
       <Header
         title="🔒 Privacidad"
-        subtitle="Control total sobre tus datos compartidos"
+        subtitle="Tus datos, bajo tu control"
       />
 
       {googleMsg && (

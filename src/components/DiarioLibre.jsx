@@ -4,7 +4,6 @@ import {
   Plus,
   Pencil,
   User,
-  ChevronLeft,
   Search,
   CalendarDays,
   Star,
@@ -14,6 +13,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import EscribirEntradaModal from "./EscribirEntradaModal";
+import BackButton from "./BackButton";
 import CalendarioMensual from "./CalendarioMensual";
 import DesbloqueoDiarioModal from "./DesbloqueoDiarioModal";
 import { toISODate } from "../data/diarioLibre";
@@ -240,21 +240,17 @@ export default function DiarioLibre({ onNavigate }) {
         </button>
       </div>
 
-      <button
-        onClick={() => onNavigate?.("inicio")}
-        className="lg:hidden inline-flex items-center gap-1.5 text-base text-ink-muted hover:text-brand-pink transition-colors cursor-pointer mb-4"
-      >
-        <ChevronLeft className="w-[15px] h-[15px]" strokeWidth={2.2} />
-        Volver a Inicio
-      </button>
+      <BackButton
+        onBack={() => onNavigate?.("inicio")}
+        label="Volver a Inicio"
+        className="lg:hidden mb-4"
+      />
 
       <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight mb-2 flex items-center gap-2.5">
         <Heart className="w-6 h-6 text-brand-pink shrink-0" fill="#e26fce" strokeWidth={0} />
         Mi Bienestar
       </h2>
-      <p className="text-[17px] text-ink-muted leading-relaxed mb-6">
-        Tu espacio íntimo para escribir, sin filtro y sin juicio
-      </p>
+      <p className="text-[17px] text-ink-muted leading-relaxed mb-6">Sin filtro y sin juicio</p>
 
       <button
         onClick={() => setModalFecha(todayISO)}
@@ -509,10 +505,11 @@ export default function DiarioLibre({ onNavigate }) {
                         ev.stopPropagation();
                         setModalFecha(e.fecha);
                       }}
-                      className="flex items-center gap-1.5 text-[15px] font-bold text-brand-pink hover:text-brand-magenta transition-colors mt-2 cursor-pointer"
+                      aria-label="Editar entrada"
+                      title="Editar entrada"
+                      className="text-brand-pink hover:text-brand-magenta transition-colors mt-2 cursor-pointer"
                     >
                       <Pencil className="w-3.5 h-3.5" />
-                      Editar entrada
                     </button>
                   </div>
                 );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save, Pencil, Trash2 } from "lucide-react";
 import Header from "./Header";
+import BackButton from "./BackButton";
 import { loadContactos, saveContactos, rolesSugeridos } from "../data/contactosMedicos";
 
 const emptyForm = { nombre: "", rol: rolesSugeridos[0], telefono: "" };
@@ -54,18 +55,11 @@ export default function ContactosMedicos({ onBack }) {
 
   return (
     <div>
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="text-sm text-gray-500 hover:text-rose-500 mb-4 flex items-center gap-1"
-        >
-          ← Volver a Mi Perfil
-        </button>
-      )}
+      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
 
       <Header
         title="📞 Contactos del equipo médico"
-        subtitle="Todos los teléfonos importantes, a mano para una emergencia"
+        subtitle="A mano para una emergencia"
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -106,16 +100,15 @@ export default function ContactosMedicos({ onBack }) {
           <div className="flex items-center gap-3">
             <button
               onClick={handleGuardar}
-              className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+              aria-label={editingId ? "Guardar cambios" : "Agregar"}
+              title={editingId ? "Guardar cambios" : "Agregar"}
+              className={
+                editingId
+                  ? "flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
+                  : "bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+              }
             >
-              {editingId ? (
-                <>
-                  <Save className="w-4 h-4" />
-                  Guardar cambios
-                </>
-              ) : (
-                "+ Agregar"
-              )}
+              {editingId ? <Save className="w-4 h-4" /> : "+ Agregar"}
             </button>
             {editingId && (
               <button
@@ -147,20 +140,22 @@ export default function ContactosMedicos({ onBack }) {
                       {c.rol} {c.telefono && `· ${c.telefono}`}
                     </p>
                   </div>
-                  <div className="flex gap-2 text-xs">
+                  <div className="flex gap-3">
                     <button
                       onClick={() => handleEditar(c)}
-                      className="flex items-center gap-1 text-rose-500 hover:underline"
+                      aria-label="Editar"
+                      title="Editar"
+                      className="text-rose-500"
                     >
                       <Pencil className="w-3.5 h-3.5" />
-                      Editar
                     </button>
                     <button
                       onClick={() => handleEliminar(c.id)}
-                      className="flex items-center gap-1 text-gray-400 hover:text-red-500 hover:underline"
+                      aria-label="Eliminar"
+                      title="Eliminar"
+                      className="text-gray-400 hover:text-red-500"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
-                      Eliminar
                     </button>
                   </div>
                 </li>

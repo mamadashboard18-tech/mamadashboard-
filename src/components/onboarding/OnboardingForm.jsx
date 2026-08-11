@@ -151,10 +151,15 @@ export default function OnboardingForm({ nombre, onComplete }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-1.5 bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
+              aria-label="Guardar y continuar"
+              title="Guardar y continuar"
+              className="w-full flex items-center justify-center bg-rose-500 text-white py-2.5 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
             >
-              {!loading && <Save className="w-4 h-4" />}
-              {loading ? "Guardando…" : "Guardar y continuar"}
+              {loading ? (
+                <span className="text-sm font-medium">Guardando…</span>
+              ) : (
+                <Save className="w-[18px] h-[18px]" />
+              )}
             </button>
           </form>
         </div>

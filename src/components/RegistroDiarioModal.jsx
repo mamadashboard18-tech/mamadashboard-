@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { X, Save } from "lucide-react";
+import AttachButtons from "./AttachButtons";
 import {
   animoOpciones,
   escalaOpciones,
@@ -325,19 +326,7 @@ export default function RegistroDiarioModal({
           rows={4}
         />
 
-        <label className="inline-flex items-center gap-2 bg-[rgba(255,111,159,0.14)] text-brand-pink text-[15px] font-bold px-[18px] py-3 rounded-full cursor-pointer hover:bg-[rgba(255,111,159,0.24)] transition-colors mb-[22px]">
-          📷 Foto / archivo
-          <input
-            type="file"
-            multiple
-            accept="image/*,application/pdf"
-            onChange={(e) => {
-              if (e.target.files.length) handleArchivos(e.target.files);
-              e.target.value = "";
-            }}
-            className="hidden"
-          />
-        </label>
+        <AttachButtons onFiles={handleArchivos} className="mb-[22px]" />
 
         {archivos.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-5">
@@ -371,11 +360,12 @@ export default function RegistroDiarioModal({
           <button
             type="button"
             onClick={handleGuardar}
-            className="shrink-0 flex items-center justify-center gap-2 text-white text-lg font-bold px-7 py-3.5 rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            aria-label="Guardar"
+            title="Guardar"
+            className="shrink-0 w-[52px] h-[52px] flex items-center justify-center text-white rounded-full cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
             style={{ background: "var(--gradient-hero)" }}
           >
             <Save className="w-5 h-5" />
-            Guardar
           </button>
         </div>
       </div>

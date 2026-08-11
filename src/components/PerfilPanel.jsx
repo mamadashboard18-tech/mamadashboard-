@@ -146,7 +146,7 @@ export default function PerfilPanel({ onLogout }) {
     <div>
       <Header
         title="📋 Mi Perfil"
-        subtitle="Tus datos, contactos y preferencias — todo organizado en un solo lugar"
+        subtitle="Tus datos y preferencias"
       />
 
       <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-6">
@@ -248,10 +248,11 @@ export default function PerfilPanel({ onLogout }) {
         <div className="flex items-center gap-3">
           <button
             onClick={handleGuardar}
-            className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+            aria-label="Guardar datos"
+            title="Guardar datos"
+            className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
           >
             <Save className="w-4 h-4" />
-            Guardar datos
           </button>
           {saved && <span className="text-sm text-green-600">Guardado ✓</span>}
         </div>
@@ -292,10 +293,11 @@ export default function PerfilPanel({ onLogout }) {
             <div className="flex items-center gap-4 whitespace-nowrap">
               <button
                 onClick={() => setEditandoBebe(true)}
-                className="flex items-center gap-1 text-sm text-rose-500 hover:underline"
+                aria-label="Editar"
+                title="Editar"
+                className="text-rose-500"
               >
                 <Pencil className="w-3.5 h-3.5" />
-                Editar
               </button>
               <button
                 onClick={handleVolverAEmbarazo}
@@ -354,10 +356,11 @@ export default function PerfilPanel({ onLogout }) {
               <button
                 onClick={handleGuardarBebe}
                 disabled={!bebe.fechaNacimiento}
-                className="flex items-center gap-1.5 bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-50"
+                aria-label="Guardar"
+                title="Guardar"
+                className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
-                Guardar
               </button>
               <button
                 onClick={() => setEditandoBebe(false)}
