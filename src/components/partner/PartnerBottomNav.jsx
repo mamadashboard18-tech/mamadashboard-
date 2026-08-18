@@ -37,15 +37,31 @@ export default function PartnerBottomNav({ active, onSelect, citasPendientesRsvp
           aria-current={active === "inicio" ? "page" : undefined}
         >
           <span
-            className="w-[52px] h-[52px] rounded-full flex items-center justify-center -mt-[26px]"
-            style={{
-              background: "var(--partner-gradient)",
-              boxShadow: "0 10px 20px rgba(91,33,182,0.4), 0 0 0 7px rgba(124,58,237,0.12)",
-            }}
+            className="w-[52px] h-[52px] rounded-full flex items-center justify-center -mt-[26px] transition-[background,box-shadow] duration-200"
+            style={
+              active === "inicio"
+                ? {
+                    background: "var(--partner-gradient)",
+                    boxShadow: "0 10px 20px rgba(91,33,182,0.4), 0 0 0 7px rgba(124,58,237,0.12)",
+                  }
+                : {
+                    background: "var(--partner-violet-fill-soft)",
+                    boxShadow: "0 4px 10px rgba(91,33,182,0.15)",
+                  }
+            }
           >
-            <Home className="w-[22px] h-[22px] text-white" strokeWidth={2} />
+            <Home
+              className={`w-[22px] h-[22px] ${active === "inicio" ? "text-white" : "text-partner-violet"}`}
+              strokeWidth={2}
+            />
           </span>
-          <span className="text-[11.5px] font-bold text-partner-violet mt-1 mb-2">Inicio</span>
+          <span
+            className={`text-[11.5px] mt-1 mb-2 ${
+              active === "inicio" ? "font-bold text-partner-violet" : "font-semibold text-[#9c93a3]"
+            }`}
+          >
+            Inicio
+          </span>
         </button>
 
         <button

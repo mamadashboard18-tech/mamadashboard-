@@ -35,15 +35,31 @@ export default function BottomNav({ active, onSelect }) {
                 aria-current={isActive ? "page" : undefined}
               >
                 <span
-                  className="w-14 h-14 rounded-full flex items-center justify-center -mt-[30px]"
-                  style={{
-                    background: "var(--gradient-hero)",
-                    boxShadow: "0 10px 22px rgba(216,109,214,0.45), 0 0 0 8px rgba(226,111,206,0.12)",
-                  }}
+                  className="w-14 h-14 rounded-full flex items-center justify-center -mt-[30px] transition-[background,box-shadow] duration-200"
+                  style={
+                    isActive
+                      ? {
+                          background: "var(--gradient-hero)",
+                          boxShadow: "0 10px 22px rgba(216,109,214,0.45), 0 0 0 8px rgba(226,111,206,0.12)",
+                        }
+                      : {
+                          background: "var(--brand-pink-light)",
+                          boxShadow: "0 4px 12px rgba(216,109,214,0.18)",
+                        }
+                  }
                 >
-                  <Icon className="w-6 h-6 text-white" strokeWidth={2} />
+                  <Icon
+                    className={`w-6 h-6 ${isActive ? "text-white" : "text-brand-pink"}`}
+                    strokeWidth={isActive ? 2 : 1.8}
+                  />
                 </span>
-                <span className="text-[12px] font-bold text-brand-pink mt-0.5 mb-2">{label}</span>
+                <span
+                  className={`text-[12px] mt-0.5 mb-2 ${
+                    isActive ? "font-bold text-brand-pink" : "font-medium text-[#9c93a3]"
+                  }`}
+                >
+                  {label}
+                </span>
               </button>
             );
           }
