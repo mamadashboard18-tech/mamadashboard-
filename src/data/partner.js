@@ -207,10 +207,10 @@ export async function getPartnerProfile() {
   return authFetch("/api/partner/profile");
 }
 
-export async function updatePartnerProfile({ nombre, notifRecordatoriosEmail }) {
+export async function updatePartnerProfile({ nombre, notifRecordatoriosEmail, notifNotaEmail }) {
   return authFetch("/api/partner/profile", {
     method: "POST",
-    body: JSON.stringify({ nombre, notifRecordatoriosEmail }),
+    body: JSON.stringify({ nombre, notifRecordatoriosEmail, notifNotaEmail }),
   });
 }
 

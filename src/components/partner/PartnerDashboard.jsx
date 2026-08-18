@@ -109,7 +109,11 @@ export default function PartnerDashboard() {
         <main className="flex-1 overflow-y-auto px-[18px] py-5 pb-[110px] lg:px-10 lg:py-10 lg:pb-[60px]">
           <div className="lg:max-w-[680px] lg:mx-auto">
             {active === "perfil" ? (
-              <PartnerProfile onLogout={handleLogout} />
+              <PartnerProfile
+                motherNombre={data.motherNombre}
+                onBack={() => setActive("inicio")}
+                onLogout={handleLogout}
+              />
             ) : active === "citas" ? (
               <PartnerCitas data={data} onRsvp={handleRsvp} />
             ) : active === "multimedia" ? (

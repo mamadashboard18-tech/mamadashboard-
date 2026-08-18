@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   const { data: link } = await supabaseAdmin
     .from("partners")
-    .select("nombre, email, notif_recordatorios_email")
+    .select("nombre, email, notif_recordatorios_email, notif_nota_email")
     .eq("partner_user_id", partnerUser.id)
     .maybeSingle();
 
@@ -30,14 +30,16 @@ export default async function handler(req, res) {
       nombre: link.nombre || "",
       email: link.email || partnerUser.email || "",
       notifRecordatoriosEmail: link.notif_recordatorios_email ?? true,
+      notifNotaEmail: link.notif_nota_email ?? true,
     });
     return;
   }
 
-  const { nombre, notifRecordatoriosEmail } = req.body || {};
+  const { nombre, notifRecordatoriosEmail, notifNotaEmail } = req.body || {};
   const updates = {};
   if (typeof nombre === "string" && nombre.trim()) updates.nombre = nombre.trim();
   if (typeof notifRecordatoriosEmail === "boolean") updates.notif_recordatorios_email = notifRecordatoriosEmail;
+  if (typeof notifNotaEmail === "boolean") updates.notif_nota_email = notifNotaEmail;
 
   if (Object.keys(updates).length === 0) {
     res.status(400).json({ error: "Nada para actualizar." });

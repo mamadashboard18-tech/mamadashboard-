@@ -1,4 +1,4 @@
-import { Home, CalendarDays, Headphones, User } from "lucide-react";
+import { Home, CalendarDays, Headphones } from "lucide-react";
 
 const sections = [
   { id: "inicio", label: "Inicio", icon: Home },
@@ -53,9 +53,12 @@ export default function PartnerSidebar({ active, onSelect, onLogout, motherNombr
       <div className="px-6 py-4 border-t border-partner-border flex flex-col gap-2">
         <button
           onClick={() => onSelect("perfil")}
-          className="flex items-center gap-2 text-sm text-partner-ink-muted hover:text-partner-violet transition-colors cursor-pointer text-left"
+          className={`text-sm text-left cursor-pointer transition-colors ${
+            active === "perfil"
+              ? "font-bold text-partner-violet"
+              : "text-partner-ink-muted hover:text-partner-violet"
+          }`}
         >
-          <User className="w-3.5 h-3.5" strokeWidth={1.8} />
           Tu perfil
         </button>
         <button

@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { LogOut } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import {
   getPartnerProfile,
   updatePartnerProfile,
   updatePartnerPassword,
 } from "../../data/partner";
 import { PasswordInput, PASSWORD_RULES } from "../auth/PasswordInput";
-import PartnerPasswordChecklist from "./PartnerPasswordChecklist";
 
 const inputClass =
   "w-full border border-partner-dashed-border rounded-xl p-2.5 text-sm text-partner-ink focus:outline-none focus:border-partner-violet";
 
-export default function PartnerProfile({ onLogout }) {
+export default function PartnerProfile({ motherNombre, onBack, onLogout }) {
   const [profile, setProfile] = useState(null);
   const [nombre, setNombre] = useState("");
   const [nombreSaved, setNombreSaved] = useState(false);
@@ -68,65 +67,71 @@ export default function PartnerProfile({ onLogout }) {
     setTimeout(() => setPasswordSaved(false), 2000);
   };
 
-  const handleToggleNotif = async () => {
-    const next = !profile.notifRecordatoriosEmail;
-    setProfile((prev) => ({ ...prev, notifRecordatoriosEmail: next }));
+  const handleToggleNotif = async (field) => {
+    const next = !profile[field];
+    setProfile((prev) => ({ ...prev, [field]: next }));
     setNotifSaving(true);
-    await updatePartnerProfile({ notifRecordatoriosEmail: next });
+    await updatePartnerProfile({ [field]: next });
     setNotifSaving(false);
   };
 
   return (
     <div>
-      <h2 className="font-heading text-[26px] font-extrabold text-partner-ink mb-5">Tu perfil</h2>
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="lg:hidden inline-flex items-center gap-1.5 text-[15px] text-partner-ink-muted hover:text-partner-violet transition-colors cursor-pointer mb-4"
+        >
+          <ChevronLeft className="w-3.5 h-3.5" strokeWidth={1.8} />
+          Volver
+        </button>
+      )}
 
-      <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-5">
-        <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-4">Tu cuenta</p>
+      <h2 className="font-heading text-[26px] font-extrabold text-partner-ink">Tu perfil</h2>
+      <p className="text-[14.5px] text-partner-ink-muted mt-1 mb-[22px]">Tu cuenta como acompañante</p>
 
-        <div className="mb-4">
-          <label className="text-xs text-partner-ink-muted block mb-1">Tu nombre</label>
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              className={inputClass}
-            />
-            <button
-              onClick={handleGuardarNombre}
-              className="text-white text-sm font-bold px-4 py-2.5 rounded-full transition-opacity hover:opacity-90 whitespace-nowrap cursor-pointer"
-              style={{ background: "var(--partner-gradient)" }}
-            >
-              Guardar
-            </button>
-          </div>
-          {nombreSaved && <p className="text-sm text-partner-green-text mt-1.5">Guardado ✓</p>}
-          {nombreError && <p className="text-sm text-red-500 mt-1.5">{nombreError}</p>}
+      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">Tu cuenta</p>
+      <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-[18px]">
+        <label className="text-[13px] text-partner-ink-muted block mb-2">Tu nombre</label>
+        <div className="flex items-center gap-2.5 mb-[18px] flex-wrap">
+          <input
+            type="text"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className={`${inputClass} flex-1 min-w-[180px]`}
+          />
+          <button
+            onClick={handleGuardarNombre}
+            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-opacity hover:opacity-90 whitespace-nowrap cursor-pointer"
+            style={{ background: "var(--partner-gradient)" }}
+          >
+            {nombreSaved ? "Guardado ✓" : "Guardar"}
+          </button>
         </div>
+        {nombreError && <p className="text-sm text-red-500 -mt-3 mb-3">{nombreError}</p>}
 
-        <div>
-          <label className="text-xs text-partner-ink-muted block mb-1">Email</label>
-          <p className="text-sm text-partner-ink-secondary">{profile.email}</p>
-        </div>
+        <label className="text-[13px] text-partner-ink-muted block mb-1.5">Email</label>
+        <p className="text-[15px] text-partner-ink">{profile.email}</p>
       </div>
 
-      <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-5">
-        <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-4">Contraseña</p>
-        <label className="text-xs text-partner-ink-muted block mb-1">Nueva contraseña</label>
-        <PasswordInput
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
-          autoComplete="new-password"
-          name="partner-new-password"
-          variant="violet"
-        />
-        {password && <PartnerPasswordChecklist password={password} />}
-        {passwordError && <p className="text-sm text-red-500 mt-2">{passwordError}</p>}
+      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">Contraseña</p>
+      <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-[18px]">
+        <label className="text-[13px] text-partner-ink-muted block mb-2">Nueva contraseña</label>
+        <div className="mb-4">
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            autoComplete="new-password"
+            name="partner-new-password"
+            variant="violet"
+          />
+        </div>
+        {passwordError && <p className="text-sm text-red-500 mb-3 -mt-2">{passwordError}</p>}
         <button
           onClick={handleGuardarPassword}
           disabled={passwordSaving || !password}
-          className="mt-3.5 text-white text-sm font-bold px-4 py-2.5 rounded-full transition-opacity hover:opacity-90 disabled:opacity-60 cursor-pointer"
+          className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-opacity hover:opacity-90 disabled:opacity-60 cursor-pointer"
           style={{ background: "var(--partner-gradient)" }}
         >
           {passwordSaving ? "Guardando…" : "Actualizar contraseña"}
@@ -134,25 +139,36 @@ export default function PartnerProfile({ onLogout }) {
         {passwordSaved && <span className="text-sm text-partner-green-text ml-3">Actualizada ✓</span>}
       </div>
 
-      <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-5">
-        <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-4">Notificaciones</p>
+      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">Notificaciones</p>
+      <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-[26px]">
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
-            checked={profile.notifRecordatoriosEmail}
-            onChange={handleToggleNotif}
+            checked={profile.notifNotaEmail}
+            onChange={() => handleToggleNotif("notifNotaEmail")}
             disabled={notifSaving}
-            className="w-4 h-4 accent-[#7c3aed]"
+            className="w-[19px] h-[19px] accent-[#7c3aed] shrink-0 cursor-pointer"
           />
-          <span className="text-sm text-partner-ink-secondary">Recibir recordatorios de citas por email</span>
+          <span className="text-[15px] text-partner-ink">
+            Recibir un aviso por email cuando {motherNombre || "tu pareja"} te mande una nota
+          </span>
+        </label>
+        <label className="flex items-center gap-3 cursor-pointer mt-3.5">
+          <input
+            type="checkbox"
+            checked={profile.notifRecordatoriosEmail}
+            onChange={() => handleToggleNotif("notifRecordatoriosEmail")}
+            disabled={notifSaving}
+            className="w-[19px] h-[19px] accent-[#7c3aed] shrink-0 cursor-pointer"
+          />
+          <span className="text-[15px] text-partner-ink">Recordatorios de citas compartidas por email</span>
         </label>
       </div>
 
       <button
         onClick={onLogout}
-        className="inline-flex items-center gap-1.5 text-sm text-partner-violet hover:text-partner-violet-deep font-semibold cursor-pointer"
+        className="text-[14.5px] font-semibold text-partner-ink-muted hover:text-partner-violet-deep transition-colors cursor-pointer"
       >
-        <LogOut className="w-3.5 h-3.5" strokeWidth={1.8} />
         Cerrar sesión
       </button>
     </div>
