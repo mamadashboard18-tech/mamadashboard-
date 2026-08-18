@@ -23,7 +23,7 @@ export async function connectGoogleCalendar() {
 
 export async function disconnectGoogleCalendar() {
   const headers = await authHeaders();
-  await fetch("/api/google-calendar/disconnect", { method: "POST", headers });
+  await fetch("/api/google-calendar/status", { method: "POST", headers });
 }
 
 export async function getGoogleCalendarEvents(dateISO) {
