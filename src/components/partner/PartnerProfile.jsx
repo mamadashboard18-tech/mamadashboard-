@@ -24,6 +24,12 @@ export default function PartnerProfile({ motherNombre, onBack, onLogout }) {
   const [notifSaving, setNotifSaving] = useState(false);
 
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).has("__dev_mock")) {
+      const mock = { nombre: "Martín Ibarra", email: "martin.ibarra@gmail.com", notifRecordatoriosEmail: true, notifNotaEmail: true };
+      setProfile(mock);
+      setNombre(mock.nombre);
+      return;
+    }
     getPartnerProfile().then((result) => {
       if (!result.ok) return;
       setProfile(result);

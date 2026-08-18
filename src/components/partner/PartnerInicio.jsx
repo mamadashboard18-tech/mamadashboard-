@@ -1,4 +1,5 @@
-import { Activity, ChevronRight, Quote } from "lucide-react";
+import { useState } from "react";
+import { Activity, ChevronRight, Quote, X } from "lucide-react";
 import CircularProgress from "../CircularProgress";
 import { consejoPartnerSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
@@ -27,6 +28,7 @@ export default function PartnerInicio({ data }) {
   const info = data.semanaActual ? getWeekData(data.semanaActual) : null;
   const porcentaje = data.semanaActual ? Math.round((data.semanaActual / totalWeeks) * 100) : 0;
   const contenidoRecomendado = getBibliotecaPorCategoria("pareja_acompanante").slice(0, 2);
+  const [sintomaAbierto, setSintomaAbierto] = useState(null);
 
   return (
     <div>
@@ -122,25 +124,29 @@ export default function PartnerInicio({ data }) {
                 <span className="inline-block bg-partner-violet/12 text-partner-violet text-[11px] font-extrabold uppercase tracking-wide px-3 py-[5px] rounded-full mb-4">
                   {formatFecha(registro.fecha)}
                 </span>
-                <div className="flex flex-col gap-4">
-                  {registro.sintomas.map((label) => (
-                    <div key={label}>
-                      <div className="flex items-center gap-2.5 mb-2">
+                <div className="flex flex-col gap-2">
+                  {registro.sintomas.map((label) => {
+                    const consejo = consejoPartnerSintoma(label);
+                    return (
+                      <button
+                        key={label}
+                        type="button"
+                        onClick={() => consejo && setSintomaAbierto({ label, consejo })}
+                        className={`w-full flex items-center gap-2.5 text-left ${consejo ? "cursor-pointer" : ""}`}
+                      >
                         <span className="w-8 h-8 rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
                           <Activity className="w-[15px] h-[15px]" strokeWidth={1.8} />
                         </span>
-                        <p className="text-[14.5px] font-bold text-partner-ink">{label}</p>
-                      </div>
-                      {consejoPartnerSintoma(label) && (
-                        <div className="ml-[42px] bg-partner-surface-tint rounded-[14px] px-3.5 py-2.5">
-                          <span className="text-[12.5px] font-bold text-partner-violet-deep">Cómo podés ayudar: </span>
-                          <span className="text-[13px] text-partner-ink-secondary">
-                            {consejoPartnerSintoma(label)}
+                        <p className="flex-1 min-w-0 text-[14.5px] font-bold text-partner-ink">{label}</p>
+                        {consejo && (
+                          <span className="flex items-center gap-1 text-[12px] font-bold text-partner-violet shrink-0">
+                            Cómo ayudar
+                            <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.2} />
                           </span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
                 {recomendacion && (
                   <div className="mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2">
@@ -182,6 +188,41 @@ export default function PartnerInicio({ data }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {sintomaAbierto && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-5"
+          onClick={() => setSintomaAbierto(null)}
+        >
+          <div
+            className="relative bg-white rounded-[22px] p-6 w-full max-w-sm shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setSintomaAbierto(null)}
+              aria-label="Cerrar"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-partner-violet/10 flex items-center justify-center text-partner-violet-deep cursor-pointer"
+            >
+              <X className="w-4 h-4" strokeWidth={2.2} />
+            </button>
+
+            <div className="flex items-center gap-2.5 mb-4 pr-8">
+              <span className="w-9 h-9 rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
+                <Activity className="w-4 h-4" strokeWidth={1.8} />
+              </span>
+              <p className="text-[16px] font-bold text-partner-ink">{sintomaAbierto.label}</p>
+            </div>
+
+            <div className="bg-partner-surface-tint rounded-[14px] px-4 py-3.5">
+              <span className="text-[12.5px] font-bold text-partner-violet-deep">Cómo podés ayudar: </span>
+              <span className="text-[13.5px] text-partner-ink-secondary leading-relaxed">
+                {sintomaAbierto.consejo}
+              </span>
+            </div>
+          </div>
         </div>
       )}
     </div>

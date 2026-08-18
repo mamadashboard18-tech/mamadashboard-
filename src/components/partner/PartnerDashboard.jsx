@@ -31,6 +31,39 @@ export default function PartnerDashboard() {
 
   const load = () => {
     setLoading(true);
+    if (new URLSearchParams(window.location.search).has("__dev_mock")) {
+      const today = new Date();
+      const iso = (d) => d.toISOString().slice(0, 10);
+      const plus = (n) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() + n);
+        return d;
+      };
+      setLoading(false);
+      setData({
+        motherNombre: "Valentina",
+        semanaActual: 28,
+        citas: [
+          { id: "c1", fecha: iso(plus(5)), hora: "10:30", tipo: "Ecografía morfológica", medico: "Dra. Laura Paz", lugar: "Sanatorio Mater", partner_rsvp: null },
+          { id: "c2", fecha: iso(plus(11)), hora: "18:00", tipo: "Curso de preparto", medico: "", lugar: "Centro Materno", partner_rsvp: "puede" },
+        ],
+        sintomas: [
+          {
+            fecha: iso(today),
+            sintomas: ["Náuseas matutinas", "Cansancio"],
+          },
+          {
+            fecha: iso(plus(-1)),
+            sintomas: ["Dolor de espalda"],
+          },
+        ],
+        notas: [
+          { id: "n1", texto: "Hoy me sentí mejor, gracias por acompañarme", created_at: new Date().toISOString() },
+          { id: "n2", texto: "¿Podés pasar a buscar las vitaminas que me recetó la doctora?", created_at: iso(plus(-2)) },
+        ],
+      });
+      return;
+    }
     fetchPartnerData().then((result) => {
       setLoading(false);
       if (!result.ok) {

@@ -1,5 +1,5 @@
 import { Activity } from "lucide-react";
-import { getBibliotecaPorCategoria, tipoIconoComponent, tipoLabel } from "../../data/multimedia";
+import { getBibliotecaPorCategoria, tipoIconoComponent } from "../../data/multimedia";
 
 const contenido = getBibliotecaPorCategoria("pareja_acompanante");
 
@@ -21,21 +21,12 @@ export default function PartnerMultimedia() {
                   <Icon className="w-[18px] h-[18px]" strokeWidth={1.8} />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                    <span className="text-[11.5px] font-bold tracking-wide uppercase text-partner-violet">
-                      {tipoLabel[item.tipo]}
-                    </span>
-                    {item.gratis && (
-                      <span className="bg-partner-green-bg text-partner-green-text text-[11px] font-bold px-2.5 py-[3px] rounded-full">
-                        Gratis
-                      </span>
-                    )}
-                  </div>
                   <p className="text-[15.5px] font-bold text-partner-ink leading-snug">{item.titulo}</p>
-                  {item.autor && <p className="text-[12.5px] text-partner-ink-faint mt-1">{item.autor}</p>}
-                  <p className="text-[13.5px] text-partner-ink-secondary mt-2.5 leading-relaxed">
-                    {item.descripcion}
-                  </p>
+                  {item.gratis && (
+                    <span className="inline-block bg-partner-green-bg text-partner-green-text text-[11px] font-bold px-2.5 py-[3px] rounded-full mt-1.5">
+                      Gratis
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

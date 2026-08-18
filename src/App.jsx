@@ -22,6 +22,10 @@ function getPartnerInviteToken() {
 }
 
 export default function App() {
+  if (new URLSearchParams(window.location.search).has("__dev_mock")) {
+    return <PartnerDashboard />;
+  }
+
   const [mode, setMode] = useState("loading");
   const [authTab, setAuthTab] = useState("login");
   const [user, setUser] = useState(null);
