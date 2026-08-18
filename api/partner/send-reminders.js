@@ -45,11 +45,11 @@ export default async function handler(req, res) {
   for (const cita of candidatas) {
     const { data: partner } = await supabaseAdmin
       .from("partners")
-      .select("email")
+      .select("email, notif_recordatorios_email")
       .eq("mother_id", cita.mother_id)
       .maybeSingle();
 
-    if (!partner?.email) continue;
+    if (!partner?.email || partner.notif_recordatorios_email === false) continue;
 
     const { data: motherUser } = await supabaseAdmin.auth.admin.getUserById(cita.mother_id);
     const motherNombre = motherUser?.user?.user_metadata?.nombre || "tu pareja";

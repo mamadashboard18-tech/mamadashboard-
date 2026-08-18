@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Users } from "lucide-react";
 import { acceptInvite } from "../../data/partner";
-import { PasswordInput, PasswordChecklist, PASSWORD_RULES } from "../auth/PasswordInput";
+import { PasswordInput, PASSWORD_RULES } from "../auth/PasswordInput";
+import PartnerPasswordChecklist from "./PartnerPasswordChecklist";
 
 const inputClass =
-  "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
+  "w-full border border-partner-dashed-border rounded-xl p-3 text-[15px] text-partner-ink focus:outline-none focus:border-partner-violet";
 
 export default function PartnerJoinScreen({ token, onJoined }) {
   const [nombre, setNombre] = useState("");
@@ -32,23 +34,30 @@ export default function PartnerJoinScreen({ token, onJoined }) {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-6">
-      <div className="w-full max-w-sm">
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-xl">👥</span>
-          <span className="font-semibold text-gray-900">Mamá App · Partner</span>
+    <div
+      className="min-h-dvh flex items-center justify-center px-5 py-8 box-border"
+      style={{ background: "var(--partner-gradient-page)" }}
+    >
+      <div className="w-full max-w-[400px]">
+        <div className="flex items-center justify-center gap-2.5 mb-[22px]">
+          <span className="w-[34px] h-[34px] rounded-full bg-partner-violet/16 flex items-center justify-center text-partner-violet shrink-0">
+            <Users className="w-4 h-4" strokeWidth={1.8} />
+          </span>
+          <span className="font-heading text-[17px] font-extrabold text-partner-ink">Mamá App · Partner</span>
         </div>
 
-        <div className="bg-white rounded-2xl border border-rose-100 shadow-sm p-7">
-          <h2 className="text-base font-semibold text-gray-900 mb-1">Te invitaron a acompañar</h2>
-          <p className="text-xs text-gray-500 mb-5">
+        <div className="bg-white rounded-[22px] shadow-[0_12px_32px_rgba(46,42,53,0.1)] p-[30px_26px]">
+          <h2 className="font-heading text-[21px] font-extrabold text-partner-ink mb-1.5">
+            Te invitaron a acompañar
+          </h2>
+          <p className="text-[13.5px] text-partner-ink-muted mb-[22px] leading-relaxed">
             Vas a poder ver las citas médicas que comparta con vos, sus síntomas recientes y las
             notas que te quiera mandar.
           </p>
 
           <form onSubmit={handleSubmit} autoComplete="off">
-            <div className="mb-3">
-              <label className="text-xs text-gray-500 block mb-1">Tu nombre</label>
+            <div className="mb-4">
+              <label className="text-[12.5px] font-semibold text-partner-ink-muted block mb-1.5">Tu nombre</label>
               <input
                 type="text"
                 value={nombre}
@@ -60,8 +69,8 @@ export default function PartnerJoinScreen({ token, onJoined }) {
               />
             </div>
 
-            <div className="mb-3">
-              <label className="text-xs text-gray-500 block mb-1">Tu email</label>
+            <div className="mb-4">
+              <label className="text-[12.5px] font-semibold text-partner-ink-muted block mb-1.5">Tu email</label>
               <input
                 type="email"
                 value={email}
@@ -71,19 +80,22 @@ export default function PartnerJoinScreen({ token, onJoined }) {
                 autoComplete="off"
                 name="partner-email"
               />
-              <p className="text-xs text-gray-400 mt-1">Acá te van a llegar los avisos y recordatorios.</p>
+              <p className="text-xs text-partner-ink-faint mt-1.5">Acá te van a llegar los avisos y recordatorios.</p>
             </div>
 
-            <div className="mb-3">
-              <label className="text-xs text-gray-500 block mb-1">Elegí una contraseña</label>
+            <div className="mb-4">
+              <label className="text-[12.5px] font-semibold text-partner-ink-muted block mb-1.5">
+                Elegí una contraseña
+              </label>
               <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 autoComplete="new-password"
                 name="partner-password"
+                variant="violet"
               />
-              {password && <PasswordChecklist password={password} />}
+              {password && <PartnerPasswordChecklist password={password} />}
             </div>
 
             {error && <p className="text-xs text-red-500 mb-3">{error}</p>}
@@ -91,7 +103,8 @@ export default function PartnerJoinScreen({ token, onJoined }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
+              className="w-full text-white text-[15.5px] font-bold py-3.5 rounded-full transition-opacity hover:opacity-90 disabled:opacity-60 mt-1.5 cursor-pointer"
+              style={{ background: "var(--partner-gradient)" }}
             >
               {loading ? "Un momento…" : "Aceptar invitación"}
             </button>

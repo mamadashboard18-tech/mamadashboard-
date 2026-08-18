@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Header from "../Header";
-import BackButton from "../BackButton";
+import { ChevronLeft, Users, Link2 } from "lucide-react";
+import PartnerAmbientBlobs from "./PartnerAmbientBlobs";
 import {
   getPartnerStatus,
   createInvite,
@@ -80,60 +80,79 @@ export default function PartnerManagement({ onBack }) {
   if (!status) return null;
 
   return (
-    <div>
-      <BackButton onBack={onBack} label="Volver" className="mb-4" />
+    <div className="relative">
+      <PartnerAmbientBlobs />
+      {onBack && (
+        <button
+          onClick={onBack}
+          aria-label="Volver"
+          title="Volver"
+          className="w-10 h-10 rounded-full bg-partner-violet/12 flex items-center justify-center text-partner-violet mb-5 hover:bg-partner-violet/20 transition-colors cursor-pointer"
+        >
+          <ChevronLeft className="w-[17px] h-[17px]" strokeWidth={1.8} />
+        </button>
+      )}
 
-      <Header
-        title="👥 Tu partner"
-        subtitle="Compartí citas y notas con tu acompañante"
-      />
+      <div className="flex items-center gap-2.5 mb-1.5">
+        <Users className="w-6 h-6 text-partner-violet shrink-0" strokeWidth={1.7} />
+        <h2 className="font-heading text-[26px] font-extrabold text-partner-ink">Tu partner</h2>
+      </div>
+      <p className="text-[15px] text-partner-ink-muted mb-6">
+        Compartí citas, síntomas y notas con quien te acompaña.
+      </p>
 
       {status.hasPartner ? (
-        <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-6">
-          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-5">
+          <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3.5">
             Partner vinculado
           </p>
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            <div>
-              <p className="text-sm font-medium text-gray-900">{status.nombre}</p>
-              <p className="text-xs text-gray-500">{status.email}</p>
+          <div className="flex items-center justify-between flex-wrap gap-3.5">
+            <div className="flex items-center gap-3">
+              <span className="w-[42px] h-[42px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
+                <Users className="w-[19px] h-[19px]" strokeWidth={1.8} />
+              </span>
+              <div>
+                <p className="text-base font-bold text-partner-ink">{status.nombre}</p>
+                <p className="text-[13px] text-partner-ink-muted mt-0.5">{status.email}</p>
+              </div>
             </div>
             <button
               onClick={handleQuitarPartner}
-              className="text-sm text-gray-400 hover:text-red-500 hover:underline"
+              className="text-sm font-semibold text-partner-ink-muted hover:text-partner-violet-deep cursor-pointer"
             >
               Quitar partner
             </button>
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-6">
-          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Invitar a tu partner
+        <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px] mb-5">
+          <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">
+            {status.pendingInvite ? "Invitación pendiente" : "Invitar a tu partner"}
           </p>
 
           {status.pendingInvite ? (
             <div>
-              <p className="text-sm text-gray-700 mb-2">
+              <p className="text-sm text-partner-ink-secondary mb-3.5">
                 Mandale este link para que se una (válido por unos días):
               </p>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-3.5 flex-wrap">
                 <input
                   readOnly
                   value={status.pendingInvite.url}
-                  className="flex-1 border border-rose-100 rounded-xl p-2.5 text-xs text-gray-600 bg-rose-50/50"
+                  className="flex-1 min-w-0 border border-partner-dashed-border rounded-xl bg-partner-surface-tint p-2.5 text-xs text-partner-ink-secondary"
                   onFocus={(e) => e.target.select()}
                 />
                 <button
                   onClick={handleCopiar}
-                  className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors whitespace-nowrap"
+                  className="text-white text-sm font-bold px-[18px] py-2.5 rounded-full transition-opacity hover:opacity-90 whitespace-nowrap cursor-pointer"
+                  style={{ background: "var(--partner-gradient)" }}
                 >
                   {copied ? "Copiado ✓" : "Copiar"}
                 </button>
               </div>
               <button
                 onClick={handleRevocar}
-                className="text-sm text-gray-400 hover:text-red-500 hover:underline"
+                className="text-sm font-semibold text-partner-ink-muted hover:text-partner-violet-deep cursor-pointer"
               >
                 Revocar este link
               </button>
@@ -141,15 +160,17 @@ export default function PartnerManagement({ onBack }) {
             </div>
           ) : (
             <div>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-partner-ink-secondary mb-[18px] leading-relaxed">
                 Generá un link único y mandaselo por WhatsApp o como prefieras. Solo con ese link
                 puede crear su cuenta de partner.
               </p>
               <button
                 onClick={handleGenerarLink}
                 disabled={creating}
-                className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
+                className="inline-flex items-center gap-2 text-white text-[15px] font-bold px-[22px] py-3 rounded-full transition-opacity hover:opacity-90 disabled:opacity-60 cursor-pointer"
+                style={{ background: "var(--partner-gradient)" }}
               >
+                <Link2 className="w-4 h-4" strokeWidth={1.8} />
                 {creating ? "Generando…" : "Generar link de invitación"}
               </button>
               {error && <p className="text-sm text-red-500 mt-3">{error}</p>}
@@ -159,43 +180,46 @@ export default function PartnerManagement({ onBack }) {
       )}
 
       {status.hasPartner && (
-        <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm">
-          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div className="bg-white/72 backdrop-blur-md rounded-[22px] shadow-[0_6px_26px_rgba(91,33,182,0.10)] p-[22px]">
+          <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3.5">
             Mandarle una nota
           </p>
           <textarea
             value={nota}
             onChange={(e) => setNota(e.target.value)}
             placeholder="Ej: hoy me sentí mejor, gracias por acompañarme"
-            className="w-full border border-rose-100 rounded-xl p-3 text-sm text-gray-700 focus:outline-none focus:border-rose-300 resize-none mb-3"
+            className="w-full min-h-[78px] rounded-2xl border border-partner-dashed-border bg-partner-surface-tint p-3.5 text-sm text-partner-ink focus:outline-none focus:border-partner-violet focus:bg-white resize-none mb-3"
             rows={3}
           />
           <button
             onClick={handleEnviarNota}
             disabled={enviando || !nota.trim()}
-            className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60 mb-5"
+            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-opacity hover:opacity-90 disabled:opacity-60 mb-5 cursor-pointer"
+            style={{ background: "var(--partner-gradient)" }}
           >
             {enviando ? "Enviando…" : "Enviar nota"}
           </button>
 
           {notas.length > 0 && (
             <div>
-              <p className="text-xs text-gray-400 mb-2">Notas enviadas</p>
-              <ul className="space-y-2">
+              <p className="text-xs text-partner-ink-faint mb-2.5">Notas enviadas</p>
+              <div className="flex flex-col gap-2">
                 {notas.map((n) => (
-                  <li
+                  <div
                     key={n.id}
-                    className="bg-rose-50 border border-rose-100 rounded-xl px-3 py-2 text-sm text-gray-700 flex items-center justify-between gap-3"
+                    className="bg-partner-surface-tint rounded-2xl px-3.5 py-2.5 flex items-center justify-between gap-3"
                   >
-                    <span>{n.texto}</span>
+                    <span className="text-sm text-[#3d3646]">{n.texto}</span>
                     <span
-                      className={`text-xs whitespace-nowrap ${n.leida_at ? "text-gray-400" : "text-rose-500 font-medium"}`}
+                      className={`text-xs whitespace-nowrap ${
+                        n.leida_at ? "font-semibold text-partner-ink-muted" : "font-bold text-partner-violet-deep"
+                      }`}
                     >
                       {n.leida_at ? "Leída ✓" : "No leída"}
                     </span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
         </div>

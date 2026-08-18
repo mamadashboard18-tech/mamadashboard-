@@ -202,3 +202,20 @@ export async function sendRsvp(citaId, respuesta) {
     body: JSON.stringify({ citaId, respuesta }),
   });
 }
+
+export async function getPartnerProfile() {
+  return authFetch("/api/partner/profile");
+}
+
+export async function updatePartnerProfile({ nombre, notifRecordatoriosEmail }) {
+  return authFetch("/api/partner/profile", {
+    method: "POST",
+    body: JSON.stringify({ nombre, notifRecordatoriosEmail }),
+  });
+}
+
+export async function updatePartnerPassword(password) {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return { ok: false, error: "No se pudo actualizar la contraseña." };
+  return { ok: true };
+}

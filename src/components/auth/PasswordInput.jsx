@@ -1,7 +1,10 @@
 import { useState } from "react";
 
-const inputClass =
-  "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
+const inputClassByVariant = {
+  rose: "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300",
+  violet:
+    "w-full border border-partner-dashed-border rounded-xl p-2.5 text-sm text-partner-ink focus:outline-none focus:border-partner-violet",
+};
 
 export const PASSWORD_RULES = [
   { key: "length", label: "Al menos 8 caracteres", test: (v) => v.length >= 8 },
@@ -49,7 +52,7 @@ function EyeIcon({ off }) {
   );
 }
 
-export function PasswordInput({ value, onChange, placeholder, name, autoComplete }) {
+export function PasswordInput({ value, onChange, placeholder, name, autoComplete, variant = "rose" }) {
   const [visible, setVisible] = useState(false);
   return (
     <div className="relative">
@@ -58,7 +61,7 @@ export function PasswordInput({ value, onChange, placeholder, name, autoComplete
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`${inputClass} pr-10`}
+        className={`${inputClassByVariant[variant]} pr-10`}
         name={name}
         autoComplete={autoComplete}
       />

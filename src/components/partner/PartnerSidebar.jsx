@@ -1,37 +1,45 @@
+import { Home, CalendarDays, Headphones, User } from "lucide-react";
+
 const sections = [
-  { id: "inicio", label: "Inicio", icon: "🏠" },
-  { id: "citas", label: "Citas", icon: "🗓️" },
-  { id: "multimedia", label: "Multimedia", icon: "🎧" },
+  { id: "inicio", label: "Inicio", icon: Home },
+  { id: "citas", label: "Citas", icon: CalendarDays },
+  { id: "multimedia", label: "Multimedia", icon: Headphones },
 ];
 
 export default function PartnerSidebar({ active, onSelect, onLogout, motherNombre, citasPendientesRsvp }) {
   return (
-    <aside className="no-print w-64 shrink-0 h-full bg-white border-r border-rose-100 flex flex-col">
-      <div className="px-6 py-6 border-b border-rose-100">
-        <p className="text-xs font-medium tracking-wide text-rose-400 uppercase">Acompañando a</p>
-        <h1 className="text-lg font-semibold text-gray-900 mt-1">{motherNombre || "tu pareja"}</h1>
+    <aside className="no-print relative z-10 w-[264px] shrink-0 hidden lg:flex flex-col bg-white/75 backdrop-blur-md border-r border-partner-border">
+      <div className="px-6 pt-6 pb-5 border-b border-partner-border">
+        <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-1">
+          Acompañando a
+        </p>
+        <h1 className="font-heading text-xl font-extrabold text-partner-ink">
+          {motherNombre || "tu pareja"}
+        </h1>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
         {sections.map((s) => {
+          const Icon = s.icon;
           const isActive = s.id === active;
           const showBadge = s.id === "citas" && citasPendientesRsvp > 0;
           return (
             <button
               key={s.id}
               onClick={() => onSelect(s.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl text-base font-semibold transition-colors cursor-pointer ${
                 isActive
-                  ? "bg-rose-500 text-white shadow-sm"
-                  : "text-gray-600 hover:bg-rose-50 hover:text-rose-600"
+                  ? "text-white"
+                  : "text-[#71667a] hover:bg-partner-surface-tint hover:text-partner-violet"
               }`}
+              style={isActive ? { background: "var(--partner-gradient)" } : undefined}
             >
-              <span className="text-base">{s.icon}</span>
+              <Icon className="w-[17px] h-[17px] shrink-0" strokeWidth={1.6} />
               <span className="flex-1 text-left">{s.label}</span>
               {showBadge && (
                 <span
-                  className={`text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center ${
-                    isActive ? "bg-white text-rose-500" : "bg-rose-500 text-white"
+                  className={`text-[11px] font-bold rounded-full w-[19px] h-[19px] flex items-center justify-center shrink-0 ${
+                    isActive ? "bg-white text-partner-violet" : "bg-partner-violet-deep text-white"
                   }`}
                 >
                   {citasPendientesRsvp}
@@ -42,8 +50,18 @@ export default function PartnerSidebar({ active, onSelect, onLogout, motherNombr
         })}
       </nav>
 
-      <div className="px-6 py-4 border-t border-rose-100">
-        <button onClick={onLogout} className="text-xs text-gray-400 hover:text-rose-500">
+      <div className="px-6 py-4 border-t border-partner-border flex flex-col gap-2">
+        <button
+          onClick={() => onSelect("perfil")}
+          className="flex items-center gap-2 text-sm text-partner-ink-muted hover:text-partner-violet transition-colors cursor-pointer text-left"
+        >
+          <User className="w-3.5 h-3.5" strokeWidth={1.8} />
+          Tu perfil
+        </button>
+        <button
+          onClick={onLogout}
+          className="text-sm text-partner-ink-muted hover:text-partner-violet transition-colors cursor-pointer text-left"
+        >
           Cerrar sesión
         </button>
       </div>

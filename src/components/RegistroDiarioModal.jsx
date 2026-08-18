@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { X, Save } from "lucide-react";
+import { X, Save, Users } from "lucide-react";
 import AttachButtons from "./AttachButtons";
+import ToggleSwitch from "./ToggleSwitch";
 import {
   animoOpciones,
   escalaOpciones,
@@ -235,15 +236,20 @@ export default function RegistroDiarioModal({
         </div>
 
         {hasPartner && (
-          <label className="flex items-center gap-2 mb-3 cursor-pointer">
-            <input
-              type="checkbox"
+          <div className="bg-white border border-[var(--border-soft)] rounded-[18px] px-4 py-3.5 flex items-center gap-3 mb-3">
+            <span className="w-9 h-9 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
+              <Users className="w-4 h-4" strokeWidth={1.8} />
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-[15px] font-bold text-ink">Compartir con mi partner</p>
+              <p className="text-xs text-[#8a7f92] mt-0.5">Va a ver los síntomas de hoy y los tips de cómo ayudar</p>
+            </div>
+            <ToggleSwitch
               checked={compartirPartner}
-              onChange={(e) => setCompartirPartner(e.target.checked)}
-              className="accent-brand-pink w-4 h-4"
+              onChange={() => setCompartirPartner((v) => !v)}
+              label="Compartir con mi partner"
             />
-            <span className="text-sm text-ink-muted">Compartir estos síntomas con tu partner 👥</span>
-          </label>
+          </div>
         )}
 
         <button

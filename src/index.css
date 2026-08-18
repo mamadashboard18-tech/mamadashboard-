@@ -33,6 +33,32 @@
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Partner mode — separate palette, distinct from brand-pink/brand-purple
+     by explicit product decision (the "acompañante" view). Don't unify
+     without checking first. */
+  --partner-violet: #7c3aed;
+  --partner-violet-deep: #5b21b6;
+  --partner-violet-fill: rgba(124, 58, 237, 0.14);
+  --partner-violet-fill-soft: rgba(124, 58, 237, 0.12);
+  --partner-violet-border: rgba(124, 58, 237, 0.15);
+  --partner-surface-tint: #f5eefe;
+  --partner-border: #efe6fb;
+  --partner-dashed-border: #e4d3f9;
+  --partner-ink: #2e2a35;
+  --partner-ink-secondary: #4a4351;
+  --partner-ink-muted: #857d93;
+  --partner-ink-faint: #a89fb0;
+  --partner-gold: #d6a244;
+  --partner-green-bg: #ddeecb;
+  --partner-green-text: #4c7a34;
+  --partner-blob-peach: #f4d9c7;
+  --partner-blob-lavender: #c9b6f2;
+  --partner-blob-violet: #7c3aed;
+
+  --partner-gradient: linear-gradient(135deg, #f0b87a 0%, #c08fe0 45%, #5b21b6 100%);
+  --partner-gradient-page: linear-gradient(135deg, #f4e4d6 0%, #e6d8f0 45%, #c9b6f2 100%);
+  --partner-gradient-note: linear-gradient(135deg, #f3ebfd 0%, #e7d9fa 100%);
 }
 
 @theme {
@@ -47,6 +73,19 @@
   --color-brand-teal: #2ee6d6;
   --color-ink: #241d2b;
   --color-ink-muted: #71667a;
+
+  --color-partner-violet: #7c3aed;
+  --color-partner-violet-deep: #5b21b6;
+  --color-partner-surface-tint: #f5eefe;
+  --color-partner-border: #efe6fb;
+  --color-partner-dashed-border: #e4d3f9;
+  --color-partner-ink: #2e2a35;
+  --color-partner-ink-secondary: #4a4351;
+  --color-partner-ink-muted: #857d93;
+  --color-partner-ink-faint: #a89fb0;
+  --color-partner-gold: #d6a244;
+  --color-partner-green-bg: #ddeecb;
+  --color-partner-green-text: #4c7a34;
 }
 
 body {

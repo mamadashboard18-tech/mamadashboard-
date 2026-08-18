@@ -1,3 +1,4 @@
+import { FileText, CirclePlay, Quote, BookOpen, Book, NotebookPen, Mic, Tv } from "lucide-react";
 import semanal from "./multimediaSemanal.json";
 import biblioteca from "./multimediaBiblioteca.json";
 
@@ -10,6 +11,19 @@ export const tipoIcono = {
   plantilla: "📝",
   podcast: "🎙️",
   canal: "📺",
+};
+
+// Íconos de línea (lucide) equivalentes, para pantallas que usan el
+// lenguaje visual sin emojis (ej. modo partner).
+export const tipoIconoComponent = {
+  articulo: FileText,
+  video: CirclePlay,
+  frase: Quote,
+  guia: BookOpen,
+  libro: Book,
+  plantilla: NotebookPen,
+  podcast: Mic,
+  canal: Tv,
 };
 
 export const tipoLabel = {
