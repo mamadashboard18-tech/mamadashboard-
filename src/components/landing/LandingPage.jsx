@@ -1,276 +1,419 @@
-import {
-  Home,
-  CalendarDays,
-  Heart,
-  Lock,
-  Sprout,
-  Headphones,
-  Users,
-  Check,
-  ShieldCheck,
-  HeartHandshake,
-} from "lucide-react";
-import AmbientBlobs from "../AmbientBlobs";
-import { pilares, seccionesDetalle, stats, partnerHighlights } from "../../data/landingContent";
+import { useEffect, useRef, useState } from "react";
+import "./landing.css";
+import { pilares, secciones, partnerPoints, heroWeek } from "../../data/landingContent";
 
-const icons = { Home, CalendarDays, Heart, Lock, Sprout, Headphones, Users };
+/* ---------- Scroll-reveal primitive ---------- */
+
+function useInView() {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, inView];
+}
+
+function Reveal({ children, delay = 0, className = "" }) {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${inView ? "reveal-visible" : ""} ${className}`}
+      style={{ transitionDelay: inView ? `${delay}ms` : "0ms" }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ---------- Kicker (small-caps label with accent mark) ---------- */
+
+function Kicker({ children, tone = "ink" }) {
+  return (
+    <p
+      className="flex items-center gap-2 text-xs tracking-[0.22em] uppercase font-medium"
+      style={{ color: tone === "paper" ? "var(--paper-on-ink)" : "var(--ink-muted)", opacity: tone === "paper" ? 0.75 : 1 }}
+    >
+      <span className="inline-block w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "var(--accent)" }} />
+      {children}
+    </p>
+  );
+}
+
+/* ---------- Hero week ruler — a functional graphic, not decoration ---------- */
+
+function WeekRuler({ current, total }) {
+  const marks = [1, 10, 20, 30, 40];
+  const pct = (w) => `${((w - 1) / (total - 1)) * 100}%`;
+
+  return (
+    <div className="mt-14 max-w-md">
+      <p className="font-display italic text-sm mb-4" style={{ color: "var(--ink-muted)" }}>
+        Semana {current} de {total}
+      </p>
+      <div className="relative h-px w-full" style={{ background: "var(--rule)" }}>
+        {marks.map((w) => (
+          <span
+            key={w}
+            aria-hidden="true"
+            className="absolute top-1/2 h-2 w-px -translate-y-1/2"
+            style={{ left: pct(w), background: "var(--ink-muted)" }}
+          />
+        ))}
+        <span
+          aria-hidden="true"
+          className="absolute top-1/2 h-2.5 w-2.5 rounded-full -translate-x-1/2 -translate-y-1/2"
+          style={{ left: pct(current), background: "var(--accent)" }}
+        />
+      </div>
+      <div className="relative h-4 mt-2">
+        {marks.map((w) => (
+          <span
+            key={w}
+            className="absolute text-[11px]"
+            style={{
+              left: pct(w),
+              transform: w === 1 ? "translateX(0)" : w === total ? "translateX(-100%)" : "translateX(-50%)",
+              color: "var(--ink-muted)",
+            }}
+          >
+            {w}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Bespoke section glyphs — hand-drawn, not an icon library ---------- */
+
+function SectionGlyph({ type }) {
+  const common = { width: 24, height: 24, viewBox: "0 0 28 28", fill: "none" };
+  switch (type) {
+    case "inicio":
+      return (
+        <svg {...common} aria-hidden="true">
+          <circle cx="14" cy="14" r="10" stroke="var(--rule)" strokeWidth="1.6" />
+          <path d="M14 4a10 10 0 0 1 8.5 15.3" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      );
+    case "embarazo":
+      return (
+        <svg {...common} aria-hidden="true">
+          <line x1="3" y1="14" x2="25" y2="14" stroke="var(--rule)" strokeWidth="1.6" />
+          <line x1="3" y1="10.5" x2="3" y2="17.5" stroke="var(--ink)" strokeWidth="1.6" />
+          <line x1="25" y1="10.5" x2="25" y2="17.5" stroke="var(--ink)" strokeWidth="1.6" />
+          <circle cx="16" cy="14" r="2.3" fill="var(--accent)" />
+        </svg>
+      );
+    case "citas":
+      return (
+        <svg {...common} aria-hidden="true">
+          {[6, 14, 22].flatMap((x) =>
+            [6, 14, 22].map((y) => (
+              <circle
+                key={`${x}-${y}`}
+                cx={x}
+                cy={y}
+                r={x === 14 && y === 14 ? 2.4 : 1.5}
+                fill={x === 14 && y === 14 ? "var(--accent)" : "var(--rule)"}
+              />
+            ))
+          )}
+        </svg>
+      );
+    case "bienestar":
+      return (
+        <svg {...common} aria-hidden="true">
+          <path d="M2 16 Q7 7 11 16 T20 16 T27 11" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      );
+    case "multimedia":
+      return (
+        <svg {...common} aria-hidden="true">
+          <line x1="5" y1="10" x2="5" y2="20" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round" />
+          <line x1="11" y1="5" x2="11" y2="23" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
+          <line x1="17" y1="9" x2="17" y2="19" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round" />
+          <line x1="23" y1="12" x2="23" y2="16" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      );
+    case "comunidad":
+      return (
+        <svg {...common} aria-hidden="true">
+          <line x1="9" y1="10" x2="19" y2="18" stroke="var(--rule)" strokeWidth="1.6" />
+          <circle cx="9" cy="10" r="2.4" fill="var(--ink)" />
+          <circle cx="19" cy="18" r="2.4" fill="var(--accent)" />
+          <circle cx="21.5" cy="7" r="1.8" fill="var(--rule)" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+/* ---------- Page ---------- */
 
 export default function LandingPage({ onGoToAuth, onDevPreview }) {
   return (
-    <div className="min-h-screen bg-[var(--bg)]">
-      <header className="sticky top-0 bg-[var(--bg)]/90 backdrop-blur border-b border-[var(--border-soft)] z-40">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-full bg-brand-pink-light flex items-center justify-center">
-              <Heart className="w-4 h-4 text-brand-pink" strokeWidth={2} fill="currentColor" />
-            </span>
-            <span className="font-heading font-extrabold text-ink">Mamá App</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => onGoToAuth("login")}
-              className="text-sm text-ink-muted hover:text-brand-pink cursor-pointer"
-            >
-              Iniciar sesión
-            </button>
-            <button
-              onClick={() => onGoToAuth("signup")}
-              className="text-white text-sm font-bold px-4 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer"
-              style={{ background: "var(--gradient-hero)" }}
-            >
-              Crear cuenta
-            </button>
-          </div>
-        </div>
+    <div className="landing-editorial min-h-screen">
+      <header className="max-w-6xl mx-auto px-6 sm:px-10 py-6 flex items-center justify-between">
+        <span className="font-semibold text-lg">
+          Mamá App<span style={{ color: "var(--accent)" }}>.</span>
+        </span>
+        <nav className="flex items-center gap-5">
+          <button onClick={() => onGoToAuth("login")} className="link-muted text-sm hidden sm:inline cursor-pointer">
+            Ya tengo cuenta
+          </button>
+          <button
+            onClick={() => onGoToAuth("signup")}
+            className="btn-primary inline-flex items-center gap-1.5 text-sm font-semibold px-4 py-2.5 rounded-md cursor-pointer"
+          >
+            Crear cuenta <span className="arrow">→</span>
+          </button>
+        </nav>
       </header>
 
       {/* HERO */}
-      <div className="relative">
-        <AmbientBlobs />
-        <section className="max-w-4xl mx-auto px-6 text-center pt-16 pb-14 relative z-10">
-          <span className="inline-flex items-center gap-1.5 bg-brand-pink-light text-brand-magenta text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
-            <Heart className="w-3.5 h-3.5" fill="currentColor" />
-            Tu compañera en cada semana de embarazo
-          </span>
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-ink leading-tight mb-6">
-            Tu compañera de embarazo:
-            <br />
-            <span
-              className="bg-clip-text text-transparent"
-              style={{ backgroundImage: "var(--gradient-hero)" }}
-            >
-              organizada, emocional
-            </span>{" "}
-            y siempre a mano
-          </h1>
-          <p className="text-ink-muted text-lg mb-9 max-w-xl mx-auto">
-            La app que te acompaña desde el día que te enterás hasta los primeros meses con tu
-            bebé — seguimiento semana a semana, bienestar emocional y una comunidad real, todo
-            pensado para vos.
-          </p>
-          <button
-            onClick={() => onGoToAuth("signup")}
-            className="text-white text-sm font-bold px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
-            style={{ background: "var(--gradient-hero)" }}
+      <section className="max-w-6xl mx-auto px-6 sm:px-10 pt-8 pb-24 sm:pt-16 sm:pb-32">
+        <Reveal>
+          <Kicker>Mamá App — un diario para cada semana</Kicker>
+        </Reveal>
+        <Reveal delay={80}>
+          <h1
+            className="font-display text-balance text-[2.5rem] leading-[1.1] sm:text-6xl sm:leading-[1.06] md:text-7xl font-medium max-w-4xl mt-8"
+            style={{ color: "var(--ink)" }}
           >
-            Crear mi cuenta gratis
-          </button>
-          <p className="text-xs text-ink-muted mt-3">
-            Gratis para empezar · Te acompaña en el día a día, no reemplaza a tu médico.
+            No vas a recordar cada semana.{" "}
+            <em className="italic" style={{ color: "var(--accent)" }}>
+              Nosotras sí.
+            </em>
+          </h1>
+        </Reveal>
+        <Reveal delay={160}>
+          <p className="mt-8 text-lg leading-relaxed max-w-[42ch]" style={{ color: "var(--ink-muted)" }}>
+            Mamá App es tu diario de embarazo: seguimiento semana a semana, un espacio para tu
+            bienestar emocional y todo organizado en un solo lugar — sin vueltas, sin apps de más.
           </p>
-        </section>
-      </div>
-
-      {/* STATS */}
-      <section className="max-w-4xl mx-auto px-6 pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {stats.map((s) => (
-            <div
-              key={s.label}
-              className="bg-white border border-[var(--border-soft)] rounded-2xl p-6 text-center shadow-sm"
+        </Reveal>
+        <Reveal delay={240}>
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            <button
+              onClick={() => onGoToAuth("signup")}
+              className="btn-primary inline-flex items-center gap-2 text-sm font-semibold px-6 py-3.5 rounded-md cursor-pointer"
             >
-              <p className="font-heading text-3xl font-extrabold text-brand-pink">{s.value}</p>
-              <p className="text-sm text-ink-muted mt-1">{s.label}</p>
-            </div>
-          ))}
+              Empezar mi diario <span className="arrow">→</span>
+            </button>
+            <p className="text-xs max-w-[24ch] leading-relaxed" style={{ color: "var(--ink-muted)" }}>
+              Gratis para empezar. No reemplaza a tu médico — te acompaña entre consulta y consulta.
+            </p>
+          </div>
+        </Reveal>
+        <Reveal delay={320}>
+          <WeekRuler current={heroWeek.current} total={heroWeek.total} />
+        </Reveal>
+      </section>
+
+      {/* PULL QUOTE */}
+      <section className="border-t" style={{ borderColor: "var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
+          <Reveal>
+            <p
+              className="font-display italic text-balance text-2xl sm:text-4xl md:text-[2.65rem] leading-[1.32] max-w-3xl"
+              style={{ color: "var(--ink)" }}
+            >
+              No es una libreta más. Es el lugar donde vas a poner en palabras cada semana — la
+              que fue linda y la que costó.
+            </p>
+          </Reveal>
         </div>
       </section>
 
-      {/* QUÉ ES */}
-      <section className="bg-white border-y border-[var(--border-soft)]">
-        <div className="max-w-4xl mx-auto px-6 py-20 text-center">
-          <h2 className="text-3xl font-extrabold text-ink mb-5">Más que una libreta de embarazo</h2>
-          <p className="text-ink-muted text-lg max-w-2xl mx-auto">
-            La mayoría de las apps te tiran una ficha semanal y ya. Mamá App suma seguimiento
-            semana a semana, tu bienestar emocional, contenido en audio y una comunidad real de
-            mamás — todo en un solo lugar, para que no tengas que andar buscando en mil lados.
-          </p>
-        </div>
-      </section>
-
-      {/* PILARES */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-ink text-center mb-3">
-          Pensada para acompañarte de verdad
-        </h2>
-        <p className="text-ink-muted text-center max-w-xl mx-auto mb-12">
-          Organización, contención y privacidad — las tres cosas que más se necesitan y menos se
-          encuentran juntas.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {pilares.map((p) => {
-            const Icon = icons[p.icon] || Heart;
-            return (
-              <div
-                key={p.title}
-                className="bg-white border border-[var(--border-soft)] rounded-2xl p-6 shadow-sm"
-              >
-                <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand-pink-light">
-                  <Icon className="w-5 h-5 text-brand-pink" strokeWidth={2} />
-                </span>
-                <p className="font-heading font-bold text-ink mt-4 mb-2">{p.title}</p>
-                <p className="text-sm text-ink-muted leading-relaxed">{p.desc}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* DETALLE DE SECCIONES */}
-      <section className="bg-white border-y border-[var(--border-soft)]">
-        <div className="max-w-5xl mx-auto px-6 py-20">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-ink text-center mb-3">
-            Todo lo que tenés dentro de la app
-          </h2>
-          <p className="text-ink-muted text-center max-w-xl mx-auto mb-14">
-            Siete áreas integradas, pensadas para acompañarte en cada etapa del camino.
-          </p>
-
-          <div className="space-y-14">
-            {seccionesDetalle.map((s, i) => {
-              const Icon = icons[s.icon] || Heart;
-              return (
-                <div key={s.title} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                  <div className={i % 2 === 1 ? "md:order-2" : ""}>
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-pink-light mb-4">
-                      <Icon className="w-6 h-6 text-brand-pink" strokeWidth={2} />
-                    </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-brand-pink text-sm font-semibold">{s.tagline}</p>
-                      {s.comingSoon && (
-                        <span className="bg-brand-purple-light text-brand-purple text-[11px] font-semibold px-2 py-0.5 rounded-full">
-                          Muy pronto
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-2xl font-extrabold text-ink mb-3">{s.title}</h3>
-                    <p className="text-ink-muted mb-4 leading-relaxed">{s.desc}</p>
-                    <ul className="space-y-2">
-                      {s.items.map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-ink">
-                          <Check className="w-4 h-4 text-brand-pink mt-0.5 shrink-0" strokeWidth={2.5} />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div
-                    className={`rounded-[28px] aspect-[4/3] flex items-center justify-center shadow-sm ${
-                      i % 2 === 1 ? "md:order-1" : ""
-                    }`}
-                    style={{ background: "var(--gradient-hero)" }}
-                  >
-                    <Icon className="w-16 h-16 text-white" strokeWidth={1.5} />
+      {/* POR QUÉ — numbered editorial list */}
+      <section className="border-t" style={{ borderColor: "var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
+          <Reveal>
+            <Kicker>Por qué Mamá App</Kicker>
+          </Reveal>
+          <div className="mt-14">
+            {pilares.map((p, i) => (
+              <Reveal key={p.number} delay={i * 90}>
+                <div
+                  className={`grid grid-cols-1 sm:grid-cols-[auto,1fr] gap-3 sm:gap-10 items-baseline py-9 border-t ${
+                    i % 2 === 1 ? "sm:pl-16" : ""
+                  }`}
+                  style={{ borderColor: "var(--rule)" }}
+                >
+                  <span className="font-display text-5xl sm:text-6xl" style={{ color: "var(--rule)" }}>
+                    {p.number}
+                  </span>
+                  <div className="max-w-xl">
+                    <h3 className="font-display text-xl sm:text-2xl font-medium mb-2.5" style={{ color: "var(--ink)" }}>
+                      {p.title}
+                    </h3>
+                    <p className="leading-relaxed" style={{ color: "var(--ink-muted)" }}>
+                      {p.desc}
+                    </p>
                   </div>
                 </div>
-              );
-            })}
+              </Reveal>
+            ))}
+            <div className="border-t" style={{ borderColor: "var(--rule)" }} />
           </div>
         </div>
       </section>
 
-      {/* MODO ACOMPAÑANTE (PAPÁ / PAREJA) */}
-      <section
-        className="border-y border-[var(--partner-border)]"
-        style={{ background: "var(--partner-surface-tint)" }}
-      >
-        <div className="max-w-5xl mx-auto px-6 py-20">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <span className="inline-flex items-center gap-1.5 bg-white text-[var(--partner-violet)] text-xs font-semibold px-3 py-1.5 rounded-full mb-5 border border-[var(--partner-border)]">
-                <HeartHandshake className="w-3.5 h-3.5" strokeWidth={2} />
-                Modo acompañante
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-ink mb-4">
-                Tampoco tu pareja se queda afuera
+      {/* ADENTRO DE LA APP — editorial index */}
+      <section className="border-t" style={{ borderColor: "var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
+          <Reveal>
+            <Kicker>Adentro de la app</Kicker>
+          </Reveal>
+          <Reveal delay={60}>
+            <h2 className="font-display text-balance text-3xl sm:text-5xl font-medium mt-4 mb-14 max-w-2xl" style={{ color: "var(--ink)" }}>
+              Seis lugares. Un solo espacio.
+            </h2>
+          </Reveal>
+          <div>
+            {secciones.map((s, i) => (
+              <Reveal key={s.number} delay={i * 70}>
+                <div className="py-8 border-t" style={{ borderColor: "var(--rule)" }}>
+                  <div className="flex items-center gap-3 mb-2.5 flex-wrap">
+                    <span className="font-display text-sm" style={{ color: "var(--ink-muted)" }}>
+                      {s.number}
+                    </span>
+                    <SectionGlyph type={s.icon} />
+                    <h3 className="font-display text-xl sm:text-2xl font-medium" style={{ color: "var(--ink)" }}>
+                      {s.title}
+                    </h3>
+                    {s.comingSoon && (
+                      <span
+                        className="text-[10px] tracking-[0.15em] uppercase font-semibold px-2 py-0.5 rounded"
+                        style={{ color: "var(--accent-deep)", background: "var(--paper-deep)" }}
+                      >
+                        Muy pronto
+                      </span>
+                    )}
+                  </div>
+                  <p className="leading-relaxed max-w-xl sm:pl-[52px]" style={{ color: "var(--ink-muted)" }}>
+                    {s.desc}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+            <div className="border-t" style={{ borderColor: "var(--rule)" }} />
+          </div>
+        </div>
+      </section>
+
+      {/* MODO ACOMPAÑANTE — tonal inversion signals a different voice */}
+      <section style={{ background: "var(--ink)", color: "var(--paper-on-ink)" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 py-20 sm:py-28">
+          <Reveal>
+            <Kicker tone="paper">Modo acompañante</Kicker>
+          </Reveal>
+          <div className="grid sm:grid-cols-2 gap-10 sm:gap-16 mt-8">
+            <Reveal delay={80}>
+              <h2 className="font-display text-balance text-3xl sm:text-5xl font-medium leading-[1.12]">
+                Tu pareja tampoco se queda afuera.
               </h2>
-              <p className="text-ink-muted mb-6 leading-relaxed">
-                Invitá a tu pareja, a tu mamá o a quien vos elijas para que te acompañe desde su
-                propia app — liviana, simple, y pensada para sumar sin invadir tu espacio.
-              </p>
-              <ul className="space-y-2.5">
-                {partnerHighlights.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-ink">
-                    <Check
-                      className="w-4 h-4 mt-0.5 shrink-0"
-                      style={{ color: "var(--partner-violet)" }}
-                      strokeWidth={2.5}
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div
-              className="rounded-[28px] aspect-[4/3] flex items-center justify-center shadow-sm"
-              style={{ background: "var(--partner-gradient)" }}
-            >
-              <Users className="w-16 h-16 text-white" strokeWidth={1.5} />
-            </div>
+            </Reveal>
+            <Reveal delay={160}>
+              <div>
+                <p className="leading-relaxed mb-7" style={{ opacity: 0.85 }}>
+                  Invitá a tu pareja, a tu mamá o a quien vos quieras para que te acompañe desde
+                  su propia app — liviana, simple, pensada para sumar sin invadir tu espacio.
+                </p>
+                <ul className="space-y-3">
+                  {partnerPoints.map((point) => (
+                    <li key={point} className="flex gap-3 leading-relaxed" style={{ opacity: 0.85 }}>
+                      <span aria-hidden="true" style={{ color: "var(--accent)" }}>
+                        —
+                      </span>
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ACLARACIÓN: NO REEMPLAZA AL MÉDICO */}
-      <section className="max-w-3xl mx-auto px-6 py-20 text-center">
-        <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand-pink-light mb-5">
-          <ShieldCheck className="w-6 h-6 text-brand-pink" strokeWidth={2} />
-        </span>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-ink mb-4">
-          Un espacio que te acompaña, no un consultorio
-        </h2>
-        <p className="text-ink-muted leading-relaxed max-w-xl mx-auto">
-          Mamá App te ayuda a organizarte y a cuidar tu bienestar emocional durante el embarazo y
-          el postparto. No reemplaza la consulta con tu médico, no da diagnósticos ni indica
-          tratamientos — para eso siempre vas a tener a tu equipo de salud de confianza. Nosotras
-          nos encargamos de que no llegues perdida a ninguna semana.
-        </p>
+      {/* NOTA — the medical disclaimer, framed as an editorial aside */}
+      <section className="border-t" style={{ borderColor: "var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 py-20 sm:py-24">
+          <Reveal>
+            <div className="border-l-2 pl-6 sm:pl-8 max-w-2xl" style={{ borderColor: "var(--accent)" }}>
+              <p className="text-xs tracking-[0.22em] uppercase font-semibold mb-3" style={{ color: "var(--ink-muted)" }}>
+                Nota
+              </p>
+              <p className="font-display italic text-lg sm:text-xl leading-relaxed" style={{ color: "var(--ink)" }}>
+                Mamá App te ayuda a organizarte y a cuidar tu bienestar emocional durante el
+                embarazo y el postparto. No reemplaza la consulta con tu médico, no da
+                diagnósticos ni indica tratamientos — para eso siempre vas a tener a tu equipo de
+                salud de confianza.
+              </p>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
       {/* CTA FINAL */}
-      <section className="max-w-3xl mx-auto px-6 pb-24 text-center">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-ink mb-5">
-          Empezá a acompañarte hoy
-        </h2>
-        <p className="text-ink-muted text-lg mb-9">
-          Creá tu cuenta gratis y empezá tu seguimiento personalizado, semana a semana.
-        </p>
-        <button
-          onClick={() => onGoToAuth("signup")}
-          className="text-white text-sm font-bold px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity shadow-sm cursor-pointer"
-          style={{ background: "var(--gradient-hero)" }}
-        >
-          Crear mi cuenta gratis
-        </button>
+      <section className="border-t" style={{ borderColor: "var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-6 sm:px-10 py-24 sm:py-32">
+          <Reveal>
+            <h2 className="font-display text-balance text-4xl sm:text-6xl font-medium mb-6 max-w-2xl" style={{ color: "var(--ink)" }}>
+              Empezá esta semana.
+            </h2>
+          </Reveal>
+          <Reveal delay={80}>
+            <p className="text-lg mb-10 max-w-md leading-relaxed" style={{ color: "var(--ink-muted)" }}>
+              Creá tu cuenta gratis. Vas a poder anotar tu semana en menos de un minuto.
+            </p>
+          </Reveal>
+          <Reveal delay={160}>
+            <button
+              onClick={() => onGoToAuth("signup")}
+              className="btn-primary inline-flex items-center gap-2 text-sm font-semibold px-7 py-3.5 rounded-md cursor-pointer"
+            >
+              Crear mi cuenta gratis <span className="arrow">→</span>
+            </button>
+          </Reveal>
+        </div>
       </section>
 
-      <footer className="max-w-6xl mx-auto px-6 py-8 border-t border-[var(--border-soft)] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-ink-muted">
-        <span>© 2026 Mamá App · No sustituye la atención médica profesional.</span>
-        {import.meta.env.DEV && (
-          <button onClick={onDevPreview} className="hover:text-brand-pink cursor-pointer">
-            Vista previa del dashboard (solo desarrollo)
-          </button>
-        )}
+      <footer className="border-t" style={{ borderColor: "var(--rule)" }}>
+        <div
+          className="max-w-6xl mx-auto px-6 sm:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs"
+          style={{ color: "var(--ink-muted)" }}
+        >
+          <span>Mamá App © 2026 · No sustituye la atención médica profesional.</span>
+          {import.meta.env.DEV && (
+            <button onClick={onDevPreview} className="link-muted cursor-pointer">
+              Vista previa del dashboard (solo desarrollo)
+            </button>
+          )}
+        </div>
       </footer>
     </div>
   );
