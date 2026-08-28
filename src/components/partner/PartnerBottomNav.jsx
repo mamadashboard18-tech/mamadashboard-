@@ -3,7 +3,7 @@ import { Home, CalendarDays, Headphones } from "lucide-react";
 export default function PartnerBottomNav({ active, onSelect, citasPendientesRsvp }) {
   return (
     <nav
-      className="no-print safe-bottom fixed bottom-0 inset-x-0 z-30 lg:hidden bg-white/70 backdrop-blur-md border-t border-partner-border"
+      className="no-print safe-bottom fixed bottom-0 inset-x-0 z-30 lg:hidden bg-white border-t border-partner-border"
       aria-label="Navegación de partner"
     >
       <div className="grid grid-cols-3">

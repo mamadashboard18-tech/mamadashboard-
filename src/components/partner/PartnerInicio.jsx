@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Activity, ChevronRight, Quote, X } from "lucide-react";
 import CircularProgress from "../CircularProgress";
-import { consejoPartnerSintoma } from "../../data/sintomas";
+import { consejoPartnerSintoma, porQuePasaSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
-import { getBibliotecaPorCategoria, getRecomendacionesHoy, tipoIconoComponent, tipoLabel } from "../../data/multimedia";
+import { getBibliotecaPorCategoria, getRecomendacionesHoy, tipoIconoComponent } from "../../data/multimedia";
 
 const trimesterLabel = { 1: "1er trimestre", 2: "2do trimestre", 3: "3er trimestre" };
 
@@ -78,16 +78,11 @@ export default function PartnerInicio({ data }) {
             {contenidoRecomendado.map((item, i) => {
               const Icon = tipoIconoComponent[item.tipo] || Activity;
               const card = (
-                <div className="flex items-center gap-3 bg-white/72 backdrop-blur-md rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]">
+                <div className="flex items-center gap-3 bg-white rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]">
                   <span className="w-[38px] h-[38px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
                     <Icon className="w-[17px] h-[17px]" strokeWidth={1.8} />
                   </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[10.5px] font-extrabold tracking-wide uppercase text-partner-ink-faint">
-                      {tipoLabel[item.tipo]}
-                    </p>
-                    <p className="text-sm font-bold text-partner-ink mt-0.5 line-clamp-2">{item.titulo}</p>
-                  </div>
+                  <p className="flex-1 min-w-0 text-sm font-bold text-partner-ink line-clamp-2">{item.titulo}</p>
                   <ChevronRight className="w-3.5 h-3.5 text-partner-dashed-border shrink-0" strokeWidth={2} />
                 </div>
               );
@@ -119,7 +114,7 @@ export default function PartnerInicio({ data }) {
             return (
               <div
                 key={registro.fecha}
-                className="bg-white/72 backdrop-blur-md rounded-[22px] p-5 shadow-[0_6px_26px_rgba(91,33,182,0.10)]"
+                className="bg-white rounded-[22px] p-5 shadow-[0_6px_26px_rgba(91,33,182,0.10)]"
               >
                 <span className="inline-block bg-partner-violet/12 text-partner-violet text-[11px] font-extrabold uppercase tracking-wide px-3 py-[5px] rounded-full mb-4">
                   {formatFecha(registro.fecha)}
@@ -127,11 +122,12 @@ export default function PartnerInicio({ data }) {
                 <div className="flex flex-col gap-2">
                   {registro.sintomas.map((label) => {
                     const consejo = consejoPartnerSintoma(label);
+                    const porQue = porQuePasaSintoma(label);
                     return (
                       <button
                         key={label}
                         type="button"
-                        onClick={() => consejo && setSintomaAbierto({ label, consejo })}
+                        onClick={() => consejo && setSintomaAbierto({ label, consejo, porQue })}
                         className={`w-full flex items-center gap-2.5 text-left ${consejo ? "cursor-pointer" : ""}`}
                       >
                         <span className="w-8 h-8 rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
@@ -149,13 +145,16 @@ export default function PartnerInicio({ data }) {
                   })}
                 </div>
                 {recomendacion && (
-                  <div className="mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="w-full mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2 text-left cursor-pointer"
+                  >
                     <Activity className="w-[15px] h-[15px] text-partner-violet shrink-0" strokeWidth={1.8} />
-                    <p className="flex-1 min-w-0 text-[12.5px] font-semibold text-partner-violet-deep">
-                      Contenido recomendado: {recomendacion}
+                    <p className="flex-1 min-w-0 text-[12.5px] font-semibold text-partner-violet-deep line-clamp-1">
+                      {recomendacion}
                     </p>
                     <ChevronRight className="w-[13px] h-[13px] text-partner-dashed-border shrink-0" strokeWidth={2} />
-                  </div>
+                  </button>
                 )}
               </div>
             );
@@ -215,6 +214,15 @@ export default function PartnerInicio({ data }) {
               </span>
               <p className="text-[16px] font-bold text-partner-ink">{sintomaAbierto.label}</p>
             </div>
+
+            {sintomaAbierto.porQue && (
+              <div className="bg-partner-surface-tint rounded-[14px] px-4 py-3.5 mb-3">
+                <span className="text-[12.5px] font-bold text-partner-violet-deep">Por qué pasa: </span>
+                <span className="text-[13.5px] text-partner-ink-secondary leading-relaxed">
+                  {sintomaAbierto.porQue}
+                </span>
+              </div>
+            )}
 
             <div className="bg-partner-surface-tint rounded-[14px] px-4 py-3.5">
               <span className="text-[12.5px] font-bold text-partner-violet-deep">Cómo podés ayudar: </span>
