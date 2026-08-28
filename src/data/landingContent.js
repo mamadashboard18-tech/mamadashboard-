@@ -1,18 +1,18 @@
 export const pilares = [
   {
     number: "01",
-    title: "Seguimiento que no es solo una ficha",
-    desc: "Guardá cómo va creciendo tu bebé y cómo te fuiste sintiendo, semana a semana, con un historial que después podés exportar.",
+    title: "Un registro que es tuyo",
+    desc: "Anotá cómo te sentís y cómo va creciendo tu bebé, semana a semana. Es tu historial personal, a tu ritmo, y podés exportarlo cuando quieras.",
   },
   {
     number: "02",
-    title: "Tu cabeza importa tanto como tu cuerpo",
-    desc: "Check-in emocional diario, herramientas para bajar la ansiedad y un lugar para escribir lo que no le contás a nadie más.",
+    title: "Contenido que cambia con vos",
+    desc: "Podcasts, meditaciones y guías se actualizan solos según la semana en la que estás, no según un calendario genérico.",
   },
   {
     number: "03",
-    title: "Tus datos son tuyos",
-    desc: "Todo lo que registrás es privado. Decidís qué compartir, con quién y cuándo — incluso con tu pareja.",
+    title: "Bienestar emocional real",
+    desc: "Check-in diario, herramientas para bajar la ansiedad y un lugar para escribir lo que sentís, no solo para anotar síntomas.",
   },
 ];
 
@@ -66,7 +66,7 @@ export const partnerPoints = [
     iconPath: "M4 5h16v11H8l-4 4V5Z",
   },
   {
-    text: "Entra con una invitación simple — solo ve lo que vos decidís compartir",
+    text: "Entra con una invitación simple y ve solo lo que vos decidís compartir",
     iconPath: "M12 3 4 7v5c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V7l-8-4Z M9.5 12l2 2 3.5-3.5",
   },
 ];

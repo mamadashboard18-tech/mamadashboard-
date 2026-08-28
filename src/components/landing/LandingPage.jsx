@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { pilares, secciones, partnerPoints } from "../../data/landingContent";
 
-/* Design tokens — from design_handoff_landing/README.md (hifi, final values) */
+/* Design tokens, from design_handoff_landing/README.md (hifi, final values) */
 const C = {
   bg: "#fdf6fa",
   ink: "#241d2b",
@@ -20,7 +20,6 @@ const C = {
 
 const gradientBrand = `linear-gradient(135deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
 const gradientBrandPanel = `linear-gradient(160deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
-const gradientText = `linear-gradient(120deg,${C.rose} 0%,${C.pink} 45%,${C.purpleGrad} 100%)`;
 const gradientNumber = `linear-gradient(135deg,${C.rose},${C.purpleGrad})`;
 
 const TOTAL_WEEKS = 40;
@@ -143,7 +142,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       >
         <div className="max-w-[1120px] mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
           <span className="font-heading cursor-default" style={{ fontSize: 20, fontWeight: 800, color: C.ink, letterSpacing: "-0.01em" }}>
-            Mamá App
+            Acuna App
           </span>
           <div className="flex items-center gap-3.5">
             <button
@@ -186,7 +185,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         >
           <div>
             <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 20px" }}>
-              Mamá App — un diario para cada semana
+              Acuna App, tu acompañamiento en el embarazo
             </p>
             <h1
               className="font-heading text-pretty"
@@ -194,21 +193,12 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             >
               No vas a recordar cada semana.
               <br />
-              <span
-                style={{
-                  background: gradientText,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                Nosotras sí.
-              </span>
+              Nosotras sí.
             </h1>
             <p className="text-pretty" style={{ fontSize: "clamp(17px,1.6vw,20px)", lineHeight: 1.6, color: C.paragraph, margin: "0 0 30px", maxWidth: "32em" }}>
-              Mamá App es tu diario de embarazo: seguimiento semana a semana, un espacio para tu
-              bienestar emocional y todo organizado en un solo lugar — sin vueltas, sin apps de
-              más.
+              Acuna App es tu acompañamiento en el embarazo: todo lo que necesitás en un solo
+              lugar, desde el seguimiento semana a semana hasta tu bienestar emocional, sin apps
+              de más.
             </p>
             <div className="flex flex-wrap items-center gap-[18px]">
               <a
@@ -228,7 +218,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                 Empezar mi diario
               </a>
               <p style={{ fontSize: 14, lineHeight: 1.5, color: C.faint, margin: 0, maxWidth: "24em" }}>
-                Gratis para empezar. No reemplaza a tu médico — te acompaña entre consulta y
+                Gratis para empezar. No reemplaza a tu médico, te acompaña entre consulta y
                 consulta.
               </p>
             </div>
@@ -244,7 +234,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         <div aria-hidden="true" className="absolute rounded-full" style={{ bottom: -160, left: -100, width: 460, height: 460, background: "radial-gradient(circle,rgba(255,154,106,0.4) 0%,rgba(255,154,106,0) 70%)", filter: "blur(50px)" }} />
         <div className="relative z-[1] max-w-[980px] mx-auto" style={{ padding: "clamp(72px,12vw,140px) 24px" }}>
           <p className="font-heading text-pretty" style={{ fontWeight: 700, fontSize: "clamp(26px,3.6vw,46px)", lineHeight: 1.26, letterSpacing: "-0.02em", color: "#fff", margin: 0 }}>
-            “No es una libreta más. Es el lugar donde vas a poner en palabras cada semana — la
+            “No es una libreta más. Es el lugar donde vas a poner en palabras cada semana, la
             que fue linda y la que costó.”
           </p>
         </div>
@@ -253,7 +243,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* POR QUÉ MAMÁ APP */}
       <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
         <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 44px" }}>
-          Por qué Mamá App
+          Por qué Acuna App
         </p>
         <div className="flex flex-col">
           {pilares.map((p, i) => (
@@ -372,7 +362,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </h2>
             <p className="text-pretty" style={{ fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: "rgba(255,255,255,0.92)", margin: 0, maxWidth: "32em" }}>
               Invitá a tu pareja, a tu mamá o a quien vos quieras para que te acompañe desde su
-              propia app — liviana, simple, pensada para sumar sin invadir tu espacio.
+              propia app: liviana, simple, pensada para sumar sin invadir tu espacio.
             </p>
           </div>
           <div className="flex flex-col">
@@ -399,9 +389,9 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* NOTA */}
       <section className="max-w-[880px] mx-auto" style={{ padding: "clamp(56px,7vw,84px) 24px 0" }}>
         <p className="text-pretty" style={{ fontSize: 15.5, lineHeight: 1.75, color: C.muted, margin: 0 }}>
-          Mamá App te ayuda a organizarte y a cuidar tu bienestar emocional durante el embarazo y
-          el postparto. No reemplaza la consulta con tu médico, no da diagnósticos ni indica
-          tratamientos — para eso siempre vas a tener a tu equipo de salud de confianza.
+          Acuna App te ayuda a organizarte y a cuidar tu bienestar emocional durante el embarazo
+          y el postparto. No reemplaza la consulta con tu médico, no da diagnósticos ni indica
+          tratamientos. Para eso siempre vas a tener a tu equipo de salud de confianza.
         </p>
       </section>
 
@@ -448,14 +438,14 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
 
       <footer style={{ borderTop: `1px solid ${C.border}` }}>
         <div className="max-w-[1120px] mx-auto flex flex-wrap items-center justify-between gap-2.5" style={{ padding: "28px 24px 40px" }}>
-          <p style={{ fontSize: 14, color: C.faint, margin: 0 }}>Mamá App © 2026 · No sustituye la atención médica profesional.</p>
+          <p style={{ fontSize: 14, color: C.faint, margin: 0 }}>Acuna App © 2026 · No sustituye la atención médica profesional.</p>
           {import.meta.env.DEV ? (
             <button onClick={onDevPreview} className="cursor-pointer hover:underline font-heading" style={{ fontSize: 15, fontWeight: 800, color: C.hairline }}>
               Vista previa del dashboard (solo desarrollo)
             </button>
           ) : (
             <span className="font-heading" style={{ fontSize: 15, fontWeight: 800, color: C.hairline }}>
-              Mamá App
+              Acuna App
             </span>
           )}
         </div>
