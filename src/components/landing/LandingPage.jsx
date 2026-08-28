@@ -131,57 +131,51 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
     <div style={{ background: C.bg, fontFamily: "Inter, system-ui, sans-serif", color: C.ink, overflowX: "hidden" }}>
       <style>{`html{scroll-behavior:smooth}`}</style>
 
-      <header
-        className="sticky top-0 z-20"
-        style={{
-          background: "rgba(253,246,250,0.88)",
-          backdropFilter: "blur(14px)",
-          WebkitBackdropFilter: "blur(14px)",
-          borderBottom: `1px solid ${C.border}`,
-        }}
-      >
-        <div className="max-w-[1120px] mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
-          <span className="font-heading cursor-default" style={{ fontSize: 20, fontWeight: 800, color: C.ink, letterSpacing: "-0.01em" }}>
-            Acuna App
-          </span>
-          <div className="flex items-center gap-3.5">
-            <button
-              onClick={() => onGoToAuth("login")}
-              className="cursor-pointer transition-colors hover:text-[#e26fce]"
-              style={{ fontSize: 15, fontWeight: 600, color: C.muted }}
-            >
-              Ya tengo cuenta
-            </button>
-            <a
-              href="#crear"
-              className="cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap"
-              style={{
-                fontSize: 15,
-                fontWeight: 700,
-                color: "#fff",
-                textDecoration: "none",
-                padding: "11px 20px",
-                borderRadius: 999,
-                background: gradientBrand,
-                boxShadow: "0 8px 20px rgba(226,111,206,0.3)",
-              }}
-            >
-              Crear cuenta
-            </a>
-          </div>
-        </div>
-      </header>
-
-      {/* HERO */}
-      <section className="relative overflow-hidden">
+      {/* HEADER + HERO share one gradient backdrop so the nav reads as part of the same scene */}
+      <div className="relative overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
           <div className="absolute rounded-full" style={{ top: -140, left: -90, width: 420, height: 420, background: C.rose, opacity: 0.22, filter: "blur(90px)" }} />
           <div className="absolute rounded-full" style={{ top: -60, right: -120, width: 460, height: 460, background: C.purple, opacity: 0.18, filter: "blur(100px)" }} />
           <div className="absolute rounded-full" style={{ bottom: -160, left: "35%", width: 380, height: 380, background: C.peach, opacity: 0.16, filter: "blur(100px)" }} />
         </div>
-        <div
+
+        <header className="relative z-[1]">
+          <div className="max-w-[1120px] mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
+            <span className="font-heading cursor-default" style={{ fontSize: 20, fontWeight: 800, color: C.ink, letterSpacing: "-0.01em" }}>
+              Acuna App
+            </span>
+            <div className="flex items-center gap-3.5">
+              <button
+                onClick={() => onGoToAuth("login")}
+                className="cursor-pointer transition-colors hover:text-[#e26fce]"
+                style={{ fontSize: 15, fontWeight: 600, color: C.muted }}
+              >
+                Ya tengo cuenta
+              </button>
+              <a
+                href="#crear"
+                className="cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap"
+                style={{
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: "#fff",
+                  textDecoration: "none",
+                  padding: "11px 20px",
+                  borderRadius: 999,
+                  background: gradientBrand,
+                  boxShadow: "0 8px 20px rgba(226,111,206,0.3)",
+                }}
+              >
+                Crear cuenta
+              </a>
+            </div>
+          </div>
+        </header>
+
+        {/* HERO */}
+        <section
           className="relative z-[1] max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]"
-          style={{ padding: "clamp(56px,9vw,110px) 24px clamp(48px,7vw,86px)", gap: "clamp(36px,5vw,64px)" }}
+          style={{ padding: "clamp(40px,7vw,90px) 24px clamp(48px,7vw,86px)", gap: "clamp(36px,5vw,64px)" }}
         >
           <div>
             <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 20px" }}>
@@ -225,8 +219,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           </div>
 
           <WeekCard week={week} setWeek={setWeek} />
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* PULL QUOTE */}
       <section className="relative overflow-hidden" style={{ background: gradientBrandPanel }}>
