@@ -178,16 +178,16 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           style={{ padding: "clamp(40px,7vw,90px) 24px clamp(48px,7vw,86px)", gap: "clamp(36px,5vw,64px)" }}
         >
           <div>
-            <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 20px" }}>
+            <p className="uppercase text-balance" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 20px" }}>
               Acuna App, tu acompañamiento en el embarazo
             </p>
             <h1
               className="font-heading text-pretty"
               style={{ fontSize: "clamp(38px,5.4vw,64px)", fontWeight: 800, lineHeight: 1.04, letterSpacing: "-0.03em", margin: "0 0 22px" }}
             >
-              No vas a recordar cada semana.
+              Todo tu embarazo.
               <br />
-              Nosotras sí.
+              Acompañada, siempre.
             </h1>
             <p className="text-pretty" style={{ fontSize: "clamp(17px,1.6vw,20px)", lineHeight: 1.6, color: C.paragraph, margin: "0 0 30px", maxWidth: "32em" }}>
               Acuna App es tu acompañamiento en el embarazo: todo lo que necesitás en un solo
@@ -228,8 +228,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         <div aria-hidden="true" className="absolute rounded-full" style={{ bottom: -160, left: -100, width: 460, height: 460, background: "radial-gradient(circle,rgba(255,154,106,0.4) 0%,rgba(255,154,106,0) 70%)", filter: "blur(50px)" }} />
         <div className="relative z-[1] max-w-[980px] mx-auto" style={{ padding: "clamp(72px,12vw,140px) 24px" }}>
           <p className="font-heading text-pretty" style={{ fontWeight: 700, fontSize: "clamp(26px,3.6vw,46px)", lineHeight: 1.26, letterSpacing: "-0.02em", color: "#fff", margin: 0 }}>
-            “No es una libreta más. Es el lugar donde vas a poner en palabras cada semana, la
-            que fue linda y la que costó.”
+            “Cada semana de tu embarazo es distinta. Merecés estar acompañada en todas, no solo
+            en las más lindas.”
           </p>
         </div>
       </section>
@@ -352,7 +352,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               Modo acompañante
             </p>
             <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(30px,3.8vw,48px)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 20px" }}>
-              Tu pareja tampoco se queda afuera.
+              Tu acompañante tampoco se queda afuera.
             </h2>
             <p className="text-pretty" style={{ fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: "rgba(255,255,255,0.92)", margin: 0, maxWidth: "32em" }}>
               Invitá a tu pareja, a tu mamá o a quien vos quieras para que te acompañe desde su
