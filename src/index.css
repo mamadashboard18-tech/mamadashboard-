@@ -182,3 +182,174 @@ h3,
   border: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
+
+/* Accessible keyboard focus ring — invisible on mouse click, visible on tab */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--brand-purple);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Shared press/lift feedback for primary CTAs */
+.btn-lift {
+  transition:
+    transform 0.2s var(--ease-out),
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+.btn-lift:hover {
+  transform: translateY(-2px);
+}
+.btn-lift:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Week-by-week bar chart — tactile hover feedback */
+.week-bar {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.week-bar:hover {
+  opacity: 1;
+  transform: scaleY(1.08);
+}
+
+/* Hero phone showcase — smooth swap when a side phone is tapped to center it */
+.phone-frame {
+  transition:
+    width 0.4s var(--ease-out),
+    height 0.4s var(--ease-out),
+    left 0.4s var(--ease-out),
+    right 0.4s var(--ease-out),
+    top 0.4s var(--ease-out),
+    margin-left 0.4s var(--ease-out),
+    transform 0.4s var(--ease-out),
+    box-shadow 0.4s ease;
+}
+.phone-frame:hover {
+  filter: brightness(1.02);
+}
+
+/* Shown in place of the iframe until the phone scrolls near the viewport */
+.phone-frame-skeleton {
+  background: linear-gradient(
+    100deg,
+    rgba(155, 93, 229, 0.07) 30%,
+    rgba(226, 111, 206, 0.14) 50%,
+    rgba(155, 93, 229, 0.07) 70%
+  );
+  background-size: 250% 100%;
+  animation: phoneSkeletonShimmer 1.6s ease-in-out infinite;
+}
+@keyframes phoneSkeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -50% 0; }
+}
+
+/* "Adentro de la app" — wide bento: 2x2 compact cards each side, phone in the middle */
+.inside-app-grid {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+.inside-app-grid .cell-group {
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.inside-app-grid .cell-group .span-2 {
+  grid-column: 1 / -1;
+}
+.inside-app-grid .cell-phone {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 860px) {
+  .inside-app-grid {
+    flex-direction: column;
+  }
+  .inside-app-grid .cell-phone {
+    order: -1;
+  }
+}
+
+@media (max-width: 520px) {
+  .inside-app-grid .cell-group {
+    grid-template-columns: 1fr;
+  }
+  .inside-app-grid .cell-group .span-2 {
+    grid-column: auto;
+  }
+}
+
+.section-card {
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s ease;
+}
+.section-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(155, 93, 229, 0.14);
+}
+
+/* "Así se siente" — benefits bento (photo + feature cards) */
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    "big photo statA gradA"
+    "nav statB dark dark";
+  gap: 18px;
+}
+.experience-grid .area-big { grid-area: big; }
+.experience-grid .area-photo { grid-area: photo; }
+.experience-grid .area-statA { grid-area: statA; }
+.experience-grid .area-gradA { grid-area: gradA; }
+.experience-grid .area-nav { grid-area: nav; }
+.experience-grid .area-statB { grid-area: statB; }
+.experience-grid .area-dark { grid-area: dark; }
+
+@media (max-width: 900px) {
+  .experience-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "big photo"
+      "nav photo"
+      "statA gradA"
+      "statB statB"
+      "dark dark";
+  }
+}
+
+@media (max-width: 560px) {
+  .experience-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "photo"
+      "big"
+      "nav"
+      "statA"
+      "gradA"
+      "statB"
+      "dark";
+  }
+}
+
+.experience-card {
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
+}
+.experience-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Modo acompañante — asymmetric bento, big feature card + 3 supporting ones */
+.partner-bento {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 20px;
+}
+
+@media (max-width: 760px) {
+  .partner-bento {
+    grid-template-columns: 1fr;
+  }
+}

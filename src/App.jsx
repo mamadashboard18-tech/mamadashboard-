@@ -21,9 +21,43 @@ function getPartnerInviteToken() {
   return new URLSearchParams(window.location.search).get("partner_invite");
 }
 
+const previewPanels = {
+  inicio: InicioPanel,
+  citas: ControlCitas,
+  bienestar: BienestarPanel,
+  multimedia: MultimediaPanel,
+};
+
+/* Static, read-only screen render used by the landing page's phone mockups.
+   Runs unauthenticated on local/demo data only (see src/data/*.js), same as
+   __dev_mock below — no real user data is ever reachable through this route. */
+function AppPreviewScreen({ panel }) {
+  const Panel = previewPanels[panel] || InicioPanel;
+  const noop = () => {};
+  return (
+    <div className="h-dvh bg-[var(--bg)] flex flex-col">
+      <main className="flex-1 p-4 pb-28 overflow-hidden">
+        <Panel nombre="Sofía" onNavigate={noop} />
+      </main>
+      <BottomNav active={panel} onSelect={noop} />
+    </div>
+  );
+}
+
 export default function App() {
-  if (new URLSearchParams(window.location.search).has("__dev_mock")) {
+  const params = new URLSearchParams(window.location.search);
+  const previewPanel = params.get("app_preview");
+
+  if (previewPanel?.startsWith("partner-")) {
+    return <PartnerDashboard initialActive={previewPanel.replace("partner-", "")} />;
+  }
+
+  if (params.has("__dev_mock")) {
     return <PartnerDashboard />;
+  }
+
+  if (previewPanel) {
+    return <AppPreviewScreen panel={previewPanel} />;
   }
 
   const [mode, setMode] = useState("loading");

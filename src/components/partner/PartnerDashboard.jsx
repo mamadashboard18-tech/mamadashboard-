@@ -22,11 +22,11 @@ function useIsDesktop() {
   return isDesktop;
 }
 
-export default function PartnerDashboard() {
+export default function PartnerDashboard({ initialActive = "inicio" }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [active, setActive] = useState("inicio");
+  const [active, setActive] = useState(initialActive);
   const isDesktop = useIsDesktop();
 
   const load = () => {

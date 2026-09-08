@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { pilares, secciones, partnerPoints } from "../../data/landingContent";
+import { useEffect, useRef, useState } from "react";
+import { pilares, secciones } from "../../data/landingContent";
+import fotoEmbarazada from "../../assets/landing/embarazada-telefono.jpg";
 
 /* Design tokens, from design_handoff_landing/README.md (hifi, final values) */
 const C = {
@@ -22,9 +23,7 @@ const gradientBrand = `linear-gradient(135deg,${C.rose} 0%,${C.pink} 55%,${C.pur
 const gradientBrandPanel = `linear-gradient(160deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
 const gradientNumber = `linear-gradient(135deg,${C.rose},${C.purpleGrad})`;
 
-const TOTAL_WEEKS = 40;
-
-function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style }) {
+function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style, className }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -33,6 +32,7 @@ function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style }) {
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={className}
       style={{ width: size, height: size, flexShrink: 0, ...style }}
       aria-hidden="true"
     >
@@ -41,92 +41,266 @@ function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style }) {
   );
 }
 
-function WeekCard({ week, setWeek }) {
-  const trimester = week <= 13 ? "Primer trimestre" : week <= 27 ? "Segundo trimestre" : "Tercer trimestre";
-  const restantes = TOTAL_WEEKS - week;
-  const faltan = restantes === 0 ? "Última semana" : `Faltan ${restantes} semanas`;
+/* Phone bezel showing a real, live screen of the app (via the unauthenticated
+   /?app_preview=<panel> route in App.jsx) scaled to fit — not a screenshot,
+   so it never drifts from the actual product UI. */
+function PhoneFrame({ src, title, width, height, screenHeight, rotate = 0, z = 1, dim = false, pos, onClick }) {
+  const bezel = 9;
+  const notchClearance = 26;
+  const screenWidth = width - bezel * 2;
+  const scale = screenWidth / 390;
+  const wrapRef = useRef(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    if (shouldLoad || !wrapRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+    observer.observe(wrapRef.current);
+    return () => observer.disconnect();
+  }, [shouldLoad]);
 
   return (
     <div
+      ref={wrapRef}
+      onClick={onClick}
+      className="phone-frame"
       style={{
-        background: "rgba(255,255,255,0.78)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        border: `1px solid ${C.border}`,
-        borderRadius: 30,
-        padding: "clamp(24px,3vw,32px)",
-        boxShadow: "0 20px 50px rgba(155,93,229,0.14)",
+        position: "absolute",
+        width,
+        height,
+        borderRadius: 42,
+        background: "#15111a",
+        padding: bezel,
+        boxShadow: dim ? "0 20px 44px rgba(36,29,43,0.28)" : "0 30px 60px rgba(155,93,229,0.32), 0 10px 26px rgba(226,111,206,0.22)",
+        transform: `rotate(${rotate}deg)`,
+        zIndex: z,
+        cursor: onClick ? "pointer" : undefined,
+        ...pos,
       }}
     >
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 mb-[26px]">
-        <div>
-          <p
-            className="uppercase"
-            style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.07em", color: C.veryFaint, margin: "0 0 6px" }}
-          >
-            Tu embarazo
-          </p>
-          <p
-            className="font-heading whitespace-nowrap"
-            style={{ fontSize: "clamp(26px,3vw,34px)", fontWeight: 800, margin: 0, letterSpacing: "-0.02em", color: C.ink }}
-          >
-            Semana {week} <span style={{ color: C.veryFaint, fontWeight: 700 }}>de {TOTAL_WEEKS}</span>
-          </p>
-        </div>
-        <span
-          className="uppercase whitespace-nowrap"
-          style={{ color: C.pink, fontSize: 13, fontWeight: 700, letterSpacing: "0.04em" }}
-        >
-          {trimester}
-        </span>
-      </div>
-
-      <div className="flex items-end gap-[2px] h-[74px] mb-3">
-        {Array.from({ length: TOTAL_WEEKS }, (_, i) => i + 1).map((n) => {
-          const active = n <= week;
-          const isCurrent = n === week;
-          const h = 22 + Math.round((n / TOTAL_WEEKS) * 46);
-          const bg = isCurrent ? C.purple : active ? `linear-gradient(180deg,${C.rose},${C.pink})` : "rgba(155,93,229,0.16)";
-          return (
-            <button
-              key={n}
-              onClick={() => setWeek(n)}
-              aria-label={`Semana ${n}`}
-              className="cursor-pointer"
-              style={{
-                flex: 1,
-                minWidth: 0,
-                height: isCurrent ? 74 : h,
-                border: "none",
-                padding: 0,
-                borderRadius: 999,
-                background: bg,
-                opacity: active ? 1 : 0.9,
-                transition: "height .18s ease, background .18s ease",
-              }}
-            />
-          );
-        })}
-      </div>
-      <div className="flex justify-between" style={{ fontSize: 12, fontWeight: 600, color: C.veryFaint }}>
-        <span>Semana 1</span>
-        <span>20</span>
-        <span>40</span>
+      <div
+        style={{
+          width: screenWidth,
+          height: screenHeight,
+          borderRadius: 32,
+          overflow: "hidden",
+          background: "#fdf6fa",
+          filter: dim ? "brightness(0.74) saturate(0.92)" : "none",
+          transition: "filter 0.4s ease",
+        }}
+      >
+        {/* Status-bar spacer so the dynamic island never sits on top of the app's own header text */}
+        <div style={{ height: notchClearance, background: "#fdf6fa" }} />
+        {shouldLoad ? (
+          <iframe
+            src={src}
+            title={title}
+            tabIndex={-1}
+            scrolling="no"
+            style={{
+              width: 390,
+              height: 844,
+              border: 0,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+              pointerEvents: "none",
+            }}
+          />
+        ) : (
+          <div
+            className="phone-frame-skeleton"
+            style={{ width: screenWidth, height: screenHeight - notchClearance }}
+            aria-hidden="true"
+          />
+        )}
       </div>
       <div
-        className="flex items-center justify-between gap-3.5 mt-6 pt-[22px]"
-        style={{ borderTop: `1px solid ${C.border}` }}
-      >
-        <p style={{ fontSize: 14, color: C.muted, margin: 0 }}>Tocá cualquier semana de la línea.</p>
-        <span style={{ fontSize: 13, fontWeight: 700, color: C.purple }}>{faltan}</span>
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: bezel + 7,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: screenWidth * 0.3,
+          height: 16,
+          borderRadius: 999,
+          background: "#15111a",
+        }}
+      />
+    </div>
+  );
+}
+
+function FloatingBadge({ iconPath, text, pos }) {
+  return (
+    <div
+      className="hidden sm:flex items-center"
+      style={{
+        position: "absolute",
+        gap: 9,
+        background: "#fff",
+        borderRadius: 999,
+        padding: "7px 16px 7px 7px",
+        boxShadow: "0 14px 30px rgba(36,29,43,0.18)",
+        whiteSpace: "nowrap",
+        zIndex: 4,
+        ...pos,
+      }}
+    >
+      <span className="flex items-center justify-center shrink-0" style={{ width: 26, height: 26, borderRadius: "50%", background: gradientNumber }}>
+        <Icon path={iconPath} size={13} stroke="#fff" strokeWidth={2.2} />
+      </span>
+      <span style={{ fontSize: 13, fontWeight: 700, color: C.ink }}>{text}</span>
+    </div>
+  );
+}
+
+/* Illustrative chat mockup for the "notas y aliento" partner feature — a
+   custom static mock rather than another live iframe, kept light on purpose. */
+function ChatMock() {
+  return (
+    <div className="flex flex-col gap-2.5">
+      <div className="flex items-start">
+        <div style={{ background: "var(--partner-gradient)", borderRadius: "4px 16px 16px 16px", padding: "10px 14px", maxWidth: "78%" }}>
+          <p style={{ fontSize: 13, color: "#fff", margin: 0, lineHeight: 1.45 }}>
+            ¿Cómo te sentís hoy? Vi que anotaste que estabas cansada.
+          </p>
+        </div>
+      </div>
+      <div className="flex items-start justify-end">
+        <div style={{ background: `linear-gradient(135deg,${C.rose},${C.pink})`, borderRadius: "16px 4px 16px 16px", padding: "10px 14px", maxWidth: "78%" }}>
+          <p style={{ fontSize: 13, color: "#fff", margin: 0, lineHeight: 1.45 }}>
+            Un poco, pero mejor. Gracias por preguntar 💜
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
-export default function LandingPage({ onGoToAuth, onDevPreview }) {
-  const [week, setWeek] = useState(24);
+function SectionCard({ s, className = "" }) {
+  const isComingSoon = s.comingSoon;
 
+  const body = (
+    <>
+      <span
+        className="flex items-center justify-center shrink-0 mb-3"
+        style={{ width: 38, height: 38, borderRadius: 12, background: isComingSoon ? "rgba(155,93,229,0.1)" : gradientNumber }}
+      >
+        <Icon path={s.iconPath} size={19} stroke={isComingSoon ? C.hairline : "#fff"} />
+      </span>
+      <span
+        className="font-heading block"
+        style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-0.02em", color: isComingSoon ? C.veryFaint : C.ink, marginBottom: 4 }}
+      >
+        {s.title}
+      </span>
+      <span
+        className="block"
+        style={{
+          fontSize: 13.5,
+          lineHeight: 1.45,
+          color: isComingSoon ? C.faint : C.paragraph,
+        }}
+      >
+        {s.desc}
+      </span>
+      {isComingSoon && (
+        <span className="uppercase mt-3" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.07em", color: C.purple }}>
+          Muy pronto
+        </span>
+      )}
+    </>
+  );
+
+  const baseProps = {
+    className: `section-card ${className} flex flex-col items-start`,
+    style: { background: "rgba(155,93,229,0.05)", borderRadius: 20, padding: "18px 18px", color: "inherit" },
+  };
+
+  if (isComingSoon) {
+    return <div {...baseProps}>{body}</div>;
+  }
+  return (
+    <a href="#crear" {...baseProps} className={`${baseProps.className} no-underline`}>
+      {body}
+    </a>
+  );
+}
+
+const SHOWCASE_PANELS = {
+  multimedia: { src: "/?app_preview=multimedia", title: "Vista previa: Multimedia" },
+  inicio: { src: "/?app_preview=inicio", title: "Vista previa: Inicio" },
+  bienestar: { src: "/?app_preview=bienestar", title: "Vista previa: Mi Bienestar" },
+};
+
+/* Which panel sits center decides the other two's sides — clicking a side
+   phone swaps it to center instead of reshuffling all three. */
+const SHOWCASE_ROLES_BY_CENTER = {
+  inicio: { left: "multimedia", center: "inicio", right: "bienestar" },
+  multimedia: { left: "inicio", center: "multimedia", right: "bienestar" },
+  bienestar: { left: "multimedia", center: "bienestar", right: "inicio" },
+};
+
+const SHOWCASE_ROLE_STYLE = {
+  left: { width: 186, height: 372, screenHeight: 354, rotate: -9, z: 1, dim: true, pos: { left: 0, top: 58 } },
+  right: { width: 186, height: 372, screenHeight: 354, rotate: 8, z: 2, dim: false, pos: { right: 0, top: 74 } },
+  center: { width: 216, height: 452, screenHeight: 434, rotate: 0, z: 3, dim: false, pos: { left: "50%", top: 0, marginLeft: -108 } },
+};
+
+function AppShowcase() {
+  const [centerId, setCenterId] = useState("inicio");
+  const roles = SHOWCASE_ROLES_BY_CENTER[centerId];
+
+  return (
+    <div className="relative mx-auto" style={{ width: "100%", maxWidth: 520, height: 560 }}>
+      {Object.keys(SHOWCASE_PANELS).map((id) => {
+        const role = id === roles.left ? "left" : id === roles.right ? "right" : "center";
+        return (
+          <PhoneFrame
+            key={id}
+            src={SHOWCASE_PANELS[id].src}
+            title={SHOWCASE_PANELS[id].title}
+            onClick={role === "center" ? undefined : () => setCenterId(id)}
+            {...SHOWCASE_ROLE_STYLE[role]}
+          />
+        );
+      })}
+
+      <FloatingBadge
+        iconPath="M4 9 H20 M8 3 V7 M16 3 V7 M4 5 H20 V20 H4 Z"
+        text="Seguimiento semana a semana"
+        pos={{ left: -20, top: 34 }}
+      />
+      <FloatingBadge
+        iconPath="M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z"
+        text="Sin filtro y sin juicio"
+        pos={{ right: -20, top: 34 }}
+      />
+      <FloatingBadge iconPath="M4 5h16v11H8l-4 4V5Z" text="Contenido para tu semana" pos={{ left: -30, top: 262 }} />
+      <FloatingBadge
+        iconPath="M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5"
+        text="Invitá a tu acompañante"
+        pos={{ right: -30, top: 282 }}
+      />
+      <FloatingBadge
+        iconPath="M12 3 L13.2 8.8 L19 10 L13.2 11.2 L12 17 L10.8 11.2 L5 10 L10.8 8.8 Z"
+        text="Check-in emocional diario"
+        pos={{ left: "50%", bottom: -6, marginLeft: -120 }}
+      />
+    </div>
+  );
+}
+
+export default function LandingPage({ onGoToAuth, onDevPreview }) {
   return (
     <div style={{ background: C.bg, fontFamily: "Inter, system-ui, sans-serif", color: C.ink, overflowX: "hidden" }}>
       <style>{`html{scroll-behavior:smooth}`}</style>
@@ -154,7 +328,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               </button>
               <a
                 href="#crear"
-                className="cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap"
+                className="btn-lift cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap"
                 style={{
                   fontSize: 15,
                   fontWeight: 700,
@@ -197,7 +371,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             <div className="flex flex-wrap items-center gap-[18px]">
               <a
                 href="#crear"
-                className="cursor-pointer transition-[filter] hover:brightness-105"
+                className="btn-lift cursor-pointer transition-[filter] hover:brightness-105"
                 style={{
                   fontSize: 17,
                   fontWeight: 700,
@@ -218,20 +392,39 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </div>
           </div>
 
-          <WeekCard week={week} setWeek={setWeek} />
+          <AppShowcase />
         </section>
       </div>
 
       {/* PULL QUOTE */}
-      <section className="relative overflow-hidden" style={{ background: gradientBrandPanel }}>
-        <div aria-hidden="true" className="absolute rounded-full" style={{ top: -120, right: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 70%)", filter: "blur(40px)" }} />
-        <div aria-hidden="true" className="absolute rounded-full" style={{ bottom: -160, left: -100, width: 460, height: 460, background: "radial-gradient(circle,rgba(255,154,106,0.4) 0%,rgba(255,154,106,0) 70%)", filter: "blur(50px)" }} />
-        <div className="relative z-[1] max-w-[980px] mx-auto" style={{ padding: "clamp(72px,12vw,140px) 24px" }}>
-          <p className="font-heading text-pretty" style={{ fontWeight: 700, fontSize: "clamp(26px,3.6vw,46px)", lineHeight: 1.26, letterSpacing: "-0.02em", color: "#fff", margin: 0 }}>
-            “Cada semana de tu embarazo es distinta. Merecés estar acompañada en todas, no solo
-            en las más lindas.”
-          </p>
-        </div>
+      <section className="relative overflow-hidden max-w-[900px] mx-auto" style={{ padding: "clamp(48px,7vw,84px) 24px" }}>
+        <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ top: -40, left: -60, width: 300, height: 300, background: C.rose, opacity: 0.14, filter: "blur(90px)" }} />
+        <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ bottom: -60, right: -40, width: 320, height: 320, background: C.purple, opacity: 0.14, filter: "blur(90px)" }} />
+        <span
+          aria-hidden="true"
+          className="font-heading block relative z-[1]"
+          style={{ fontSize: "clamp(48px,6vw,66px)", lineHeight: 1, color: C.pink, opacity: 0.28, marginBottom: -6 }}
+        >
+          “
+        </span>
+        <p
+          className="font-heading text-pretty relative z-[1]"
+          style={{
+            fontWeight: 700,
+            fontSize: "clamp(22px,2.8vw,34px)",
+            lineHeight: 1.34,
+            letterSpacing: "-0.02em",
+            margin: 0,
+            maxWidth: "20em",
+            background: gradientBrand,
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          Cada semana de tu embarazo es distinta. Merecés estar acompañada en todas, no solo en
+          las más lindas.
+        </p>
       </section>
 
       {/* POR QUÉ MAMÁ APP */}
@@ -279,7 +472,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       </section>
 
       {/* ADENTRO DE LA APP */}
-      <section className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
+      <section id="adentro" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
         <div className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
           <div className="flex items-end justify-between gap-5 flex-wrap mb-10">
             <h2 className="font-heading" style={{ fontSize: "clamp(28px,3.4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", margin: 0 }}>
@@ -287,95 +480,129 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </h2>
             <p style={{ fontSize: 15, color: C.faint, margin: 0 }}>6 áreas, todo en un solo lugar</p>
           </div>
-          <div className="flex flex-col">
-            {secciones.map((s, i) =>
-              s.comingSoon ? (
-                <div
-                  key={s.title}
-                  className="grid items-start grid-cols-[34px_1fr] sm:[grid-template-columns:34px_minmax(150px,1fr)_minmax(240px,1.6fr)]"
-                  style={{
-                    gap: "clamp(12px,2vw,28px)",
-                    padding: "26px 4px",
-                    borderTop: `1px solid ${C.border}`,
-                    borderBottom: i === secciones.length - 1 ? `1px solid ${C.border}` : "none",
-                  }}
-                >
-                  <Icon path={s.iconPath} stroke={C.hairline} style={{ marginTop: 2 }} />
-                  <span className="flex flex-col gap-1">
-                    <span className="font-heading" style={{ fontSize: "clamp(19px,2vw,23px)", fontWeight: 800, letterSpacing: "-0.02em", color: C.veryFaint }}>
-                      {s.title}
-                    </span>
-                    <span className="uppercase" style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.08em", color: C.purple }}>
-                      Muy pronto
-                    </span>
-                  </span>
-                  <span className="text-pretty col-span-2 sm:col-span-1" style={{ fontSize: 16, lineHeight: 1.6, color: C.faint }}>
-                    {s.desc}
-                  </span>
-                </div>
-              ) : (
-                <a
-                  key={s.title}
-                  href="#crear"
-                  className="group grid items-start grid-cols-[34px_1fr] sm:[grid-template-columns:34px_minmax(150px,1fr)_minmax(240px,1.6fr)] no-underline"
-                  style={{ gap: "clamp(12px,2vw,28px)", padding: "26px 4px", borderTop: `1px solid ${C.border}`, color: C.ink }}
-                >
-                  <Icon path={s.iconPath} style={{ marginTop: 2 }} />
-                  <span
-                    className="font-heading transition-colors group-hover:text-[#e26fce]"
-                    style={{ fontSize: "clamp(19px,2vw,23px)", fontWeight: 800, letterSpacing: "-0.02em" }}
-                  >
-                    {s.title}
-                  </span>
-                  <span className="text-pretty col-span-2 sm:col-span-1" style={{ fontSize: 16, lineHeight: 1.6, color: C.paragraph }}>
-                    {s.desc}
-                  </span>
-                </a>
-              )
-            )}
+          <div className="inside-app-grid">
+            <div className="cell-group">
+              <SectionCard s={secciones[0]} />
+              <SectionCard s={secciones[1]} />
+              <SectionCard s={secciones[2]} className="span-2" />
+            </div>
+
+            <div
+              className="cell-phone flex justify-center"
+              style={{ background: "var(--brand-purple-light)", borderRadius: 28, paddingTop: 16, width: 270, height: 390, overflow: "hidden" }}
+            >
+              <PhoneFrame
+                src="/?app_preview=inicio"
+                title="Vista previa: Inicio"
+                width={240}
+                height={600}
+                screenHeight={582}
+                rotate={0}
+                z={1}
+                pos={{ position: "relative" }}
+              />
+            </div>
+
+            <div className="cell-group">
+              <SectionCard s={secciones[3]} />
+              <SectionCard s={secciones[4]} />
+              <SectionCard s={secciones[5]} className="span-2" />
+            </div>
           </div>
         </div>
       </section>
 
       {/* MODO ACOMPAÑANTE */}
-      <section className="relative overflow-hidden" style={{ background: "var(--partner-gradient)" }}>
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-          <div className="absolute rounded-full" style={{ top: -140, left: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 70%)", filter: "blur(50px)" }} />
-          <div className="absolute rounded-full" style={{ bottom: -160, right: -70, width: 440, height: 440, background: "radial-gradient(circle,rgba(201,182,242,0.55) 0%,rgba(201,182,242,0) 70%)", filter: "blur(60px)" }} />
-        </div>
-        <div
-          className="relative z-[1] max-w-[1120px] mx-auto grid items-start [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]"
-          style={{ padding: "clamp(64px,9vw,110px) 24px", gap: "clamp(36px,5vw,64px)" }}
-        >
-          <div>
-            <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", color: "#fff", opacity: 0.9, margin: "0 0 22px" }}>
+      <section id="acompanante" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
+        <div className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
+          <div className="max-w-[640px] mb-10">
+            <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.purple, margin: "0 0 14px" }}>
               Modo acompañante
             </p>
-            <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(30px,3.8vw,48px)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.03em", color: "#fff", margin: "0 0 20px" }}>
+            <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(28px,3.6vw,44px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1, margin: "0 0 14px" }}>
               Tu acompañante tampoco se queda afuera.
             </h2>
-            <p className="text-pretty" style={{ fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.65, color: "rgba(255,255,255,0.92)", margin: 0, maxWidth: "32em" }}>
-              Invitá a tu pareja, a tu mamá o a quien vos quieras para que te acompañe desde su
-              propia app: liviana, simple, pensada para sumar sin invadir tu espacio.
+            <p className="text-pretty" style={{ fontSize: 17, lineHeight: 1.6, color: C.paragraph, margin: 0 }}>
+              Invitá a tu pareja, a tu mamá o a quien quieras para que lo viva con vos, desde su
+              propia app.
             </p>
           </div>
-          <div className="flex flex-col">
-            {partnerPoints.map((point, i) => (
-              <div
-                key={point.text}
-                className="flex items-start gap-4"
-                style={{
-                  padding: "20px 0",
-                  borderTop: "1px solid rgba(255,255,255,0.3)",
-                  borderBottom: i === partnerPoints.length - 1 ? "1px solid rgba(255,255,255,0.3)" : "none",
-                }}
-              >
-                <Icon path={point.iconPath} size={22} stroke="#fff" strokeWidth={1.6} style={{ marginTop: 2, opacity: 0.9 }} />
-                <p className="text-pretty" style={{ fontSize: 17, lineHeight: 1.55, color: "#fff", margin: 0 }}>
-                  {point.text}
-                </p>
+
+          <div className="partner-bento">
+            <div className="partner-cell" style={{ background: "var(--partner-surface-tint)", borderRadius: 28, padding: 26 }}>
+              <p className="font-heading" style={{ fontSize: 21, fontWeight: 800, color: C.ink, margin: "0 0 8px" }}>
+                Se entera de todo, sin que tengas que repetirlo
+              </p>
+              <p style={{ fontSize: 15, lineHeight: 1.55, color: C.paragraph, margin: "0 0 20px" }}>
+                Ve tu semana, tus síntomas recientes y qué puede hacer para ayudarte, todo
+                actualizado solo.
+              </p>
+              <div className="flex justify-center" style={{ background: "var(--partner-gradient)", borderRadius: 24, height: 360, overflow: "hidden" }}>
+                <PhoneFrame
+                  src="/?app_preview=partner-inicio&__dev_mock=1"
+                  title="Vista previa: Inicio del acompañante"
+                  width={230}
+                  height={560}
+                  screenHeight={542}
+                  rotate={0}
+                  z={1}
+                  pos={{ position: "relative", top: 18 }}
+                />
               </div>
-            ))}
+            </div>
+
+            <div className="partner-cell flex flex-col" style={{ background: "var(--partner-surface-tint)", borderRadius: 28, padding: 26 }}>
+              <div className="flex-1 flex items-center" style={{ marginBottom: 20 }}>
+                <ChatMock />
+              </div>
+              <p className="font-heading" style={{ fontSize: 19, fontWeight: 800, color: C.ink, margin: "0 0 8px" }}>
+                Te manda notas y aliento
+              </p>
+              <p style={{ fontSize: 14.5, lineHeight: 1.5, color: C.paragraph, margin: 0 }}>
+                Palabras que te llegan directo, cuando más las necesitás.
+              </p>
+            </div>
+
+            <div className="partner-cell" style={{ background: "var(--partner-surface-tint)", borderRadius: 28, padding: 26 }}>
+              <p className="font-heading" style={{ fontSize: 19, fontWeight: 800, color: C.ink, margin: "0 0 8px" }}>
+                Ve las citas compartidas
+              </p>
+              <p style={{ fontSize: 14.5, lineHeight: 1.5, color: C.paragraph, margin: "0 0 20px" }}>
+                Sabe cuándo son tus controles y puede confirmar si te acompaña.
+              </p>
+              <div className="flex justify-center" style={{ background: "var(--partner-gradient)", borderRadius: 24, height: 300, overflow: "hidden" }}>
+                <PhoneFrame
+                  src="/?app_preview=partner-citas&__dev_mock=1"
+                  title="Vista previa: Citas del acompañante"
+                  width={190}
+                  height={460}
+                  screenHeight={442}
+                  rotate={0}
+                  z={1}
+                  pos={{ position: "relative", top: 14 }}
+                />
+              </div>
+            </div>
+
+            <div className="partner-cell flex flex-col justify-center" style={{ background: "var(--partner-gradient)", borderRadius: 28, padding: 26 }}>
+              <span
+                className="flex items-center justify-center shrink-0 mb-4"
+                style={{ width: 46, height: 46, borderRadius: 14, background: "rgba(255,255,255,0.2)" }}
+              >
+                <Icon
+                  path="M12 3 4 7v5c0 4.4 3.4 8.3 8 9 4.6-.7 8-4.6 8-9V7l-8-4Z M9.5 12l2 2 3.5-3.5"
+                  size={22}
+                  stroke="#fff"
+                  strokeWidth={1.8}
+                />
+              </span>
+              <p className="font-heading" style={{ fontSize: 19, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>
+                Vos decidís qué comparte
+              </p>
+              <p style={{ fontSize: 14.5, lineHeight: 1.5, color: "rgba(255,255,255,0.9)", margin: 0 }}>
+                Entra con una invitación simple, y solo ve lo que vos elegís mostrarle.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -412,7 +639,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             <div className="flex justify-start">
               <button
                 onClick={() => onGoToAuth("signup")}
-                className="cursor-pointer transition-colors hover:text-[#9b5de5] whitespace-nowrap"
+                className="btn-lift cursor-pointer transition-colors hover:text-[#9b5de5] whitespace-nowrap"
                 style={{
                   fontSize: 17,
                   fontWeight: 700,
@@ -426,6 +653,123 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                 Crear mi cuenta gratis
               </button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ASÍ SE SIENTE — beneficios reales, no testimonios inventados */}
+      <section className="max-w-[1120px] mx-auto" style={{ padding: "0 24px clamp(64px,9vw,110px)" }}>
+        <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <div>
+            <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
+              Así se siente
+            </p>
+            <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(28px,3.6vw,44px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.08, margin: 0, maxWidth: "14em" }}>
+              Beneficios que vas a notar desde la primera semana.
+            </h2>
+          </div>
+          <a
+            href="#crear"
+            className="btn-lift cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap"
+            style={{
+              fontSize: 16,
+              fontWeight: 700,
+              color: "#fff",
+              textDecoration: "none",
+              padding: "14px 26px",
+              borderRadius: 999,
+              background: gradientBrand,
+              boxShadow: "0 12px 28px rgba(226,111,206,0.3)",
+            }}
+          >
+            Crear cuenta gratis
+          </a>
+        </div>
+
+        <div className="experience-grid">
+          <div
+            className="area-big experience-card flex flex-col"
+            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "26px 24px" }}
+          >
+            <p className="uppercase" style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.07em", color: C.purple, margin: "0 0 14px" }}>
+              Semana a semana
+            </p>
+            <p className="font-heading text-pretty" style={{ fontSize: 21, fontWeight: 700, lineHeight: 1.35, color: C.ink, margin: 0 }}>
+              Vas a poder ver cómo crece tu bebé, guardar cómo te sentís y no perderte ningún
+              control, todo en el mismo lugar.
+            </p>
+          </div>
+
+          <div className="area-photo experience-card relative overflow-hidden" style={{ borderRadius: 24, minHeight: 200 }}>
+            <img
+              src={fotoEmbarazada}
+              alt="Mujer embarazada usando su teléfono junto a una ventana"
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+
+          <div
+            className="area-statA experience-card flex flex-col justify-center"
+            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "24px" }}
+          >
+            <p className="font-heading" style={{ fontSize: "clamp(36px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 8px", color: C.ink }}>
+              40
+            </p>
+            <p style={{ fontSize: 15, lineHeight: 1.5, color: C.paragraph, margin: 0 }}>
+              Semanas de contenido curado, pensado para cada etapa de tu embarazo.
+            </p>
+          </div>
+
+          <div
+            className="area-gradA experience-card"
+            style={{ background: gradientBrandPanel, borderRadius: 24, padding: "24px", color: "#fff" }}
+          >
+            <p className="font-heading" style={{ fontSize: 19, fontWeight: 800, letterSpacing: "-0.01em", margin: "0 0 8px" }}>
+              Modo acompañante
+            </p>
+            <p style={{ fontSize: 14.5, lineHeight: 1.5, margin: 0, opacity: 0.92 }}>
+              Invitá a tu pareja o a quien vos quieras para que lo viva con vos.
+            </p>
+          </div>
+
+          <a
+            href="#adentro"
+            className="area-nav experience-card group flex items-center gap-3 no-underline"
+            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "22px 24px", color: C.ink }}
+          >
+            <span
+              className="flex items-center justify-center shrink-0"
+              style={{ width: 40, height: 40, borderRadius: 12, background: gradientNumber }}
+            >
+              <Icon path="M9 6l6 6-6 6" size={18} strokeWidth={2.2} stroke="#fff" />
+            </span>
+            <span className="font-heading transition-colors group-hover:text-[#e26fce]" style={{ fontSize: 16, fontWeight: 800 }}>
+              Descubrí todo lo que incluye
+            </span>
+          </a>
+
+          <div
+            className="area-statB experience-card flex flex-col justify-center"
+            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "24px" }}
+          >
+            <p className="font-heading" style={{ fontSize: "clamp(36px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 8px", color: C.ink }}>
+              6
+            </p>
+            <p style={{ fontSize: 15, lineHeight: 1.5, color: C.paragraph, margin: 0 }}>
+              Áreas en un solo lugar: desde el seguimiento hasta tu bienestar emocional.
+            </p>
+          </div>
+
+          <div
+            className="area-dark experience-card flex items-center"
+            style={{ background: C.ink, borderRadius: 24, padding: "26px 28px" }}
+          >
+            <p className="text-pretty" style={{ fontSize: 18, lineHeight: 1.5, color: "#fff", margin: 0, fontWeight: 600 }}>
+              Tu historial es tuyo. Podés exportarlo cuando quieras, y nadie más lo ve si vos no
+              querés.
+            </p>
           </div>
         </div>
       </section>
