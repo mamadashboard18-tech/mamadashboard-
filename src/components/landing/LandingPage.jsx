@@ -50,7 +50,7 @@ function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style, clas
 /* Phone bezel showing a real, live screen of the app (via the unauthenticated
    /?app_preview=<panel> route in App.jsx) scaled to fit — not a screenshot,
    so it never drifts from the actual product UI. */
-function PhoneFrame({ src, title, width, height, screenHeight, rotate = 0, z = 1, dim = false, pos, onClick }) {
+function PhoneFrame({ src, title, width, height, screenHeight, rotate = 0, z = 1, dim = false, pos, onClick, loadDelay = 0 }) {
   const bezel = 9;
   const notchClearance = 26;
   const screenWidth = width - bezel * 2;
@@ -60,18 +60,30 @@ function PhoneFrame({ src, title, width, height, screenHeight, rotate = 0, z = 1
 
   useEffect(() => {
     if (shouldLoad || !wrapRef.current) return;
+    let timer;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setShouldLoad(true);
           observer.disconnect();
+          // Staggering the hero's side phones (loadDelay > 0) keeps them from
+          // fighting the center phone for bandwidth/CPU on first paint — each
+          // iframe boots the whole app bundle, so loading 3 at once is the
+          // main thing slowing down the first screen.
+          if (loadDelay > 0) {
+            timer = setTimeout(() => setShouldLoad(true), loadDelay);
+          } else {
+            setShouldLoad(true);
+          }
         }
       },
       { rootMargin: "400px" }
     );
     observer.observe(wrapRef.current);
-    return () => observer.disconnect();
-  }, [shouldLoad]);
+    return () => {
+      observer.disconnect();
+      if (timer) clearTimeout(timer);
+    };
+  }, [shouldLoad, loadDelay]);
 
   return (
     <div
@@ -338,8 +350,8 @@ const SHOWCASE_ROLES_BY_CENTER = {
 };
 
 const SHOWCASE_ROLE_STYLE = {
-  left: { width: 186, height: 372, screenHeight: 354, rotate: -9, z: 1, dim: true, pos: { left: 0, top: 58 } },
-  right: { width: 186, height: 372, screenHeight: 354, rotate: 8, z: 2, dim: false, pos: { right: 0, top: 74 } },
+  left: { width: 186, height: 372, screenHeight: 354, rotate: -9, z: 1, dim: true, pos: { left: 0, top: 58 }, loadDelay: 450 },
+  right: { width: 186, height: 372, screenHeight: 354, rotate: 8, z: 2, dim: false, pos: { right: 0, top: 74 }, loadDelay: 650 },
   center: { width: 216, height: 452, screenHeight: 434, rotate: 0, z: 3, dim: false, pos: { left: "50%", top: 0, marginLeft: -108 } },
 };
 
