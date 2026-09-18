@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { pilares, secciones } from "../../data/landingContent";
 import fotoEmbarazada from "../../assets/landing/embarazada-telefono.jpg";
 import fotoVentana from "../../assets/landing/gallery/photo-8359692.jpg";
@@ -341,12 +341,21 @@ function ScrollToTopButton() {
   );
 }
 
-/* Fires once, the first time the ref'd element enters the viewport — drives
-   the "En números" section's reveal + count-up animation. */
-function useInView(ref) {
+/* Fires once, the first time the watched element enters the viewport —
+   drives the "En números" section's reveal + count-up animation. Returns a
+   callback ref (not a plain useRef) because that section is itself mounted
+   late by LazySection: a plain ref's `.current` would flip from null to the
+   real node without ever re-running this effect, since React only re-runs
+   effects when a *ref object* identity changes, not when `.current` does —
+   leaving the reveal permanently stuck at "not in view". A callback ref
+   fires again whenever the node it's attached to actually changes. */
+function useInView() {
+  const [node, setNode] = useState(null);
   const [inView, setInView] = useState(false);
+  const ref = useCallback((el) => setNode(el), []);
+
   useEffect(() => {
-    if (!ref.current || inView) return;
+    if (!node || inView) return;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -356,10 +365,11 @@ function useInView(ref) {
       },
       { threshold: 0.3 }
     );
-    observer.observe(ref.current);
+    observer.observe(node);
     return () => observer.disconnect();
-  }, [ref, inView]);
-  return inView;
+  }, [node, inView]);
+
+  return [ref, inView];
 }
 
 /* Mounts its children only once the section is getting close to the
@@ -609,8 +619,7 @@ function AppShowcase() {
 }
 
 export default function LandingPage({ onGoToAuth, onDevPreview }) {
-  const numbersRef = useRef(null);
-  const numbersInView = useInView(numbersRef);
+  const [numbersRef, numbersInView] = useInView();
 
   return (
     <div style={{ background: C.bg, fontFamily: "Inter, system-ui, sans-serif", color: C.ink, overflowX: "hidden" }}>
