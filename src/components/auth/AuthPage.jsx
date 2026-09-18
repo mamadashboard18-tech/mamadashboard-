@@ -9,9 +9,34 @@ import {
 import { PasswordInput, PasswordChecklist, PASSWORD_RULES } from "./PasswordInput";
 import { totalWeeks } from "../../data/seguimientoSemanal";
 import BackButton from "../BackButton";
+import AmbientBlobs from "../AmbientBlobs";
 
 const inputClass =
-  "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
+  "w-full border border-[var(--border-soft)] rounded-xl p-2.5 text-sm text-ink bg-white focus:outline-none focus:border-brand-pink transition-colors";
+
+const labelClass = "text-xs font-medium text-ink-muted block mb-1";
+
+const primaryButtonClass =
+  "btn-lift w-full text-white text-sm font-heading font-bold py-3 rounded-full transition-[filter] hover:brightness-105 disabled:opacity-60 disabled:pointer-events-none";
+
+const primaryButtonStyle = {
+  background: "var(--gradient-hero)",
+  boxShadow: "0 10px 24px rgba(155,93,229,0.35)",
+};
+
+const secondaryButtonClass =
+  "w-full flex items-center justify-center gap-2 border border-[var(--border-soft)] rounded-full py-3 text-sm font-semibold text-ink hover:bg-brand-pink-light/40 transition-colors disabled:opacity-60";
+
+function BrandLockup() {
+  return (
+    <div className="mb-6">
+      <p className="text-xs font-medium tracking-wide text-brand-pink uppercase">
+        Tu compañera de embarazo
+      </p>
+      <h1 className="font-heading text-lg font-bold text-ink mt-1">Mamá App</h1>
+    </div>
+  );
+}
 
 function GoogleIcon() {
   return (
@@ -38,12 +63,7 @@ function GoogleIcon() {
 
 function GoogleButton({ label, onClick, disabled }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="w-full flex items-center justify-center gap-2 border border-rose-100 rounded-xl py-2.5 text-sm font-medium text-gray-700 hover:bg-rose-50 transition-colors disabled:opacity-60"
-    >
+    <button type="button" onClick={onClick} disabled={disabled} className={secondaryButtonClass}>
       <GoogleIcon />
       {label}
     </button>
@@ -52,10 +72,10 @@ function GoogleButton({ label, onClick, disabled }) {
 
 function Divider() {
   return (
-    <div className="flex items-center gap-3 my-4">
-      <div className="flex-1 h-px bg-rose-100" />
-      <span className="text-xs text-gray-400">o</span>
-      <div className="flex-1 h-px bg-rose-100" />
+    <div className="flex items-center gap-3 my-5">
+      <div className="flex-1 h-px bg-[var(--border-soft)]" />
+      <span className="text-xs text-ink-muted">o</span>
+      <div className="flex-1 h-px bg-[var(--border-soft)]" />
     </div>
   );
 }
@@ -95,25 +115,23 @@ function VerifyCodeStep({ signupData, onVerified, onBack }) {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-6">
+    <div className="relative overflow-hidden min-h-screen bg-[var(--bg)] flex items-center justify-center px-6">
+      <AmbientBlobs />
       <div className="w-full max-w-sm">
         <BackButton onBack={onBack} label="Volver" className="mb-6" />
 
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-xl">🤰</span>
-          <span className="font-semibold text-gray-900">Mamá App</span>
-        </div>
+        <BrandLockup />
 
-        <div className="bg-white rounded-2xl border border-rose-100 shadow-sm p-7">
-          <h2 className="text-base font-semibold text-gray-900 mb-1">Verificá tu email</h2>
-          <p className="text-xs text-gray-500 mb-5">
+        <div className="bg-white rounded-3xl border border-[var(--border-soft)] shadow-[0_20px_50px_-25px_rgba(155,93,229,0.4)] p-7">
+          <h2 className="font-heading text-base font-bold text-ink mb-1">Verificá tu email</h2>
+          <p className="text-xs text-ink-muted mb-5">
             Te enviamos un código de 6 dígitos a{" "}
-            <span className="font-medium">{signupData.email}</span>.
+            <span className="font-medium text-ink">{signupData.email}</span>.
           </p>
 
           <form onSubmit={handleVerify}>
             <div className="mb-3">
-              <label className="text-xs text-gray-500 block mb-1">Código</label>
+              <label className={labelClass}>Código</label>
               <input
                 type="text"
                 inputMode="numeric"
@@ -131,7 +149,8 @@ function VerifyCodeStep({ signupData, onVerified, onBack }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-60"
+              className={primaryButtonClass}
+              style={primaryButtonStyle}
             >
               {loading ? "Verificando…" : "Verificar"}
             </button>
@@ -140,7 +159,7 @@ function VerifyCodeStep({ signupData, onVerified, onBack }) {
               type="button"
               onClick={handleResend}
               disabled={resending}
-              className="w-full text-xs text-gray-500 hover:text-rose-500 mt-4 disabled:opacity-60"
+              className="w-full text-xs text-ink-muted hover:text-brand-pink mt-4 disabled:opacity-60 transition-colors"
             >
               {resending ? "Reenviando…" : "Reenviar código"}
             </button>
@@ -255,29 +274,27 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-6 py-10">
+    <div className="relative overflow-hidden min-h-screen bg-[var(--bg)] flex items-center justify-center px-6 py-10">
+      <AmbientBlobs />
       <div className="w-full max-w-sm">
         <BackButton onBack={onBack} label="Volver" className="mb-6" />
 
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-xl">🤰</span>
-          <span className="font-semibold text-gray-900">Mamá App</span>
-        </div>
+        <BrandLockup />
 
-        <div className="bg-white rounded-2xl border border-rose-100 shadow-sm p-7">
-          <div className="flex bg-rose-50 rounded-xl p-1 mb-6">
+        <div className="bg-white rounded-3xl border border-[var(--border-soft)] shadow-[0_20px_50px_-25px_rgba(155,93,229,0.4)] p-7">
+          <div className="flex bg-brand-pink-light/50 rounded-xl p-1 mb-6">
             <button
               onClick={() => switchTab("login")}
-              className={`flex-1 text-sm font-medium py-2 rounded-lg transition-colors ${
-                tab === "login" ? "bg-white text-rose-600 shadow-sm" : "text-gray-500"
+              className={`flex-1 text-sm font-heading font-bold py-2 rounded-lg transition-colors ${
+                tab === "login" ? "bg-white text-brand-pink shadow-sm" : "text-ink-muted"
               }`}
             >
               Iniciar sesión
             </button>
             <button
               onClick={() => switchTab("signup")}
-              className={`flex-1 text-sm font-medium py-2 rounded-lg transition-colors ${
-                tab === "signup" ? "bg-white text-rose-600 shadow-sm" : "text-gray-500"
+              className={`flex-1 text-sm font-heading font-bold py-2 rounded-lg transition-colors ${
+                tab === "signup" ? "bg-white text-brand-pink shadow-sm" : "text-ink-muted"
               }`}
             >
               Crear cuenta
@@ -289,7 +306,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
           {tab === "login" ? (
             <form onSubmit={handleLoginSubmit}>
               <div className="mb-3">
-                <label className="text-xs text-gray-500 block mb-1">Email</label>
+                <label className={labelClass}>Email</label>
                 <input
                   type="email"
                   value={email}
@@ -301,7 +318,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               </div>
 
               <div className="mb-2">
-                <label className="text-xs text-gray-500 block mb-1">Contraseña</label>
+                <label className={labelClass}>Contraseña</label>
                 <PasswordInput
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -315,9 +332,9 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
                   type="checkbox"
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
-                  className="w-4 h-4 rounded border-rose-200 text-rose-500 focus:ring-rose-300"
+                  className="w-4 h-4 rounded border-[var(--border-soft)] accent-[var(--brand-pink)]"
                 />
-                <span className="text-xs text-gray-500">Recordarme en este dispositivo</span>
+                <span className="text-xs text-ink-muted">Recordarme en este dispositivo</span>
               </label>
 
               {error && <p className="text-xs text-red-500 mb-3 mt-3">{error}</p>}
@@ -325,7 +342,8 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors mt-4 disabled:opacity-60"
+                className={`${primaryButtonClass} mt-4`}
+                style={primaryButtonStyle}
               >
                 {loading ? "Un momento…" : "Iniciar sesión"}
               </button>
@@ -342,7 +360,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
             <form onSubmit={handleSignupSubmit}>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Nombre</label>
+                  <label className={labelClass}>Nombre</label>
                   <input
                     type="text"
                     value={nombre}
@@ -352,7 +370,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Apellido</label>
+                  <label className={labelClass}>Apellido</label>
                   <input
                     type="text"
                     value={apellido}
@@ -365,7 +383,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
 
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Fecha de nacimiento</label>
+                  <label className={labelClass}>Fecha de nacimiento</label>
                   <input
                     type="date"
                     value={fechaNacimiento}
@@ -374,7 +392,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Semana de embarazo</label>
+                  <label className={labelClass}>Semana de embarazo</label>
                   <input
                     type="number"
                     min={1}
@@ -388,7 +406,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               </div>
 
               <div className="mb-3">
-                <label className="text-xs text-gray-500 block mb-1">Celular</label>
+                <label className={labelClass}>Celular</label>
                 <input
                   type="tel"
                   value={celular}
@@ -399,7 +417,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               </div>
 
               <div className="mb-3">
-                <label className="text-xs text-gray-500 block mb-1">Email</label>
+                <label className={labelClass}>Email</label>
                 <input
                   type="email"
                   value={signupEmail}
@@ -411,7 +429,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               </div>
 
               <div className="mb-2">
-                <label className="text-xs text-gray-500 block mb-1">Contraseña</label>
+                <label className={labelClass}>Contraseña</label>
                 <PasswordInput
                   value={signupPassword}
                   onChange={(e) => setSignupPassword(e.target.value)}
@@ -422,7 +440,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               </div>
 
               <div className="mb-2 mt-3">
-                <label className="text-xs text-gray-500 block mb-1">Repetir contraseña</label>
+                <label className={labelClass}>Repetir contraseña</label>
                 <PasswordInput
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -439,7 +457,8 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-rose-500 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-rose-600 transition-colors mt-3 disabled:opacity-60"
+                className={`${primaryButtonClass} mt-3`}
+                style={primaryButtonStyle}
               >
                 {loading ? "Un momento…" : "Crear cuenta"}
               </button>
@@ -455,7 +474,7 @@ export default function AuthPage({ initialTab = "login", onSuccess, onBack }) {
           )}
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-5">
+        <p className="text-xs text-ink-muted text-center mt-5">
           Tus datos se guardan de forma segura en tu cuenta
         </p>
       </div>
