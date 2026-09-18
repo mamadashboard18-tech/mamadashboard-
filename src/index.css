@@ -292,6 +292,53 @@ button:focus-visible {
   box-shadow: 0 16px 30px rgba(155, 93, 229, 0.14);
 }
 
+/* Intro photo mosaic — real photos for context, right under the hero */
+.photo-mosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  grid-template-areas:
+    "big a a b"
+    "big c d b";
+  gap: 18px;
+}
+.photo-mosaic .mosaic-big { grid-area: big; }
+.photo-mosaic .mosaic-a { grid-area: a; }
+.photo-mosaic .mosaic-b { grid-area: b; }
+.photo-mosaic .mosaic-c { grid-area: c; }
+.photo-mosaic .mosaic-d { grid-area: d; }
+
+@media (max-width: 860px) {
+  .photo-mosaic {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 190px;
+    grid-template-areas:
+      "big a"
+      "big b"
+      "c d";
+  }
+}
+
+@media (max-width: 540px) {
+  .photo-mosaic {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 260px;
+    grid-template-areas:
+      "big"
+      "a"
+      "b"
+      "c"
+      "d";
+  }
+}
+
+.mosaic-photo {
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease;
+}
+.mosaic-photo:hover {
+  transform: translateY(-3px);
+}
+
 /* "Así se siente" — benefits bento (photo + feature cards) */
 .experience-grid {
   display: grid;

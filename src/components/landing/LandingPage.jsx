@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { pilares, secciones } from "../../data/landingContent";
 import fotoEmbarazada from "../../assets/landing/embarazada-telefono.jpg";
+import fotoVentana from "../../assets/landing/gallery/photo-8359692.jpg";
+import fotoPareja from "../../assets/landing/gallery/photo-5427264.jpg";
+import fotoPanza from "../../assets/landing/gallery/photo-7485075.jpg";
+import fotoSillon from "../../assets/landing/gallery/photo-7156578.jpg";
+import fotoSonrisa from "../../assets/landing/gallery/photo-7484481.jpg";
 
 /* Design tokens, from design_handoff_landing/README.md (hifi, final values) */
 const C = {
@@ -335,6 +340,28 @@ function ScrollToTopButton() {
   );
 }
 
+/* One photo in the intro mosaic — a short brand phrase over a gradient
+   scrim, never quotation marks or a name, so it never reads as an invented
+   customer testimonial. */
+function MosaicPhoto({ src, alt, phrase, className = "" }) {
+  return (
+    <div className={`mosaic-photo relative overflow-hidden ${className}`} style={{ borderRadius: 24 }}>
+      <img src={src} alt={alt} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0"
+        style={{ height: "62%", background: "linear-gradient(180deg,rgba(36,29,43,0) 0%,rgba(36,29,43,0.68) 100%)" }}
+      />
+      <p
+        className="font-heading text-pretty absolute left-0 right-0"
+        style={{ bottom: 16, padding: "0 18px", fontSize: 15.5, fontWeight: 700, lineHeight: 1.35, color: "#fff", margin: 0 }}
+      >
+        {phrase}
+      </p>
+    </div>
+  );
+}
+
 const SHOWCASE_PANELS = {
   multimedia: { src: "/?app_preview=multimedia", title: "Vista previa: Multimedia" },
   inicio: { src: "/?app_preview=inicio", title: "Vista previa: Inicio" },
@@ -526,6 +553,18 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           <AppShowcase />
         </section>
       </div>
+
+      {/* INTRO MOSAIC — real photos for context; captions are brand phrases,
+          not invented customer quotes (see FlipCard/MosaicPhoto comments) */}
+      <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(40px,6vw,64px) 24px 0" }}>
+        <div className="photo-mosaic">
+          <MosaicPhoto className="mosaic-big" src={fotoVentana} alt="Mujer embarazada mirando su teléfono junto a una ventana" phrase="Un lugar tranquilo para volver, cuando lo necesites." />
+          <MosaicPhoto className="mosaic-a" src={fotoPareja} alt="Pareja embarazada compartiendo el teléfono en casa" phrase="Para vivirlo acompañada, no solo de guardia." />
+          <MosaicPhoto className="mosaic-b" src={fotoPanza} alt="Mujer embarazada usando el teléfono de pie" phrase="Tu semana, siempre a mano." />
+          <MosaicPhoto className="mosaic-c" src={fotoSillon} alt="Mujer embarazada recostada revisando el teléfono" phrase="Para esas pausas que también cuentan." />
+          <MosaicPhoto className="mosaic-d" src={fotoSonrisa} alt="Mujer embarazada sonriendo con el teléfono en la mano" phrase="Cada check-in, una sonrisa menos sola." />
+        </div>
+      </section>
 
       {/* PULL QUOTE */}
       <section className="relative overflow-hidden max-w-[900px] mx-auto" style={{ padding: "clamp(48px,7vw,84px) 24px" }}>
