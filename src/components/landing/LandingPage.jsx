@@ -6,6 +6,7 @@ import fotoPareja from "../../assets/landing/gallery/photo-5427264.jpg";
 import fotoPanza from "../../assets/landing/gallery/photo-7485075.jpg";
 import fotoSillon from "../../assets/landing/gallery/photo-7156578.jpg";
 import fotoSonrisa from "../../assets/landing/gallery/photo-7484481.jpg";
+import fotoRenata from "../../assets/landing/renata-kastika.jpg";
 
 /* Design tokens, from design_handoff_landing/README.md (hifi, final values) */
 const C = {
@@ -1113,6 +1114,41 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               querés.
             </p>
           </FlipCard>
+        </div>
+      </section>
+
+      {/* QUIÉN SOY */}
+      <section className="bg-white" style={{ borderTop: `1px solid ${C.border}` }}>
+        <div
+          className="max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))]"
+          style={{ padding: "clamp(56px,8vw,100px) 24px", gap: "clamp(32px,5vw,64px)" }}
+        >
+          <div className="flex justify-center sm:justify-start">
+            <div
+              className="relative overflow-hidden shrink-0"
+              style={{ width: 240, height: 300, borderRadius: 28, background: gradientBrandPanel, boxShadow: "0 20px 44px rgba(155,93,229,0.28)" }}
+            >
+              <img src={fotoRenata} alt="Renata Kastika" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+          </div>
+
+          <div>
+            <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
+              Quién soy
+            </p>
+            <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3vw,36px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 18px" }}>
+              Hola, soy Renata Kastika.
+            </h2>
+            <p className="text-pretty" style={{ fontSize: 16.5, lineHeight: 1.7, color: C.paragraph, margin: 0, maxWidth: "42em" }}>
+              Tengo 21 años y estoy en mi último cuatrimestre de la carrera de Diseño en
+              Comunicación Visual, Gráfica y Digital. Este proyecto surgió pensando en mi tesis
+              final de carrera, lo que me llevó a uno de mis mayores intereses, inspiraciones y
+              admiraciones en la vida: la maternidad y el cuerpo de la mujer. Desde ese interés
+              personal por el tema, y como comunicadora, busqué cubrir un espacio que estaba
+              faltando: un espacio de fácil acceso, que sirva y acompañe de forma integral a las
+              inspiraciones de mi vida, las madres.
+            </p>
+          </div>
         </div>
       </section>
 
