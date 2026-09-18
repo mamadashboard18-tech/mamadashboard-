@@ -33,7 +33,7 @@ function BrandLockup() {
       <p className="text-xs font-medium tracking-wide text-brand-pink uppercase">
         Tu compañera de embarazo
       </p>
-      <h1 className="font-heading text-lg font-bold text-ink mt-1">Mamá App</h1>
+      <h1 className="font-heading text-lg font-bold text-ink mt-1">Acuna App</h1>
     </div>
   );
 }

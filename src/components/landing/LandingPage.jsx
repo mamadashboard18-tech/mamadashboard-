@@ -774,7 +774,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         </section>
       </LazySection>
 
-      {/* POR QUÉ MAMÁ APP */}
+      {/* POR QUÉ ACUNA APP */}
       <LazySection minHeight={500}>
         <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
           <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 44px" }}>

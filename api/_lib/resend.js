@@ -8,7 +8,7 @@ export async function sendOtpEmail(to, code) {
     throw new Error("RESEND_API_KEY no configurada");
   }
   const resend = new Resend(apiKey);
-  const from = process.env.RESEND_FROM_EMAIL || "Mamá App <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM_EMAIL || "Acuna App <onboarding@resend.dev>";
 
   const { error } = await resend.emails.send({
     from,

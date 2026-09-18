@@ -49,7 +49,7 @@ export default function OnboardingForm({ nombre, initialSemana, onComplete }) {
       <div className="w-full max-w-md">
         <div className="flex items-center gap-2 mb-6">
           <span className="text-xl">🤰</span>
-          <span className="font-semibold text-gray-900">Mamá App</span>
+          <span className="font-semibold text-gray-900">Acuna App</span>
         </div>
 
         <div className="bg-white rounded-2xl border border-rose-100 shadow-sm p-7">

@@ -15,7 +15,7 @@ export default function Sidebar({ active, onSelect, onLogout }) {
     <aside className="no-print hidden lg:flex w-64 shrink-0 h-full bg-white border-r border-[var(--border-soft)] flex-col">
       <div className="px-6 py-6 border-b border-[var(--border-soft)]">
         <p className="text-xs font-medium tracking-wide text-brand-pink uppercase">Tu compañera de embarazo</p>
-        <h1 className="font-heading text-lg font-bold text-ink mt-1">Mamá App</h1>
+        <h1 className="font-heading text-lg font-bold text-ink mt-1">Acuna App</h1>
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">

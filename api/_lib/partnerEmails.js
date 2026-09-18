@@ -7,7 +7,7 @@ export async function sendCitaReminderEmail(to, cita) {
     throw new Error("RESEND_API_KEY no configurada");
   }
   const resend = new Resend(apiKey);
-  const from = process.env.RESEND_FROM_EMAIL || "Mamá App <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM_EMAIL || "Acuna App <onboarding@resend.dev>";
 
   const info = citaInfoPorTipo[cita.tipo] || citaInfoPorDefecto;
   const preguntasHtml = info.preguntasPartner.map((p) => `<li>${p}</li>`).join("");
@@ -52,7 +52,7 @@ export async function sendRsvpNotificationEmail(to, { cita, respuesta, partnerNo
     throw new Error("RESEND_API_KEY no configurada");
   }
   const resend = new Resend(apiKey);
-  const from = process.env.RESEND_FROM_EMAIL || "Mamá App <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM_EMAIL || "Acuna App <onboarding@resend.dev>";
 
   const puede = respuesta === "puede";
   const fechaFormateada = new Date(cita.fecha + "T00:00:00").toLocaleDateString("es-AR", {

@@ -43,7 +43,7 @@ export default function PartnerJoinScreen({ token, onJoined }) {
           <span className="w-[34px] h-[34px] rounded-full bg-partner-violet/16 flex items-center justify-center text-partner-violet shrink-0">
             <Users className="w-4 h-4" strokeWidth={1.8} />
           </span>
-          <span className="font-heading text-[17px] font-extrabold text-partner-ink">Mamá App · Partner</span>
+          <span className="font-heading text-[17px] font-extrabold text-partner-ink">Acuna App · Partner</span>
         </div>
 
         <div className="bg-white rounded-[22px] shadow-[0_12px_32px_rgba(46,42,53,0.1)] p-[30px_26px]">
