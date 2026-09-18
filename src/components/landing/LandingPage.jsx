@@ -1118,17 +1118,39 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       </section>
 
       {/* QUIÉN SOY */}
-      <section className="bg-white" style={{ borderTop: `1px solid ${C.border}` }}>
+      <section className="relative overflow-hidden bg-white" style={{ borderTop: `1px solid ${C.border}` }}>
+        <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ top: -80, left: -80, width: 320, height: 320, background: C.rose, opacity: 0.1, filter: "blur(100px)" }} />
+        <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ bottom: -100, right: -60, width: 300, height: 300, background: C.purple, opacity: 0.1, filter: "blur(100px)" }} />
+
         <div
-          className="max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))]"
-          style={{ padding: "clamp(56px,8vw,100px) 24px", gap: "clamp(32px,5vw,64px)" }}
+          className="relative z-[1] max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))]"
+          style={{ padding: "clamp(56px,8vw,100px) 24px", gap: "clamp(40px,5vw,64px)" }}
         >
           <div className="flex justify-center sm:justify-start">
-            <div
-              className="relative overflow-hidden shrink-0"
-              style={{ width: 240, height: 300, borderRadius: 28, background: gradientBrandPanel, boxShadow: "0 20px 44px rgba(155,93,229,0.28)" }}
-            >
-              <img src={fotoRenata} alt="Renata Kastika" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+            {/* Polaroid — white card frame, tilted, a little washi-tape strip pinning it down */}
+            <div className="relative" style={{ transform: "rotate(-4deg)" }}>
+              <div
+                aria-hidden="true"
+                className="absolute"
+                style={{
+                  top: -16,
+                  left: "50%",
+                  width: 90,
+                  height: 30,
+                  marginLeft: -45,
+                  transform: "rotate(3deg)",
+                  background: "rgba(255,111,159,0.35)",
+                  boxShadow: "0 4px 10px rgba(36,29,43,0.12)",
+                }}
+              />
+              <div style={{ background: "#fff", padding: "14px 14px 20px", borderRadius: 6, boxShadow: "0 26px 50px rgba(36,29,43,0.22), 0 4px 14px rgba(36,29,43,0.1)" }}>
+                <div style={{ width: 230, height: 270, overflow: "hidden" }}>
+                  <img src={fotoRenata} alt="Renata Kastika" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                </div>
+                <p className="text-center" style={{ fontFamily: "var(--font-script)", fontSize: 28, fontWeight: 700, color: C.ink, margin: "10px 0 0" }}>
+                  Renata Kastika
+                </p>
+              </div>
             </div>
           </div>
 
@@ -1145,8 +1167,11 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               final de carrera, lo que me llevó a uno de mis mayores intereses, inspiraciones y
               admiraciones en la vida: la maternidad y el cuerpo de la mujer. Desde ese interés
               personal por el tema, y como comunicadora, busqué cubrir un espacio que estaba
-              faltando: un espacio de fácil acceso, que sirva y acompañe de forma integral a las
-              inspiraciones de mi vida, las madres.
+              faltando: un espacio de fácil acceso, que sirva y acompañe de forma integral a{" "}
+              <span style={{ fontFamily: "var(--font-script)", fontSize: "1.5em", fontWeight: 700, color: C.pink }}>
+                las madres
+              </span>
+              , las inspiraciones de mi vida.
             </p>
           </div>
         </div>
