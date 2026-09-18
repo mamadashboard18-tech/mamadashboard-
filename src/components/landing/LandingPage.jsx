@@ -640,14 +640,13 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               >
                 Ya tengo cuenta
               </button>
-              <a
-                href="#crear"
+              <button
+                onClick={() => onGoToAuth("signup")}
                 className="btn-lift cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap shrink-0"
                 style={{
                   fontSize: "clamp(12.5px,3vw,15px)",
                   fontWeight: 700,
                   color: "#fff",
-                  textDecoration: "none",
                   padding: "clamp(8px,2vw,11px) clamp(13px,3.5vw,20px)",
                   borderRadius: 999,
                   background: ctaSolid,
@@ -655,7 +654,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                 }}
               >
                 Crear cuenta
-              </a>
+              </button>
             </div>
           </div>
         </header>
