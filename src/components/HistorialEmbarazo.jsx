@@ -25,7 +25,7 @@ export default function HistorialEmbarazo({ onBack }) {
       <div className="no-print">
         <div className="flex items-start justify-between">
           <Header
-            title="📖 Historial de mi embarazo"
+            title="Historial de mi embarazo"
             subtitle="Todo lo que fuiste registrando"
           />
           <button

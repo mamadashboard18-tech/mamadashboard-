@@ -6,9 +6,11 @@ import {
   checklistRecomendado,
   loadChecklist,
   saveChecklist,
-} from "../data/checklistHospital";
+} from "../data/checklistNursery";
 
-export default function ChecklistHospital({ onBack }) {
+const checkboxClass = "w-5 h-5 rounded border-[var(--border-soft)] accent-[var(--brand-pink)] cursor-pointer";
+
+export default function ChecklistNursery({ onBack }) {
   const [marcados, setMarcados] = useState([]);
   const [propios, setPropios] = useState([]);
   const [nuevoItem, setNuevoItem] = useState("");
@@ -53,29 +55,29 @@ export default function ChecklistHospital({ onBack }) {
       <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
 
       <Header
-        title="Checklist del hospital"
-        subtitle="Bolsa, documentos y contactos"
+        title="Checklist de nursery"
+        subtitle="Preparando el cuarto del bebé"
       />
 
-      <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm mb-6">
+      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm mb-6">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-medium text-gray-700">
+          <p className="text-sm font-medium text-ink">
             {totalMarcados} de {totalItems} listo
           </p>
-          <span className="text-sm font-semibold text-rose-500">{progreso}%</span>
+          <span className="text-sm font-semibold text-brand-pink">{progreso}%</span>
         </div>
-        <div className="w-full h-2 bg-rose-50 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-brand-pink-light/50 rounded-full overflow-hidden">
           <div
-            className="h-full bg-rose-500 transition-all"
-            style={{ width: `${progreso}%` }}
+            className="h-full rounded-full transition-all"
+            style={{ width: `${progreso}%`, background: "var(--gradient-hero)" }}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {checklistRecomendado.map((cat) => (
-          <div key={cat.categoria} className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <div key={cat.categoria} className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm">
+            <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-3">
               {cat.categoria}
             </p>
             <ul className="space-y-2">
@@ -83,23 +85,17 @@ export default function ChecklistHospital({ onBack }) {
                 const checked = marcados.includes(item);
                 return (
                   <li key={item}>
-                    <button
-                      onClick={() => toggle(item)}
-                      className="flex items-center gap-2 w-full text-left text-sm"
-                    >
-                      <span
-                        className={`w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 ${
-                          checked
-                            ? "bg-rose-500 border-rose-500 text-white"
-                            : "border-rose-200"
-                        }`}
-                      >
-                        {checked && "✓"}
-                      </span>
-                      <span className={checked ? "text-gray-400 line-through" : "text-gray-700"}>
+                    <label className="flex items-center gap-2 w-full text-left text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggle(item)}
+                        className={checkboxClass}
+                      />
+                      <span className={checked ? "text-ink-muted/60 line-through" : "text-ink"}>
                         {item}
                       </span>
-                    </button>
+                    </label>
                   </li>
                 );
               })}
@@ -107,8 +103,8 @@ export default function ChecklistHospital({ onBack }) {
           </div>
         ))}
 
-        <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm sm:col-span-2">
-          <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm sm:col-span-2">
+          <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-3">
             Tus propios ítems
           </p>
 
@@ -118,28 +114,22 @@ export default function ChecklistHospital({ onBack }) {
                 const checked = marcados.includes(p.id);
                 return (
                   <li key={p.id} className="flex items-center justify-between gap-2">
-                    <button
-                      onClick={() => toggle(p.id)}
-                      className="flex items-center gap-2 text-left text-sm flex-1"
-                    >
-                      <span
-                        className={`w-5 h-5 rounded-md border flex items-center justify-center flex-shrink-0 ${
-                          checked
-                            ? "bg-rose-500 border-rose-500 text-white"
-                            : "border-rose-200"
-                        }`}
-                      >
-                        {checked && "✓"}
-                      </span>
-                      <span className={checked ? "text-gray-400 line-through" : "text-gray-700"}>
+                    <label className="flex items-center gap-2 text-left text-sm flex-1 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggle(p.id)}
+                        className={checkboxClass}
+                      />
+                      <span className={checked ? "text-ink-muted/60 line-through" : "text-ink"}>
                         {p.texto}
                       </span>
-                    </button>
+                    </label>
                     <button
                       onClick={() => eliminarPropio(p.id)}
                       aria-label="Eliminar"
                       title="Eliminar"
-                      className="text-gray-400 hover:text-red-500"
+                      className="text-ink-muted/60 hover:text-red-500"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -155,12 +145,13 @@ export default function ChecklistHospital({ onBack }) {
               value={nuevoItem}
               onChange={(e) => setNuevoItem(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && agregarPropio()}
-              placeholder="Ej: cámara de fotos, almohada de lactancia..."
-              className="flex-1 border border-rose-100 rounded-xl p-2 text-sm text-gray-700 focus:outline-none focus:border-rose-300"
+              placeholder="Ej: humidificador, luz de noche..."
+              className="flex-1 border border-[var(--border-soft)] rounded-xl p-2 text-sm text-ink bg-white focus:outline-none focus:border-brand-pink transition-colors"
             />
             <button
               onClick={agregarPropio}
-              className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors whitespace-nowrap"
+              className="text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter] whitespace-nowrap"
+              style={{ background: "var(--gradient-hero)" }}
             >
               + Agregar
             </button>

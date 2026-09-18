@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
-import { Save, Pencil, Trash2, Phone } from "lucide-react";
+import { Pencil, Trash2, Phone, Star } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
-import { loadContactos, saveContactos, rolesSugeridos } from "../data/contactosMedicos";
+import { loadContactosEmergencia, saveContactosEmergencia } from "../data/contactosEmergencia";
 
-const emptyForm = { nombre: "", rol: rolesSugeridos[0], telefono: "" };
+const emptyForm = { nombre: "", relacion: "", telefono: "" };
+
 const inputClass =
   "w-full border border-[var(--border-soft)] rounded-xl p-2 text-sm text-ink bg-white mb-3 focus:outline-none focus:border-brand-pink transition-colors";
+
 const primaryButtonStyle = { background: "var(--gradient-hero)" };
 
-export default function ContactosMedicos({ onBack }) {
+export default function ContactosEmergencia({ onBack }) {
   const [contactos, setContactos] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
-    setContactos(loadContactos());
+    setContactos(loadContactosEmergencia());
   }, []);
 
   const updateField = (field, value) => {
@@ -26,29 +28,19 @@ export default function ContactosMedicos({ onBack }) {
     if (!form.nombre.trim()) return;
     let next;
     if (editingId) {
-      next = contactos.map((c) => (c.id === editingId ? { ...form, id: editingId } : c));
+      next = contactos.map((c) => (c.id === editingId ? { ...form, id: editingId, principal: c.principal } : c));
     } else {
-      next = [...contactos, { ...form, id: Date.now().toString() }];
+      next = [...contactos, { ...form, id: Date.now().toString(), principal: contactos.length === 0 }];
     }
     setContactos(next);
-    saveContactos(next);
+    saveContactosEmergencia(next);
     setForm(emptyForm);
     setEditingId(null);
   };
 
   const handleEditar = (c) => {
-    setForm({ nombre: c.nombre, rol: c.rol, telefono: c.telefono });
+    setForm({ nombre: c.nombre, relacion: c.relacion, telefono: c.telefono });
     setEditingId(c.id);
-  };
-
-  const handleEliminar = (id) => {
-    const next = contactos.filter((c) => c.id !== id);
-    setContactos(next);
-    saveContactos(next);
-    if (editingId === id) {
-      setEditingId(null);
-      setForm(emptyForm);
-    }
   };
 
   const cancelarEdicion = () => {
@@ -56,13 +48,26 @@ export default function ContactosMedicos({ onBack }) {
     setForm(emptyForm);
   };
 
+  const handleEliminar = (id) => {
+    const next = contactos.filter((c) => c.id !== id);
+    setContactos(next);
+    saveContactosEmergencia(next);
+    if (editingId === id) cancelarEdicion();
+  };
+
+  const handleMarcarPrincipal = (id) => {
+    const next = contactos.map((c) => ({ ...c, principal: c.id === id }));
+    setContactos(next);
+    saveContactosEmergencia(next);
+  };
+
   return (
     <div>
       <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
 
       <Header
-        title="Contactos del equipo médico"
-        subtitle="A mano para una emergencia"
+        title="Contactos de emergencia"
+        subtitle="Familia y allegados, a un toque en caso de urgencia"
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -76,20 +81,18 @@ export default function ContactosMedicos({ onBack }) {
             type="text"
             value={form.nombre}
             onChange={(e) => updateField("nombre", e.target.value)}
-            placeholder="Ej: Dra. Pérez"
+            placeholder="Ej: Lucía Gómez"
             className={inputClass}
           />
 
-          <label className="text-xs text-ink-muted block mb-1">Rol</label>
-          <select
-            value={form.rol}
-            onChange={(e) => updateField("rol", e.target.value)}
+          <label className="text-xs text-ink-muted block mb-1">Relación</label>
+          <input
+            type="text"
+            value={form.relacion}
+            onChange={(e) => updateField("relacion", e.target.value)}
+            placeholder="Ej: Hermana, Mamá, Amigo"
             className={inputClass}
-          >
-            {rolesSugeridos.map((r) => (
-              <option key={r} value={r}>{r}</option>
-            ))}
-          </select>
+          />
 
           <label className="text-xs text-ink-muted block mb-1">Teléfono</label>
           <input
@@ -103,22 +106,13 @@ export default function ContactosMedicos({ onBack }) {
           <div className="flex items-center gap-3">
             <button
               onClick={handleGuardar}
-              aria-label={editingId ? "Guardar cambios" : "Agregar"}
-              title={editingId ? "Guardar cambios" : "Agregar"}
-              className={
-                editingId
-                  ? "flex items-center justify-center w-10 h-10 text-white rounded-full hover:brightness-105 transition-[filter]"
-                  : "text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter]"
-              }
+              className="text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter]"
               style={primaryButtonStyle}
             >
-              {editingId ? <Save className="w-4 h-4" /> : "+ Agregar"}
+              {editingId ? "Guardar cambios" : "+ Agregar"}
             </button>
             {editingId && (
-              <button
-                onClick={cancelarEdicion}
-                className="text-sm text-ink-muted hover:text-brand-pink"
-              >
+              <button onClick={cancelarEdicion} className="text-sm text-ink-muted hover:text-brand-pink">
                 Cancelar
               </button>
             )}
@@ -139,9 +133,16 @@ export default function ContactosMedicos({ onBack }) {
                   className="flex items-center justify-between bg-brand-pink-light/30 border border-[var(--border-soft)] rounded-xl px-3 py-2"
                 >
                   <div>
-                    <p className="text-sm font-medium text-ink">{c.nombre}</p>
+                    <p className="text-sm font-medium text-ink flex items-center gap-1.5">
+                      {c.nombre}
+                      {c.principal && (
+                        <span className="text-[10px] font-semibold text-brand-magenta bg-brand-pink-light rounded-full px-2 py-0.5">
+                          Principal
+                        </span>
+                      )}
+                    </p>
                     <p className="text-xs text-ink-muted">
-                      {c.rol} {c.telefono && `· ${c.telefono}`}
+                      {c.relacion} {c.telefono && `· ${c.telefono}`}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -155,6 +156,14 @@ export default function ContactosMedicos({ onBack }) {
                         <Phone className="w-3.5 h-3.5" />
                       </a>
                     )}
+                    <button
+                      onClick={() => handleMarcarPrincipal(c.id)}
+                      aria-label="Marcar como principal"
+                      title="Marcar como principal"
+                      className={c.principal ? "text-brand-pink" : "text-ink-muted/60 hover:text-brand-pink"}
+                    >
+                      <Star className="w-3.5 h-3.5" fill={c.principal ? "currentColor" : "none"} />
+                    </button>
                     <button
                       onClick={() => handleEditar(c)}
                       aria-label="Editar"

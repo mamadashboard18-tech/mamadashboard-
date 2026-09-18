@@ -3,59 +3,114 @@ import Header from "./Header";
 import FeatureCard from "./FeatureCard";
 import HistorialEmbarazo from "./HistorialEmbarazo";
 import ContactosMedicos from "./ContactosMedicos";
+import ContactosEmergencia from "./ContactosEmergencia";
 import PlanParto from "./PlanParto";
 import ChecklistHospital from "./ChecklistHospital";
+import ListaCompras from "./ListaCompras";
+import ListaNombres from "./ListaNombres";
+import ChecklistNursery from "./ChecklistNursery";
+import Tramites from "./Tramites";
+import PreferenciasContenido from "./PreferenciasContenido";
 import PartnerManagement from "./partner/PartnerManagement";
 import PrivacidadPanel from "./PrivacidadPanel";
 import { emptyPerfil, loadPerfil, savePerfil } from "../data/perfil";
 import { totalWeeks } from "../data/seguimientoSemanal";
 import { emptyBebe, loadBebe, saveBebe } from "../data/bebe";
-import { Save, Pencil } from "lucide-react";
+import {
+  Save,
+  Pencil,
+  BookOpen,
+  NotebookPen,
+  Backpack,
+  Phone,
+  ShieldAlert,
+  ShoppingBag,
+  Heart,
+  Home,
+  FolderOpen,
+  Users,
+  Headphones,
+  Lock,
+} from "lucide-react";
 
 const inputClass =
-  "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
+  "w-full border border-[var(--border-soft)] rounded-xl p-2.5 text-sm text-ink bg-white focus:outline-none focus:border-brand-pink transition-colors";
+
+const primaryButtonStyle = { background: "var(--gradient-hero)" };
 
 const seccionesTarjetas = [
   {
-    icon: "📖",
+    icon: <BookOpen className="w-5 h-5" />,
     title: "Historial de mi embarazo",
     desc: "Todo lo que fuiste registrando, con exportación a PDF",
     view: "historial",
   },
   {
-    icon: "📝",
+    icon: <NotebookPen className="w-5 h-5" />,
     title: "Plan de parto interactivo",
     desc: "Generador personalizable, exportable en PDF para el equipo médico",
     view: "plan-parto",
   },
   {
-    icon: "🎒",
+    icon: <Backpack className="w-5 h-5" />,
     title: "Checklist del hospital",
     desc: "Bolsa, documentos, personas de contacto",
     view: "checklist-hospital",
   },
   {
-    icon: "📞",
+    icon: <Phone className="w-5 h-5" />,
     title: "Contactos del equipo médico",
     desc: "Todos los teléfonos importantes, a mano para una emergencia",
     view: "contactos-medicos",
   },
   {
-    icon: "👥",
+    icon: <ShieldAlert className="w-5 h-5" />,
+    title: "Contactos de emergencia",
+    desc: "Familia y allegados, a un toque",
+    view: "contactos-emergencia",
+  },
+  {
+    icon: <ShoppingBag className="w-5 h-5" />,
+    title: "Lista de compras",
+    desc: "Por categoría, con sugerencias",
+    view: "lista-compras",
+  },
+  {
+    icon: <Heart className="w-5 h-5" />,
+    title: "Lista de nombres",
+    desc: "Tu shortlist, marcá tus favoritos",
+    view: "lista-nombres",
+  },
+  {
+    icon: <Home className="w-5 h-5" />,
+    title: "Checklist de nursery",
+    desc: "Progreso del cuarto del bebé",
+    view: "checklist-nursery",
+  },
+  {
+    icon: <FolderOpen className="w-5 h-5" />,
+    title: "Trámites y documentos",
+    desc: "Por país, embarazo y postparto",
+    view: "tramites",
+  },
+  {
+    icon: <Users className="w-5 h-5" />,
     title: "Tu partner",
     desc: "Invitalo para que vea tus citas, síntomas y reciba tus notas",
     view: "partner",
   },
   {
-    icon: "🔒",
+    icon: <Headphones className="w-5 h-5" />,
+    title: "Preferencias de contenido",
+    desc: "Tipos favoritos, idioma, notificaciones",
+    view: "preferencias-contenido",
+  },
+  {
+    icon: <Lock className="w-5 h-5" />,
     title: "Privacidad",
     desc: "Conectá o desconectá Google Calendar y controlá tus datos compartidos",
     view: "privacidad",
   },
-];
-
-const otrasTarjetas = [
-  { icon: "🎧", title: "Preferencias de contenido", desc: "Tipos favoritos, idioma, notificaciones" },
 ];
 
 const CANTIDAD_OPTIONS = [
@@ -70,6 +125,14 @@ const SEXO_OPTIONS = [
   { value: "mixto", label: "Uno de cada uno" },
   { value: "no-se", label: "Todavía no sé" },
 ];
+
+function toggleOptionClass(active) {
+  return `flex-1 text-sm font-medium py-2 rounded-xl border transition-colors ${
+    active
+      ? "bg-brand-pink text-white border-brand-pink"
+      : "bg-white text-ink-muted border-[var(--border-soft)] hover:border-brand-pink"
+  }`;
+}
 
 export default function PerfilPanel({ onLogout }) {
   const [view, setView] = useState("list");
@@ -90,6 +153,30 @@ export default function PerfilPanel({ onLogout }) {
 
   if (view === "contactos-medicos") {
     return <ContactosMedicos onBack={() => setView("list")} />;
+  }
+
+  if (view === "contactos-emergencia") {
+    return <ContactosEmergencia onBack={() => setView("list")} />;
+  }
+
+  if (view === "lista-compras") {
+    return <ListaCompras onBack={() => setView("list")} />;
+  }
+
+  if (view === "lista-nombres") {
+    return <ListaNombres onBack={() => setView("list")} />;
+  }
+
+  if (view === "checklist-nursery") {
+    return <ChecklistNursery onBack={() => setView("list")} />;
+  }
+
+  if (view === "tramites") {
+    return <Tramites onBack={() => setView("list")} />;
+  }
+
+  if (view === "preferencias-contenido") {
+    return <PreferenciasContenido onBack={() => setView("list")} />;
   }
 
   if (view === "plan-parto") {
@@ -145,18 +232,18 @@ export default function PerfilPanel({ onLogout }) {
   return (
     <div>
       <Header
-        title="📋 Mi Perfil"
+        title="Mi Perfil"
         subtitle="Tus datos y preferencias"
       />
 
-      <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-6">
-        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-6 shadow-sm mb-6">
+        <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-4">
           Datos personales
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="text-xs text-gray-500 block mb-1">
+            <label className="text-xs text-ink-muted block mb-1">
               Semana actual de embarazo
             </label>
             <input
@@ -167,13 +254,13 @@ export default function PerfilPanel({ onLogout }) {
               onChange={(e) => update("semanaActual", Number(e.target.value))}
               className={inputClass}
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-ink-muted/70 mt-1">
               Esto actualiza el Inicio y el seguimiento en toda la app
             </p>
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 block mb-1">Fecha probable de parto</label>
+            <label className="text-xs text-ink-muted block mb-1">Fecha probable de parto</label>
             <input
               type="date"
               value={perfil.fpp}
@@ -183,7 +270,7 @@ export default function PerfilPanel({ onLogout }) {
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 block mb-1">Médico / obstetra</label>
+            <label className="text-xs text-ink-muted block mb-1">Médico / obstetra</label>
             <input
               type="text"
               value={perfil.medico}
@@ -194,7 +281,7 @@ export default function PerfilPanel({ onLogout }) {
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 block mb-1">Hospital / clínica</label>
+            <label className="text-xs text-ink-muted block mb-1">Hospital / clínica</label>
             <input
               type="text"
               value={perfil.hospital}
@@ -206,18 +293,14 @@ export default function PerfilPanel({ onLogout }) {
         </div>
 
         <div className="mb-4">
-          <label className="text-xs text-gray-500 block mb-2">¿Cuántos bebés esperás?</label>
+          <label className="text-xs text-ink-muted block mb-2">¿Cuántos bebés esperás?</label>
           <div className="flex gap-2">
             {CANTIDAD_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => update("cantidadBebes", opt.value)}
-                className={`flex-1 text-sm font-medium py-2 rounded-xl border transition-colors ${
-                  perfil.cantidadBebes === opt.value
-                    ? "bg-rose-500 text-white border-rose-500"
-                    : "bg-white text-gray-600 border-rose-100 hover:border-rose-300"
-                }`}
+                className={toggleOptionClass(perfil.cantidadBebes === opt.value)}
               >
                 {opt.label}
               </button>
@@ -226,18 +309,14 @@ export default function PerfilPanel({ onLogout }) {
         </div>
 
         <div className="mb-4">
-          <label className="text-xs text-gray-500 block mb-2">¿Sabés el sexo?</label>
+          <label className="text-xs text-ink-muted block mb-2">¿Sabés el sexo?</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {SEXO_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => update("sexo", opt.value)}
-                className={`text-sm font-medium py-2 rounded-xl border transition-colors ${
-                  perfil.sexo === opt.value
-                    ? "bg-rose-500 text-white border-rose-500"
-                    : "bg-white text-gray-600 border-rose-100 hover:border-rose-300"
-                }`}
+                className={toggleOptionClass(perfil.sexo === opt.value)}
               >
                 {opt.label}
               </button>
@@ -250,7 +329,8 @@ export default function PerfilPanel({ onLogout }) {
             onClick={handleGuardar}
             aria-label="Guardar datos"
             title="Guardar datos"
-            className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
+            className="flex items-center justify-center w-10 h-10 text-white rounded-full hover:brightness-105 transition-[filter]"
+            style={primaryButtonStyle}
           >
             <Save className="w-4 h-4" />
           </button>
@@ -258,22 +338,23 @@ export default function PerfilPanel({ onLogout }) {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-6">
-        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-6 shadow-sm mb-6">
+        <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-4">
           Tu bebé
         </p>
 
         {!bebe.registrado && !editandoBebe && (
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="text-sm font-medium text-gray-900">¿Ya nació tu bebé?</p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm font-medium text-ink">¿Ya nació tu bebé?</p>
+              <p className="text-sm text-ink-muted mt-1">
                 Registrá el nacimiento para activar tu cuarto trimestre en Inicio
               </p>
             </div>
             <button
               onClick={() => setEditandoBebe(true)}
-              className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors whitespace-nowrap"
+              className="text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter] whitespace-nowrap"
+              style={primaryButtonStyle}
             >
               Registrar nacimiento
             </button>
@@ -283,8 +364,8 @@ export default function PerfilPanel({ onLogout }) {
         {bebe.registrado && !editandoBebe && (
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="text-sm font-medium text-gray-900">{bebe.nombre || "Tu bebé"}</p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm font-medium text-ink">{bebe.nombre || "Tu bebé"}</p>
+              <p className="text-sm text-ink-muted mt-1">
                 Nació el {bebe.fechaNacimiento}
                 {bebe.peso ? ` · ${bebe.peso} g` : ""}
                 {bebe.proximoControl ? ` · próximo control ${bebe.proximoControl}` : ""}
@@ -295,13 +376,13 @@ export default function PerfilPanel({ onLogout }) {
                 onClick={() => setEditandoBebe(true)}
                 aria-label="Editar"
                 title="Editar"
-                className="text-rose-500"
+                className="text-brand-pink"
               >
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={handleVolverAEmbarazo}
-                className="text-sm text-gray-400 hover:text-rose-500 hover:underline"
+                className="text-sm text-ink-muted hover:text-brand-pink hover:underline"
               >
                 Volver a modo embarazo
               </button>
@@ -313,7 +394,7 @@ export default function PerfilPanel({ onLogout }) {
           <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Fecha de nacimiento</label>
+                <label className="text-xs text-ink-muted block mb-1">Fecha de nacimiento</label>
                 <input
                   type="date"
                   value={bebe.fechaNacimiento}
@@ -322,7 +403,7 @@ export default function PerfilPanel({ onLogout }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Nombre (opcional)</label>
+                <label className="text-xs text-ink-muted block mb-1">Nombre (opcional)</label>
                 <input
                   type="text"
                   value={bebe.nombre}
@@ -332,7 +413,7 @@ export default function PerfilPanel({ onLogout }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Peso (g)</label>
+                <label className="text-xs text-ink-muted block mb-1">Peso (g)</label>
                 <input
                   type="number"
                   min={0}
@@ -343,7 +424,7 @@ export default function PerfilPanel({ onLogout }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-500 block mb-1">Próximo control</label>
+                <label className="text-xs text-ink-muted block mb-1">Próximo control</label>
                 <input
                   type="date"
                   value={bebe.proximoControl}
@@ -358,13 +439,14 @@ export default function PerfilPanel({ onLogout }) {
                 disabled={!bebe.fechaNacimiento}
                 aria-label="Guardar"
                 title="Guardar"
-                className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors disabled:opacity-50"
+                className="flex items-center justify-center w-10 h-10 text-white rounded-full hover:brightness-105 transition-[filter] disabled:opacity-50"
+                style={primaryButtonStyle}
               >
                 <Save className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setEditandoBebe(false)}
-                className="text-sm text-gray-500 hover:text-rose-500"
+                className="text-sm text-ink-muted hover:text-brand-pink"
               >
                 Cancelar
               </button>
@@ -375,39 +457,22 @@ export default function PerfilPanel({ onLogout }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        {seccionesTarjetas.map((t) => (
+        {seccionesTarjetas.map((t, i) => (
           <FeatureCard
             key={t.title}
             icon={t.icon}
             title={t.title}
             desc={t.desc}
+            tint={i % 2 === 0 ? "pink" : "purple"}
             onClick={() => setView(t.view)}
           />
         ))}
       </div>
 
-      <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-        Próximamente
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {otrasTarjetas.map((t) => (
-          <div
-            key={t.title}
-            className="bg-white border border-rose-100 rounded-xl p-4 shadow-sm flex items-start gap-3"
-          >
-            <span className="text-xl leading-none">{t.icon}</span>
-            <div>
-              <p className="font-medium text-gray-900 text-sm">{t.title}</p>
-              <p className="text-sm text-gray-500 mt-1">{t.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-6 pt-6 border-t border-rose-100">
+      <div className="mt-6 pt-6 border-t border-[var(--border-soft)]">
         <button
           onClick={onLogout}
-          className="text-sm text-rose-500 hover:text-rose-600 font-medium"
+          className="text-sm text-red-500 hover:text-red-600 font-medium"
         >
           Cerrar sesión
         </button>

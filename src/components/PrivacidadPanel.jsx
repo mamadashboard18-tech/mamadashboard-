@@ -41,7 +41,7 @@ export default function PrivacidadPanel({ onBack }) {
       <BackButton onBack={onBack} label="Volver" className="mb-4" />
 
       <Header
-        title="🔒 Privacidad"
+        title="Privacidad"
         subtitle="Tus datos, bajo tu control"
       />
 

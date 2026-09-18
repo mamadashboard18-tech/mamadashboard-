@@ -88,7 +88,7 @@ export default function PlanParto({ onBack }) {
 
       <div className="no-print">
         <Header
-          title="📝 Plan de parto interactivo"
+          title="Plan de parto interactivo"
           subtitle="Exportable en PDF"
         />
 
