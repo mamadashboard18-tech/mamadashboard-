@@ -22,6 +22,11 @@ const C = {
 const gradientBrand = `linear-gradient(135deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
 const gradientBrandPanel = `linear-gradient(160deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
 const gradientNumber = `linear-gradient(135deg,${C.rose},${C.purpleGrad})`;
+/* Distinct, warmer accent reserved for the "Crear cuenta" CTAs so they pop
+   against the pink/purple used everywhere else on the page, instead of
+   blending into the brand gradient. */
+const gradientCTA = `linear-gradient(135deg,#ffb073 0%,#ff7a45 100%)`;
+const ctaShadow = "0 10px 24px rgba(255,122,69,0.38)";
 
 function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style, className }) {
   return (
@@ -236,6 +241,87 @@ function SectionCard({ s, className = "" }) {
   );
 }
 
+/* Tap/click to flip and reveal a short second-person "experience" phrase on
+   the back — same honest, non-invented-testimonial voice as the rest of the
+   copy, just framed as a reveal instead of a static line. */
+function FlipCard({ className = "", frontClassName = "", frontStyle, backStyle, backText, children }) {
+  const [flipped, setFlipped] = useState(false);
+  const toggle = () => setFlipped((f) => !f);
+
+  return (
+    <div
+      className={`flip-card experience-card ${className}`}
+      onClick={toggle}
+      role="button"
+      tabIndex={0}
+      aria-pressed={flipped}
+      aria-label="Tocá para ver más"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      }}
+    >
+      <div className={`flip-card-inner${flipped ? " is-flipped" : ""}`}>
+        <div className={`flip-card-face ${frontClassName}`} style={{ borderRadius: 24, ...frontStyle }}>
+          {children}
+        </div>
+        <div className="flip-card-face flip-card-back flex items-center" style={{ borderRadius: 24, background: gradientBrandPanel, padding: "24px", ...backStyle }}>
+          <div>
+            <span aria-hidden="true" style={{ fontSize: 28, lineHeight: 1, color: "rgba(255,255,255,0.55)", display: "block", marginBottom: 4 }}>
+              “
+            </span>
+            <p className="font-heading text-pretty" style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.4, color: "#fff", margin: 0 }}>
+              {backText}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Floating "back to top" arrow — appears once the hero has scrolled past. */
+function ScrollToTopButton() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 600);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label="Volver arriba"
+      className="cursor-pointer transition-[opacity,transform] hover:brightness-105"
+      style={{
+        position: "fixed",
+        right: "clamp(16px,4vw,28px)",
+        bottom: "clamp(16px,4vw,28px)",
+        zIndex: 40,
+        width: 46,
+        height: 46,
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: C.ink,
+        boxShadow: "0 12px 26px rgba(36,29,43,0.3)",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(12px)",
+        pointerEvents: visible ? "auto" : "none",
+        transition: "opacity 0.25s ease, transform 0.25s ease",
+      }}
+    >
+      <Icon path="M12 19V5 M5 12l7-7 7 7" size={20} stroke="#fff" strokeWidth={2.2} />
+    </button>
+  );
+}
+
 const SHOWCASE_PANELS = {
   multimedia: { src: "/?app_preview=multimedia", title: "Vista previa: Multimedia" },
   inicio: { src: "/?app_preview=inicio", title: "Vista previa: Inicio" },
@@ -368,8 +454,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                   textDecoration: "none",
                   padding: "clamp(8px,2vw,11px) clamp(13px,3.5vw,20px)",
                   borderRadius: 999,
-                  background: gradientBrand,
-                  boxShadow: "0 8px 20px rgba(226,111,206,0.3)",
+                  background: gradientCTA,
+                  boxShadow: ctaShadow,
                 }}
               >
                 Crear cuenta
@@ -544,6 +630,65 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         </div>
       </section>
 
+      {/* EN NÚMEROS — real product facts (weeks/trimesters/areas), never invented user stats */}
+      <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(56px,8vw,100px) 24px" }}>
+        <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
+          Tu embarazo, de punta a punta
+        </p>
+        <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 36px", maxWidth: "26em" }}>
+          Contenido pensado semana a semana, no un calendario genérico.
+        </h2>
+
+        <div style={{ marginBottom: 40 }}>
+          <div className="flex" style={{ borderRadius: 999, overflow: "hidden", height: 12, gap: 3 }} role="img" aria-label="Línea de tiempo del embarazo dividida en 3 trimestres, semanas 1 a 40">
+            <div style={{ flex: 13, background: `linear-gradient(90deg,${C.rose},${C.pink})` }} />
+            <div style={{ flex: 14, background: `linear-gradient(90deg,${C.pink},${C.purpleGrad})` }} />
+            <div style={{ flex: 13, background: `linear-gradient(90deg,${C.purpleGrad},${C.purple})` }} />
+          </div>
+          <div className="flex justify-between" style={{ marginTop: 10 }} aria-hidden="true">
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 1</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 13</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 27</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 40</span>
+          </div>
+          <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(200px,100%),1fr))", gap: 16, marginTop: 20 }}>
+            <div>
+              <p className="font-heading" style={{ fontWeight: 800, fontSize: 15, margin: "0 0 2px", color: C.ink }}>1er trimestre</p>
+              <p style={{ fontSize: 13.5, color: C.paragraph, margin: 0 }}>Semanas 1 a 13</p>
+            </div>
+            <div>
+              <p className="font-heading" style={{ fontWeight: 800, fontSize: 15, margin: "0 0 2px", color: C.ink }}>2do trimestre</p>
+              <p style={{ fontSize: 13.5, color: C.paragraph, margin: 0 }}>Semanas 14 a 27</p>
+            </div>
+            <div>
+              <p className="font-heading" style={{ fontWeight: 800, fontSize: 15, margin: "0 0 2px", color: C.ink }}>3er trimestre</p>
+              <p style={{ fontSize: 13.5, color: C.paragraph, margin: 0 }}>Semanas 28 a 40</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: 16 }}>
+          {[
+            { n: "40", label: "Semanas, cada una con su propio contenido", iconPath: "M4 9 H20 M8 3 V7 M16 3 V7 M4 5 H20 V20 H4 Z" },
+            { n: "3", label: "Trimestres, cada uno con su guía", iconPath: "M4 20h16 M8 20V10 M12 20V4 M16 20V13" },
+            { n: "6", label: "Áreas en un solo lugar", iconPath: "M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z" },
+            { n: "1", label: "Una sola app para todo el embarazo", iconPath: "M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5" },
+          ].map((f) => (
+            <div key={f.n} className="flex items-center gap-3.5" style={{ background: "rgba(155,93,229,0.05)", borderRadius: 20, padding: "18px 20px" }}>
+              <span className="flex items-center justify-center shrink-0" style={{ width: 42, height: 42, borderRadius: 13, background: gradientNumber }}>
+                <Icon path={f.iconPath} size={20} stroke="#fff" strokeWidth={1.8} />
+              </span>
+              <div>
+                <p className="font-heading" style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", margin: 0, color: C.ink, lineHeight: 1.1 }}>
+                  {f.n}
+                </p>
+                <p style={{ fontSize: 13.5, lineHeight: 1.4, color: C.paragraph, margin: 0 }}>{f.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* MODO ACOMPAÑANTE */}
       <section id="acompanante" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
         <div className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
@@ -665,7 +810,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                 Empezá esta semana.
               </h2>
               <p className="text-pretty" style={{ fontSize: "clamp(16px,1.5vw,19px)", lineHeight: 1.6, color: "rgba(255,255,255,0.86)", margin: 0, maxWidth: "26em" }}>
-                Creá tu cuenta gratis. Vas a poder anotar tu semana en menos de un minuto.
+                Creá tu cuenta. Vas a poder anotar tu semana en menos de un minuto.
               </p>
             </div>
             <div className="flex justify-start">
@@ -682,7 +827,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                   boxShadow: "0 12px 30px rgba(36,29,43,0.18)",
                 }}
               >
-                Crear mi cuenta gratis
+                Crear mi cuenta
               </button>
             </div>
           </div>
@@ -710,18 +855,20 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               textDecoration: "none",
               padding: "14px 26px",
               borderRadius: 999,
-              background: gradientBrand,
-              boxShadow: "0 12px 28px rgba(226,111,206,0.3)",
+              background: gradientCTA,
+              boxShadow: ctaShadow,
             }}
           >
-            Crear cuenta gratis
+            Crear cuenta
           </a>
         </div>
 
         <div className="experience-grid">
-          <div
-            className="area-big experience-card flex flex-col"
-            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "26px 24px" }}
+          <FlipCard
+            className="area-big"
+            frontClassName="flex flex-col"
+            frontStyle={{ background: "rgba(155,93,229,0.05)", padding: "26px 24px" }}
+            backText="Vas a mirar atrás y vas a poder ver cada semana, cada síntoma, cada momento. Nada se pierde."
           >
             <p className="uppercase" style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.07em", color: C.purple, margin: "0 0 14px" }}>
               Semana a semana
@@ -730,7 +877,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               Vas a poder ver cómo crece tu bebé, guardar cómo te sentís y no perderte ningún
               control, todo en el mismo lugar.
             </p>
-          </div>
+          </FlipCard>
 
           <div className="area-photo experience-card relative overflow-hidden" style={{ borderRadius: 24, minHeight: 200 }}>
             <img
@@ -742,9 +889,11 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             />
           </div>
 
-          <div
-            className="area-statA experience-card flex flex-col justify-center"
-            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "24px" }}
+          <FlipCard
+            className="area-statA"
+            frontClassName="flex flex-col justify-center"
+            frontStyle={{ background: "rgba(155,93,229,0.05)", padding: "24px" }}
+            backText="Cada semana con su propio contenido. Nunca vas a sentir que te falta información."
           >
             <p className="font-heading" style={{ fontSize: "clamp(36px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 8px", color: C.ink }}>
               40
@@ -752,11 +901,13 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             <p style={{ fontSize: 15, lineHeight: 1.5, color: C.paragraph, margin: 0 }}>
               Semanas de contenido curado, pensado para cada etapa de tu embarazo.
             </p>
-          </div>
+          </FlipCard>
 
-          <div
-            className="area-gradA experience-card"
-            style={{ background: gradientBrandPanel, borderRadius: 24, padding: "24px", color: "#fff" }}
+          <FlipCard
+            className="area-gradA"
+            frontStyle={{ background: gradientBrandPanel, padding: "24px", color: "#fff" }}
+            backStyle={{ background: C.ink }}
+            backText="Tu acompañante se entera de todo sin que tengas que repetirlo dos veces."
           >
             <p className="font-heading" style={{ fontSize: 19, fontWeight: 800, letterSpacing: "-0.01em", margin: "0 0 8px" }}>
               Modo acompañante
@@ -764,7 +915,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             <p style={{ fontSize: 14.5, lineHeight: 1.5, margin: 0, opacity: 0.92 }}>
               Invitá a tu pareja o a quien vos quieras para que lo viva con vos.
             </p>
-          </div>
+          </FlipCard>
 
           <a
             href="#adentro"
@@ -782,9 +933,11 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </span>
           </a>
 
-          <div
-            className="area-statB experience-card flex flex-col justify-center"
-            style={{ background: "rgba(155,93,229,0.05)", borderRadius: 24, padding: "24px" }}
+          <FlipCard
+            className="area-statB"
+            frontClassName="flex flex-col justify-center"
+            frontStyle={{ background: "rgba(155,93,229,0.05)", padding: "24px" }}
+            backText="Del seguimiento al bienestar emocional, todo conectado. Sin cambiar de app."
           >
             <p className="font-heading" style={{ fontSize: "clamp(36px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.02em", margin: "0 0 8px", color: C.ink }}>
               6
@@ -792,17 +945,19 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             <p style={{ fontSize: 15, lineHeight: 1.5, color: C.paragraph, margin: 0 }}>
               Áreas en un solo lugar: desde el seguimiento hasta tu bienestar emocional.
             </p>
-          </div>
+          </FlipCard>
 
-          <div
-            className="area-dark experience-card flex items-center"
-            style={{ background: C.ink, borderRadius: 24, padding: "26px 28px" }}
+          <FlipCard
+            className="area-dark"
+            frontClassName="flex items-center"
+            frontStyle={{ background: C.ink, padding: "26px 28px" }}
+            backText="Es tu diario. Podés volver a leerlo cuando quieras, para siempre."
           >
             <p className="text-pretty" style={{ fontSize: 18, lineHeight: 1.5, color: "#fff", margin: 0, fontWeight: 600 }}>
               Tu historial es tuyo. Podés exportarlo cuando quieras, y nadie más lo ve si vos no
               querés.
             </p>
-          </div>
+          </FlipCard>
         </div>
       </section>
 
@@ -820,6 +975,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           )}
         </div>
       </footer>
+
+      <ScrollToTopButton />
     </div>
   );
 }
