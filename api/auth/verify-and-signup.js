@@ -6,8 +6,21 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { nombre, email, password, code } = req.body || {};
-  if (!nombre?.trim() || !email?.trim() || !password || !code?.trim()) {
+  const { nombre, apellido, fecha_nacimiento, semana_embarazo, celular, email, password, code } =
+    req.body || {};
+  const semanaNum = Number(semana_embarazo);
+  if (
+    !nombre?.trim() ||
+    !apellido?.trim() ||
+    !fecha_nacimiento ||
+    !Number.isFinite(semanaNum) ||
+    semanaNum < 1 ||
+    semanaNum > 42 ||
+    !celular?.trim() ||
+    !email?.trim() ||
+    !password ||
+    !code?.trim()
+  ) {
     res.status(400).json({ error: "Completá todos los campos." });
     return;
   }
@@ -31,7 +44,13 @@ export default async function handler(req, res) {
     email: normalizedEmail,
     password,
     email_confirm: true,
-    user_metadata: { nombre: nombre.trim() },
+    user_metadata: {
+      nombre: nombre.trim(),
+      apellido: apellido.trim(),
+      fecha_nacimiento,
+      semana_embarazo: semanaNum,
+      celular: celular.trim(),
+    },
   });
 
   if (createError) {

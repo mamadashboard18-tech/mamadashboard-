@@ -19,8 +19,8 @@ const SEXO_OPTIONS = [
   { value: "no-se", label: "Todavía no sé" },
 ];
 
-export default function OnboardingForm({ nombre, onComplete }) {
-  const [semanaActual, setSemanaActual] = useState(24);
+export default function OnboardingForm({ nombre, initialSemana, onComplete }) {
+  const [semanaActual, setSemanaActual] = useState(initialSemana || 24);
   const [fpp, setFpp] = useState("");
   const [medico, setMedico] = useState("");
   const [hospital, setHospital] = useState("");

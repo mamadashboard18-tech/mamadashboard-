@@ -165,7 +165,13 @@ export default function App() {
   }
 
   if (mode === "onboarding") {
-    return <OnboardingForm nombre={user?.nombre} onComplete={handleOnboardingComplete} />;
+    return (
+      <OnboardingForm
+        nombre={user?.nombre}
+        initialSemana={user?.semanaEmbarazo}
+        onComplete={handleOnboardingComplete}
+      />
+    );
   }
 
   return (
