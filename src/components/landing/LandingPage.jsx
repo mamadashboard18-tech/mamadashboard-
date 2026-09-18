@@ -16,17 +16,18 @@ const C = {
   purple: "#9b5de5",
   purpleGrad: "#9b6ee0",
   peach: "#ff9a6a",
+  deepPlum: "#3a2159",
   border: "rgba(155,93,229,0.15)",
 };
 
 const gradientBrand = `linear-gradient(135deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
 const gradientBrandPanel = `linear-gradient(160deg,${C.rose} 0%,${C.pink} 55%,${C.purpleGrad} 100%)`;
 const gradientNumber = `linear-gradient(135deg,${C.rose},${C.purpleGrad})`;
-/* Distinct, warmer accent reserved for the "Crear cuenta" CTAs so they pop
-   against the pink/purple used everywhere else on the page, instead of
-   blending into the brand gradient. */
-const gradientCTA = `linear-gradient(135deg,#ffb073 0%,#ff7a45 100%)`;
-const ctaShadow = "0 10px 24px rgba(255,122,69,0.38)";
+/* Solid brand purple, reserved for the "Crear cuenta" CTAs — flat instead of
+   a gradient so they pop against the softer gradients used everywhere else,
+   while staying inside the pink/purple palette (no off-palette accent color). */
+const ctaSolid = C.purple;
+const ctaShadow = "0 10px 24px rgba(155,93,229,0.4)";
 
 function Icon({ path, size = 24, stroke = C.pink, strokeWidth = 1.5, style, className }) {
   return (
@@ -309,8 +310,8 @@ function ScrollToTopButton() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: C.ink,
-        boxShadow: "0 12px 26px rgba(36,29,43,0.3)",
+        background: gradientNumber,
+        boxShadow: "0 12px 26px rgba(155,93,229,0.4)",
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(12px)",
         pointerEvents: visible ? "auto" : "none",
@@ -454,7 +455,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
                   textDecoration: "none",
                   padding: "clamp(8px,2vw,11px) clamp(13px,3.5vw,20px)",
                   borderRadius: 999,
-                  background: gradientCTA,
+                  background: ctaSolid,
                   boxShadow: ctaShadow,
                 }}
               >
@@ -855,7 +856,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               textDecoration: "none",
               padding: "14px 26px",
               borderRadius: 999,
-              background: gradientCTA,
+              background: ctaSolid,
               boxShadow: ctaShadow,
             }}
           >
@@ -906,7 +907,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           <FlipCard
             className="area-gradA"
             frontStyle={{ background: gradientBrandPanel, padding: "24px", color: "#fff" }}
-            backStyle={{ background: C.ink }}
+            backStyle={{ background: C.deepPlum }}
             backText="Tu acompañante se entera de todo sin que tengas que repetirlo dos veces."
           >
             <p className="font-heading" style={{ fontSize: 19, fontWeight: 800, letterSpacing: "-0.01em", margin: "0 0 8px" }}>
@@ -950,7 +951,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           <FlipCard
             className="area-dark"
             frontClassName="flex items-center"
-            frontStyle={{ background: C.ink, padding: "26px 28px" }}
+            frontStyle={{ background: C.deepPlum, padding: "26px 28px" }}
             backText="Es tu diario. Podés volver a leerlo cuando quieras, para siempre."
           >
             <p className="text-pretty" style={{ fontSize: 18, lineHeight: 1.5, color: "#fff", margin: 0, fontWeight: 600 }}>
