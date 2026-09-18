@@ -362,6 +362,39 @@ function useInView(ref) {
   return inView;
 }
 
+/* Mounts its children only once the section is getting close to the
+   viewport (large rootMargin = mounted well before it's actually visible,
+   so scrolling in never shows a blank gap) instead of on first page load.
+   A section anchor-linked from elsewhere on the page (#adentro,
+   #acompanante, #crear) must stay eagerly mounted — deferring those would
+   make the target missing from the DOM until scrolled near, breaking the
+   jump. Everything else defers, so the first screen only pays for the hero. */
+function LazySection({ children, minHeight = 420, rootMargin = "700px" }) {
+  const ref = useRef(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (mounted || !ref.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setMounted(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [mounted, rootMargin]);
+
+  return (
+    <div ref={ref} className={mounted ? "lazy-section-in" : undefined} style={mounted ? undefined : { minHeight }}>
+      {mounted ? children : null}
+    </div>
+  );
+}
+
 /* Animates 0 → target once `active` flips true. Same real number every
    time — the count-up is just presentation, not a different value. */
 function useCountUp(active, target, duration = 1100) {
@@ -679,54 +712,59 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
 
       {/* INTRO MOSAIC — real photos for context; captions are brand phrases,
           not invented customer quotes (see FlipCard/MosaicPhoto comments) */}
-      <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(40px,6vw,64px) 24px 0" }}>
-        <div className="photo-mosaic">
-          <MosaicPhoto className="mosaic-big" src={fotoVentana} alt="Mujer embarazada mirando su teléfono junto a una ventana" phrase="Un lugar tranquilo para volver, cuando lo necesites." />
-          <MosaicPhoto className="mosaic-a" src={fotoPareja} alt="Pareja embarazada compartiendo el teléfono en casa" phrase="Para vivirlo acompañada, no solo de guardia." />
-          <MosaicPhoto className="mosaic-b" src={fotoPanza} alt="Mujer embarazada usando el teléfono de pie" phrase="Tu semana, siempre a mano." />
-          <MosaicPhoto className="mosaic-c" src={fotoSillon} alt="Mujer embarazada recostada revisando el teléfono" phrase="Para esas pausas que también cuentan." />
-          <MosaicPhoto className="mosaic-d" src={fotoSonrisa} alt="Mujer embarazada sonriendo con el teléfono en la mano" phrase="Cada check-in, una sonrisa menos sola." />
-        </div>
-      </section>
+      <LazySection minHeight={480}>
+        <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(40px,6vw,64px) 24px 0" }}>
+          <div className="photo-mosaic">
+            <MosaicPhoto className="mosaic-big" src={fotoVentana} alt="Mujer embarazada mirando su teléfono junto a una ventana" phrase="Un lugar tranquilo para volver, cuando lo necesites." />
+            <MosaicPhoto className="mosaic-a" src={fotoPareja} alt="Pareja embarazada compartiendo el teléfono en casa" phrase="Para vivirlo acompañada, no solo de guardia." />
+            <MosaicPhoto className="mosaic-b" src={fotoPanza} alt="Mujer embarazada usando el teléfono de pie" phrase="Tu semana, siempre a mano." />
+            <MosaicPhoto className="mosaic-c" src={fotoSillon} alt="Mujer embarazada recostada revisando el teléfono" phrase="Para esas pausas que también cuentan." />
+            <MosaicPhoto className="mosaic-d" src={fotoSonrisa} alt="Mujer embarazada sonriendo con el teléfono en la mano" phrase="Cada check-in, una sonrisa menos sola." />
+          </div>
+        </section>
+      </LazySection>
 
       {/* PULL QUOTE */}
-      <section className="relative overflow-hidden max-w-[900px] mx-auto" style={{ padding: "clamp(48px,7vw,84px) 24px" }}>
-        <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ top: -40, left: -60, width: 300, height: 300, background: C.rose, opacity: 0.14, filter: "blur(90px)" }} />
-        <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ bottom: -60, right: -40, width: 320, height: 320, background: C.purple, opacity: 0.14, filter: "blur(90px)" }} />
-        <span
-          aria-hidden="true"
-          className="font-heading block relative z-[1]"
-          style={{ fontSize: "clamp(48px,6vw,66px)", lineHeight: 1, color: C.pink, opacity: 0.28, marginBottom: -6 }}
-        >
-          “
-        </span>
-        <p
-          className="font-heading text-pretty relative z-[1]"
-          style={{
-            fontWeight: 700,
-            fontSize: "clamp(22px,2.8vw,34px)",
-            lineHeight: 1.34,
-            letterSpacing: "-0.02em",
-            margin: 0,
-            maxWidth: "20em",
-            background: gradientBrand,
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          Cada semana de tu embarazo es distinta. Merecés estar acompañada en todas, no solo en
-          las más lindas.
-        </p>
-      </section>
+      <LazySection minHeight={260}>
+        <section className="relative overflow-hidden max-w-[900px] mx-auto" style={{ padding: "clamp(48px,7vw,84px) 24px" }}>
+          <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ top: -40, left: -60, width: 300, height: 300, background: C.rose, opacity: 0.14, filter: "blur(90px)" }} />
+          <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ bottom: -60, right: -40, width: 320, height: 320, background: C.purple, opacity: 0.14, filter: "blur(90px)" }} />
+          <span
+            aria-hidden="true"
+            className="font-heading block relative z-[1]"
+            style={{ fontSize: "clamp(48px,6vw,66px)", lineHeight: 1, color: C.pink, opacity: 0.28, marginBottom: -6 }}
+          >
+            “
+          </span>
+          <p
+            className="font-heading text-pretty relative z-[1]"
+            style={{
+              fontWeight: 700,
+              fontSize: "clamp(22px,2.8vw,34px)",
+              lineHeight: 1.34,
+              letterSpacing: "-0.02em",
+              margin: 0,
+              maxWidth: "20em",
+              background: gradientBrand,
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            Cada semana de tu embarazo es distinta. Merecés estar acompañada en todas, no solo en
+            las más lindas.
+          </p>
+        </section>
+      </LazySection>
 
       {/* POR QUÉ MAMÁ APP */}
-      <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
-        <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 44px" }}>
-          Por qué Acuna App
-        </p>
-        <div className="flex flex-col">
-          {pilares.map((p, i) => (
+      <LazySection minHeight={500}>
+        <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
+          <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 44px" }}>
+            Por qué Acuna App
+          </p>
+          <div className="flex flex-col">
+            {pilares.map((p, i) => (
             <div
               key={p.number}
               className="grid [grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))]"
@@ -761,8 +799,9 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               </p>
             </div>
           ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      </LazySection>
 
       {/* ADENTRO DE LA APP */}
       <section id="adentro" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
@@ -808,42 +847,44 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* EN NÚMEROS — real product facts (weeks/trimesters/areas), never invented user stats.
           Same numbers as before, just drawn as a donut chart with a scroll-triggered
           reveal + count-up so the section pulls the eye without inventing any data. */}
-      <section ref={numbersRef} className="max-w-[1120px] mx-auto" style={{ padding: "clamp(56px,8vw,100px) 24px" }}>
-        <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
-          Tu embarazo, de punta a punta
-        </p>
-        <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 40px", maxWidth: "26em" }}>
-          Contenido pensado semana a semana, no un calendario genérico.
-        </h2>
+      <LazySection minHeight={520}>
+        <section ref={numbersRef} className="max-w-[1120px] mx-auto" style={{ padding: "clamp(56px,8vw,100px) 24px" }}>
+          <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
+            Tu embarazo, de punta a punta
+          </p>
+          <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 40px", maxWidth: "26em" }}>
+            Contenido pensado semana a semana, no un calendario genérico.
+          </h2>
 
-        <div className="grid items-center" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))", gap: "clamp(32px,5vw,64px)" }}>
-          <div className="flex flex-col items-center">
-            <div role="img" aria-label="Gráfico circular: 40 semanas de embarazo divididas en 3 trimestres">
-              <TrimesterRing active={numbersInView} />
+          <div className="grid items-center" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))", gap: "clamp(32px,5vw,64px)" }}>
+            <div className="flex flex-col items-center">
+              <div role="img" aria-label="Gráfico circular: 40 semanas de embarazo divididas en 3 trimestres">
+                <TrimesterRing active={numbersInView} />
+              </div>
+              <div className="flex flex-wrap justify-center" style={{ gap: "6px 18px", marginTop: 22 }} aria-hidden="true">
+                {TRIMESTER_SEGMENTS.map((s) => (
+                  <div key={s.label} className="flex items-center gap-2">
+                    <span className="shrink-0 rounded-full" style={{ width: 10, height: 10, background: s.color }} />
+                    <span style={{ fontSize: 13, color: C.paragraph }}>
+                      <strong style={{ color: C.ink, fontWeight: 700 }}>{s.label}</strong> · {s.range}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-wrap justify-center" style={{ gap: "6px 18px", marginTop: 22 }} aria-hidden="true">
-              {TRIMESTER_SEGMENTS.map((s) => (
-                <div key={s.label} className="flex items-center gap-2">
-                  <span className="shrink-0 rounded-full" style={{ width: 10, height: 10, background: s.color }} />
-                  <span style={{ fontSize: 13, color: C.paragraph }}>
-                    <strong style={{ color: C.ink, fontWeight: 700 }}>{s.label}</strong> · {s.range}
-                  </span>
-                </div>
+
+            <div className="flex flex-col gap-3.5">
+              {[
+                { n: 3, label: "Trimestres, cada uno con su guía", iconPath: "M4 20h16 M8 20V10 M12 20V4 M16 20V13" },
+                { n: 6, label: "Áreas en un solo lugar", iconPath: "M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z" },
+                { n: 1, label: "Una sola app para todo el embarazo", iconPath: "M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5" },
+              ].map((f) => (
+                <FactRow key={f.label} fact={f} active={numbersInView} />
               ))}
             </div>
           </div>
-
-          <div className="flex flex-col gap-3.5">
-            {[
-              { n: 3, label: "Trimestres, cada uno con su guía", iconPath: "M4 20h16 M8 20V10 M12 20V4 M16 20V13" },
-              { n: 6, label: "Áreas en un solo lugar", iconPath: "M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z" },
-              { n: 1, label: "Una sola app para todo el embarazo", iconPath: "M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5" },
-            ].map((f) => (
-              <FactRow key={f.label} fact={f} active={numbersInView} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </LazySection>
 
       {/* MODO ACOMPAÑANTE */}
       <section id="acompanante" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
@@ -941,13 +982,15 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       </section>
 
       {/* NOTA */}
-      <section className="max-w-[880px] mx-auto" style={{ padding: "clamp(56px,7vw,84px) 24px 0" }}>
-        <p className="text-pretty" style={{ fontSize: 15.5, lineHeight: 1.75, color: C.muted, margin: 0 }}>
-          Acuna App te ayuda a organizarte y a cuidar tu bienestar emocional durante el embarazo
-          y el postparto. No reemplaza la consulta con tu médico, no da diagnósticos ni indica
-          tratamientos. Para eso siempre vas a tener a tu equipo de salud de confianza.
-        </p>
-      </section>
+      <LazySection minHeight={140}>
+        <section className="max-w-[880px] mx-auto" style={{ padding: "clamp(56px,7vw,84px) 24px 0" }}>
+          <p className="text-pretty" style={{ fontSize: 15.5, lineHeight: 1.75, color: C.muted, margin: 0 }}>
+            Acuna App te ayuda a organizarte y a cuidar tu bienestar emocional durante el embarazo
+            y el postparto. No reemplaza la consulta con tu médico, no da diagnósticos ni indica
+            tratamientos. Para eso siempre vas a tener a tu equipo de salud de confianza.
+          </p>
+        </section>
+      </LazySection>
 
       {/* CTA FINAL */}
       <section id="crear" className="max-w-[1120px] mx-auto" style={{ padding: "clamp(48px,7vw,90px) 24px clamp(64px,9vw,110px)" }}>
@@ -991,7 +1034,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       </section>
 
       {/* ASÍ SE SIENTE — beneficios reales, no testimonios inventados */}
-      <section className="max-w-[1120px] mx-auto" style={{ padding: "0 24px clamp(64px,9vw,110px)" }}>
+      <LazySection minHeight={760}>
+        <section className="max-w-[1120px] mx-auto" style={{ padding: "0 24px clamp(64px,9vw,110px)" }}>
         <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
           <div>
             <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
@@ -1115,10 +1159,12 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </p>
           </FlipCard>
         </div>
-      </section>
+        </section>
+      </LazySection>
 
       {/* QUIÉN SOY */}
-      <section className="relative overflow-hidden bg-white" style={{ borderTop: `1px solid ${C.border}` }}>
+      <LazySection minHeight={480}>
+        <section className="relative overflow-hidden bg-white" style={{ borderTop: `1px solid ${C.border}` }}>
         <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ top: -80, left: -80, width: 320, height: 320, background: C.rose, opacity: 0.1, filter: "blur(100px)" }} />
         <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ bottom: -100, right: -60, width: 300, height: 300, background: C.purple, opacity: 0.1, filter: "blur(100px)" }} />
 
@@ -1175,7 +1221,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </p>
           </div>
         </div>
-      </section>
+        </section>
+      </LazySection>
 
       <footer style={{ borderTop: `1px solid ${C.border}` }}>
         <div className="max-w-[1120px] mx-auto flex flex-wrap items-center justify-between gap-2.5" style={{ padding: "28px 24px 40px" }}>

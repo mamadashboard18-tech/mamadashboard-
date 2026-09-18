@@ -293,6 +293,15 @@ button:focus-visible {
   box-shadow: 0 16px 30px rgba(155, 93, 229, 0.14);
 }
 
+/* Section mounted by LazySection — fades/slides in instead of popping in */
+@keyframes lazySectionIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.lazy-section-in {
+  animation: lazySectionIn 0.5s var(--ease-out);
+}
+
 /* Intro photo mosaic — real photos for context, right under the hero */
 .photo-mosaic {
   display: grid;
