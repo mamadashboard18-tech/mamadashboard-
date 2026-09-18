@@ -457,9 +457,17 @@ function TrimesterRing({ active }) {
         <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(155,93,229,0.12)" strokeWidth={strokeWidth} />
         <g transform={`rotate(-90 ${center} ${center})`}>
           {TRIMESTER_SEGMENTS.map((s, i) => {
-            const len = (s.weeks / 40) * circumference;
+            // A visual gap between segments, filled by their rounded caps,
+            // instead of butting them edge-to-edge — touching segments are
+            // prone to a hairline overlap/seam artifact from floating-point
+            // rounding in the cumulative offset. Each round cap extends
+            // strokeWidth/2 past its own endpoint, so the gap has to clear
+            // both caps (strokeWidth) plus some breathing room, or the caps
+            // themselves would overlap into the next segment.
+            const gap = strokeWidth + 6;
+            const len = (s.weeks / 40) * (circumference - gap * TRIMESTER_SEGMENTS.length);
             const dashoffset = -cumulative;
-            cumulative += len;
+            cumulative += len + gap;
             return (
               <circle
                 key={i}
@@ -469,6 +477,7 @@ function TrimesterRing({ active }) {
                 fill="none"
                 stroke={s.color}
                 strokeWidth={strokeWidth}
+                strokeLinecap="round"
                 strokeDasharray={`${len} ${circumference - len}`}
                 strokeDashoffset={dashoffset}
               />
