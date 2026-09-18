@@ -271,6 +271,7 @@ button:focus-visible {
   }
   .inside-app-grid .cell-phone {
     order: -1;
+    align-self: center;
   }
 }
 

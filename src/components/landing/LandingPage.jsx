@@ -256,46 +256,75 @@ const SHOWCASE_ROLE_STYLE = {
   center: { width: 216, height: 452, screenHeight: 434, rotate: 0, z: 3, dim: false, pos: { left: "50%", top: 0, marginLeft: -108 } },
 };
 
+const SHOWCASE_DESIGN_WIDTH = 520;
+const SHOWCASE_DESIGN_HEIGHT = 560;
+
+/* The phone trio + badges are laid out in fixed design-size pixels (they need
+   to overlap and rotate precisely). On narrow screens we scale the whole
+   design down to fit instead of letting it overflow/clip — measured against
+   the actual rendered width so it works at any viewport, not just fixed
+   breakpoints. */
 function AppShowcase() {
   const [centerId, setCenterId] = useState("inicio");
   const roles = SHOWCASE_ROLES_BY_CENTER[centerId];
+  const outerRef = useRef(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const el = outerRef.current;
+    if (!el) return;
+    const update = () => setScale(Math.min(1, el.offsetWidth / SHOWCASE_DESIGN_WIDTH));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="relative mx-auto" style={{ width: "100%", maxWidth: 520, height: 560 }}>
-      {Object.keys(SHOWCASE_PANELS).map((id) => {
-        const role = id === roles.left ? "left" : id === roles.right ? "right" : "center";
-        return (
-          <PhoneFrame
-            key={id}
-            src={SHOWCASE_PANELS[id].src}
-            title={SHOWCASE_PANELS[id].title}
-            onClick={role === "center" ? undefined : () => setCenterId(id)}
-            {...SHOWCASE_ROLE_STYLE[role]}
-          />
-        );
-      })}
+    <div
+      ref={outerRef}
+      className="relative mx-auto"
+      style={{ width: "100%", maxWidth: SHOWCASE_DESIGN_WIDTH, height: SHOWCASE_DESIGN_HEIGHT * scale }}
+    >
+      <div
+        className="absolute top-0 left-0"
+        style={{ width: SHOWCASE_DESIGN_WIDTH, height: SHOWCASE_DESIGN_HEIGHT, transform: `scale(${scale})`, transformOrigin: "top left" }}
+      >
+        {Object.keys(SHOWCASE_PANELS).map((id) => {
+          const role = id === roles.left ? "left" : id === roles.right ? "right" : "center";
+          return (
+            <PhoneFrame
+              key={id}
+              src={SHOWCASE_PANELS[id].src}
+              title={SHOWCASE_PANELS[id].title}
+              onClick={role === "center" ? undefined : () => setCenterId(id)}
+              {...SHOWCASE_ROLE_STYLE[role]}
+            />
+          );
+        })}
 
-      <FloatingBadge
-        iconPath="M4 9 H20 M8 3 V7 M16 3 V7 M4 5 H20 V20 H4 Z"
-        text="Seguimiento semana a semana"
-        pos={{ left: -20, top: 34 }}
-      />
-      <FloatingBadge
-        iconPath="M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z"
-        text="Sin filtro y sin juicio"
-        pos={{ right: -20, top: 34 }}
-      />
-      <FloatingBadge iconPath="M4 5h16v11H8l-4 4V5Z" text="Contenido para tu semana" pos={{ left: -30, top: 262 }} />
-      <FloatingBadge
-        iconPath="M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5"
-        text="Invitá a tu acompañante"
-        pos={{ right: -30, top: 282 }}
-      />
-      <FloatingBadge
-        iconPath="M12 3 L13.2 8.8 L19 10 L13.2 11.2 L12 17 L10.8 11.2 L5 10 L10.8 8.8 Z"
-        text="Check-in emocional diario"
-        pos={{ left: "50%", bottom: -6, marginLeft: -120 }}
-      />
+        <FloatingBadge
+          iconPath="M4 9 H20 M8 3 V7 M16 3 V7 M4 5 H20 V20 H4 Z"
+          text="Seguimiento semana a semana"
+          pos={{ left: -20, top: 34 }}
+        />
+        <FloatingBadge
+          iconPath="M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z"
+          text="Sin filtro y sin juicio"
+          pos={{ right: -20, top: 34 }}
+        />
+        <FloatingBadge iconPath="M4 5h16v11H8l-4 4V5Z" text="Contenido para tu semana" pos={{ left: -30, top: 262 }} />
+        <FloatingBadge
+          iconPath="M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5"
+          text="Invitá a tu acompañante"
+          pos={{ right: -30, top: 282 }}
+        />
+        <FloatingBadge
+          iconPath="M12 3 L13.2 8.8 L19 10 L13.2 11.2 L12 17 L10.8 11.2 L5 10 L10.8 8.8 Z"
+          text="Check-in emocional diario"
+          pos={{ left: "50%", bottom: -6, marginLeft: -120 }}
+        />
+      </div>
     </div>
   );
 }
@@ -314,27 +343,30 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         </div>
 
         <header className="relative z-[1]">
-          <div className="max-w-[1120px] mx-auto px-6 py-3.5 flex items-center justify-between gap-4">
-            <span className="font-heading cursor-default" style={{ fontSize: 20, fontWeight: 800, color: C.ink, letterSpacing: "-0.01em" }}>
+          <div className="max-w-[1120px] mx-auto px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-2 sm:gap-4">
+            <span
+              className="font-heading cursor-default whitespace-nowrap shrink-0"
+              style={{ fontSize: "clamp(16px,4.5vw,20px)", fontWeight: 800, color: C.ink, letterSpacing: "-0.01em" }}
+            >
               Acuna App
             </span>
-            <div className="flex items-center gap-3.5">
+            <div className="flex items-center gap-2 sm:gap-3.5 min-w-0">
               <button
                 onClick={() => onGoToAuth("login")}
-                className="cursor-pointer transition-colors hover:text-[#e26fce]"
-                style={{ fontSize: 15, fontWeight: 600, color: C.muted }}
+                className="cursor-pointer transition-colors hover:text-[#e26fce] whitespace-nowrap"
+                style={{ fontSize: "clamp(12px,3vw,15px)", fontWeight: 600, color: C.muted }}
               >
                 Ya tengo cuenta
               </button>
               <a
                 href="#crear"
-                className="btn-lift cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap"
+                className="btn-lift cursor-pointer transition-[filter] hover:brightness-105 whitespace-nowrap shrink-0"
                 style={{
-                  fontSize: 15,
+                  fontSize: "clamp(12.5px,3vw,15px)",
                   fontWeight: 700,
                   color: "#fff",
                   textDecoration: "none",
-                  padding: "11px 20px",
+                  padding: "clamp(8px,2vw,11px) clamp(13px,3.5vw,20px)",
                   borderRadius: 999,
                   background: gradientBrand,
                   boxShadow: "0 8px 20px rgba(226,111,206,0.3)",
@@ -348,7 +380,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
 
         {/* HERO */}
         <section
-          className="relative z-[1] max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]"
+          className="relative z-[1] max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))]"
           style={{ padding: "clamp(40px,7vw,90px) 24px clamp(48px,7vw,86px)", gap: "clamp(36px,5vw,64px)" }}
         >
           <div>
@@ -436,7 +468,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           {pilares.map((p, i) => (
             <div
               key={p.number}
-              className="grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]"
+              className="grid [grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))]"
               style={{
                 gap: "clamp(12px,3vw,48px)",
                 paddingTop: i === 0 ? 0 : 34,
@@ -625,7 +657,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           <div aria-hidden="true" className="absolute rounded-full" style={{ top: -90, right: -70, width: 320, height: 320, background: "radial-gradient(circle,rgba(255,255,255,0.32) 0%,rgba(255,255,255,0) 70%)", filter: "blur(30px)" }} />
           <div aria-hidden="true" className="absolute rounded-full" style={{ bottom: -110, left: -60, width: 300, height: 300, background: "radial-gradient(circle,rgba(255,154,106,0.4) 0%,rgba(255,154,106,0) 70%)", filter: "blur(40px)" }} />
           <div
-            className="relative z-[1] grid items-center [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]"
+            className="relative z-[1] grid items-center [grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))]"
             style={{ gap: "clamp(26px,4vw,48px)" }}
           >
             <div>
