@@ -340,6 +340,125 @@ function ScrollToTopButton() {
   );
 }
 
+/* Fires once, the first time the ref'd element enters the viewport — drives
+   the "En números" section's reveal + count-up animation. */
+function useInView(ref) {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current || inView) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref, inView]);
+  return inView;
+}
+
+/* Animates 0 → target once `active` flips true. Same real number every
+   time — the count-up is just presentation, not a different value. */
+function useCountUp(active, target, duration = 1100) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let raf;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, target, duration]);
+  return value;
+}
+
+const TRIMESTER_SEGMENTS = [
+  { weeks: 13, color: C.rose, label: "1er trimestre", range: "Semanas 1 a 13" },
+  { weeks: 14, color: C.pink, label: "2do trimestre", range: "Semanas 14 a 27" },
+  { weeks: 13, color: C.purpleGrad, label: "3er trimestre", range: "Semanas 28 a 40" },
+];
+
+/* Donut chart of the 40 weeks split across 3 trimesters — real proportions
+   (13/14/13 weeks), just drawn as a ring instead of a flat stat tile. */
+function TrimesterRing({ active }) {
+  const size = 180;
+  const radius = 74;
+  const strokeWidth = 16;
+  const center = size / 2;
+  const circumference = 2 * Math.PI * radius;
+  const weeksValue = useCountUp(active, 40);
+  let cumulative = 0;
+
+  return (
+    <div
+      className="relative mx-auto shrink-0"
+      style={{
+        width: size,
+        height: size,
+        transform: active ? "scale(1)" : "scale(0.85)",
+        opacity: active ? 1 : 0,
+        transition: "transform 0.7s var(--ease-out), opacity 0.6s ease",
+      }}
+    >
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(155,93,229,0.12)" strokeWidth={strokeWidth} />
+        <g transform={`rotate(-90 ${center} ${center})`}>
+          {TRIMESTER_SEGMENTS.map((s, i) => {
+            const len = (s.weeks / 40) * circumference;
+            const dashoffset = -cumulative;
+            cumulative += len;
+            return (
+              <circle
+                key={i}
+                cx={center}
+                cy={center}
+                r={radius}
+                fill="none"
+                stroke={s.color}
+                strokeWidth={strokeWidth}
+                strokeDasharray={`${len} ${circumference - len}`}
+                strokeDashoffset={dashoffset}
+              />
+            );
+          })}
+        </g>
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-heading" style={{ fontSize: 40, fontWeight: 800, color: C.ink, lineHeight: 1 }}>
+          {weeksValue}
+        </span>
+        <span style={{ fontSize: 12.5, fontWeight: 700, color: C.faint, marginTop: 2 }}>semanas</span>
+      </div>
+    </div>
+  );
+}
+
+function FactRow({ fact, active }) {
+  const value = useCountUp(active, fact.n);
+  return (
+    <div className="flex items-center gap-3.5" style={{ background: "rgba(155,93,229,0.05)", borderRadius: 20, padding: "18px 20px" }}>
+      <span className="flex items-center justify-center shrink-0" style={{ width: 42, height: 42, borderRadius: 13, background: gradientNumber }}>
+        <Icon path={fact.iconPath} size={20} stroke="#fff" strokeWidth={1.8} />
+      </span>
+      <div>
+        <p className="font-heading" style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", margin: 0, color: C.ink, lineHeight: 1.1 }}>
+          {value}
+        </p>
+        <p style={{ fontSize: 13.5, lineHeight: 1.4, color: C.paragraph, margin: 0 }}>{fact.label}</p>
+      </div>
+    </div>
+  );
+}
+
 /* One photo in the intro mosaic — a short brand phrase over a gradient
    scrim, never quotation marks or a name, so it never reads as an invented
    customer testimonial. */
@@ -456,6 +575,9 @@ function AppShowcase() {
 }
 
 export default function LandingPage({ onGoToAuth, onDevPreview }) {
+  const numbersRef = useRef(null);
+  const numbersInView = useInView(numbersRef);
+
   return (
     <div style={{ background: C.bg, fontFamily: "Inter, system-ui, sans-serif", color: C.ink, overflowX: "hidden" }}>
       <style>{`html{scroll-behavior:smooth}`}</style>
@@ -682,62 +804,43 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
         </div>
       </section>
 
-      {/* EN NÚMEROS — real product facts (weeks/trimesters/areas), never invented user stats */}
-      <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(56px,8vw,100px) 24px" }}>
+      {/* EN NÚMEROS — real product facts (weeks/trimesters/areas), never invented user stats.
+          Same numbers as before, just drawn as a donut chart with a scroll-triggered
+          reveal + count-up so the section pulls the eye without inventing any data. */}
+      <section ref={numbersRef} className="max-w-[1120px] mx-auto" style={{ padding: "clamp(56px,8vw,100px) 24px" }}>
         <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
           Tu embarazo, de punta a punta
         </p>
-        <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 36px", maxWidth: "26em" }}>
+        <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 40px", maxWidth: "26em" }}>
           Contenido pensado semana a semana, no un calendario genérico.
         </h2>
 
-        <div style={{ marginBottom: 40 }}>
-          <div className="flex" style={{ borderRadius: 999, overflow: "hidden", height: 12, gap: 3 }} role="img" aria-label="Línea de tiempo del embarazo dividida en 3 trimestres, semanas 1 a 40">
-            <div style={{ flex: 13, background: `linear-gradient(90deg,${C.rose},${C.pink})` }} />
-            <div style={{ flex: 14, background: `linear-gradient(90deg,${C.pink},${C.purpleGrad})` }} />
-            <div style={{ flex: 13, background: `linear-gradient(90deg,${C.purpleGrad},${C.purple})` }} />
-          </div>
-          <div className="flex justify-between" style={{ marginTop: 10 }} aria-hidden="true">
-            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 1</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 13</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 27</span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: C.faint }}>Semana 40</span>
-          </div>
-          <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(200px,100%),1fr))", gap: 16, marginTop: 20 }}>
-            <div>
-              <p className="font-heading" style={{ fontWeight: 800, fontSize: 15, margin: "0 0 2px", color: C.ink }}>1er trimestre</p>
-              <p style={{ fontSize: 13.5, color: C.paragraph, margin: 0 }}>Semanas 1 a 13</p>
+        <div className="grid items-center" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))", gap: "clamp(32px,5vw,64px)" }}>
+          <div className="flex flex-col items-center">
+            <div role="img" aria-label="Gráfico circular: 40 semanas de embarazo divididas en 3 trimestres">
+              <TrimesterRing active={numbersInView} />
             </div>
-            <div>
-              <p className="font-heading" style={{ fontWeight: 800, fontSize: 15, margin: "0 0 2px", color: C.ink }}>2do trimestre</p>
-              <p style={{ fontSize: 13.5, color: C.paragraph, margin: 0 }}>Semanas 14 a 27</p>
-            </div>
-            <div>
-              <p className="font-heading" style={{ fontWeight: 800, fontSize: 15, margin: "0 0 2px", color: C.ink }}>3er trimestre</p>
-              <p style={{ fontSize: 13.5, color: C.paragraph, margin: 0 }}>Semanas 28 a 40</p>
+            <div className="flex flex-wrap justify-center" style={{ gap: "6px 18px", marginTop: 22 }} aria-hidden="true">
+              {TRIMESTER_SEGMENTS.map((s) => (
+                <div key={s.label} className="flex items-center gap-2">
+                  <span className="shrink-0 rounded-full" style={{ width: 10, height: 10, background: s.color }} />
+                  <span style={{ fontSize: 13, color: C.paragraph }}>
+                    <strong style={{ color: C.ink, fontWeight: 700 }}>{s.label}</strong> · {s.range}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
 
-        <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(240px,100%),1fr))", gap: 16 }}>
-          {[
-            { n: "40", label: "Semanas, cada una con su propio contenido", iconPath: "M4 9 H20 M8 3 V7 M16 3 V7 M4 5 H20 V20 H4 Z" },
-            { n: "3", label: "Trimestres, cada uno con su guía", iconPath: "M4 20h16 M8 20V10 M12 20V4 M16 20V13" },
-            { n: "6", label: "Áreas en un solo lugar", iconPath: "M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z" },
-            { n: "1", label: "Una sola app para todo el embarazo", iconPath: "M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5" },
-          ].map((f) => (
-            <div key={f.n} className="flex items-center gap-3.5" style={{ background: "rgba(155,93,229,0.05)", borderRadius: 20, padding: "18px 20px" }}>
-              <span className="flex items-center justify-center shrink-0" style={{ width: 42, height: 42, borderRadius: 13, background: gradientNumber }}>
-                <Icon path={f.iconPath} size={20} stroke="#fff" strokeWidth={1.8} />
-              </span>
-              <div>
-                <p className="font-heading" style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", margin: 0, color: C.ink, lineHeight: 1.1 }}>
-                  {f.n}
-                </p>
-                <p style={{ fontSize: 13.5, lineHeight: 1.4, color: C.paragraph, margin: 0 }}>{f.label}</p>
-              </div>
-            </div>
-          ))}
+          <div className="flex flex-col gap-3.5">
+            {[
+              { n: 3, label: "Trimestres, cada uno con su guía", iconPath: "M4 20h16 M8 20V10 M12 20V4 M16 20V13" },
+              { n: 6, label: "Áreas en un solo lugar", iconPath: "M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z" },
+              { n: 1, label: "Una sola app para todo el embarazo", iconPath: "M8 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z M17 13a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5 M15 20c0-2.4-1.6-4.4-3.8-5.1c.6-.3 1.2-.4 1.8-.4c2.8 0 5 2.2 5 5" },
+            ].map((f) => (
+              <FactRow key={f.label} fact={f} active={numbersInView} />
+            ))}
+          </div>
         </div>
       </section>
 
