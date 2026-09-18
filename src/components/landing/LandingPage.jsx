@@ -824,8 +824,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               style={{ background: "var(--brand-purple-light)", borderRadius: 28, paddingTop: 16, width: 270, height: 390, overflow: "hidden" }}
             >
               <PhoneFrame
-                src="/?app_preview=inicio"
-                title="Vista previa: Inicio"
+                src="/?app_preview=citas"
+                title="Vista previa: Citas"
                 width={240}
                 height={600}
                 screenHeight={582}
