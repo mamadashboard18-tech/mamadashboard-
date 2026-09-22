@@ -11,13 +11,14 @@ function mapUser(user) {
     semanaEmbarazo: meta.semana_embarazo ?? null,
     celular: meta.celular || "",
     email: user.email,
+    proveedor: user.app_metadata?.provider || "email",
   };
 }
 
-async function postJson(url, body) {
+async function postJson(url, body, extraHeaders = {}) {
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...extraHeaders },
     body: JSON.stringify(body),
   });
   const data = await res.json().catch(() => ({}));
@@ -135,4 +136,71 @@ export function onAuthChange(callback) {
 
 export async function logout() {
   await supabase.auth.signOut();
+}
+
+export async function getCuenta() {
+  const { data } = await supabase.auth.getUser();
+  return mapUser(data.user);
+}
+
+export async function updateCuenta({ nombre, apellido, fechaNacimiento, celular }) {
+  if (!nombre?.trim() || !apellido?.trim()) {
+    return { ok: false, error: "Nombre y apellido son obligatorios." };
+  }
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      nombre: nombre.trim(),
+      apellido: apellido.trim(),
+      fecha_nacimiento: fechaNacimiento || "",
+      celular: celular?.trim() || "",
+    },
+  });
+  if (error) {
+    return { ok: false, error: "No se pudieron guardar los cambios. Intentá de nuevo." };
+  }
+  return { ok: true, user: mapUser(data.user) };
+}
+
+export async function changePassword({ email, actual, nueva }) {
+  if (!actual || !nueva) {
+    return { ok: false, error: "Completá la contraseña actual y la nueva." };
+  }
+  // Supabase no pide la contraseña actual para cambiarla; la verificamos
+  // re-autenticando para que alguien con la sesión abierta no pueda cambiarla.
+  const { error: authError } = await supabase.auth.signInWithPassword({ email, password: actual });
+  if (authError) {
+    return { ok: false, error: "La contraseña actual no es correcta." };
+  }
+  const { error } = await supabase.auth.updateUser({ password: nueva });
+  if (error) {
+    const same = /different|same/i.test(error.message);
+    return {
+      ok: false,
+      error: same ? "La nueva contraseña tiene que ser distinta a la actual." : "No se pudo cambiar la contraseña.",
+    };
+  }
+  return { ok: true };
+}
+
+export async function requestEmailChange({ email }) {
+  if (!email?.trim()) {
+    return { ok: false, error: "Ingresá el nuevo email." };
+  }
+  return postJson("/api/auth/send-verification-code", { email: email.trim() });
+}
+
+export async function confirmEmailChange({ email, code }) {
+  if (!code?.trim()) {
+    return { ok: false, error: "Ingresá el código." };
+  }
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  const result = await postJson(
+    "/api/auth/verify-and-signup",
+    { mode: "change-email", email: email.trim(), code: code.trim() },
+    token ? { Authorization: `Bearer ${token}` } : {}
+  );
+  if (!result.ok) return result;
+  const { data: refreshed } = await supabase.auth.refreshSession();
+  return { ok: true, user: mapUser(refreshed.session?.user) };
 }

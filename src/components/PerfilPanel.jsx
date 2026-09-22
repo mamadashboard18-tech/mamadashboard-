@@ -13,6 +13,7 @@ import Tramites from "./Tramites";
 import PreferenciasContenido from "./PreferenciasContenido";
 import PartnerManagement from "./partner/PartnerManagement";
 import PrivacidadPanel from "./PrivacidadPanel";
+import CuentaPanel from "./CuentaPanel";
 import { emptyPerfil, loadPerfil, savePerfil } from "../data/perfil";
 import { totalWeeks } from "../data/seguimientoSemanal";
 import { emptyBebe, loadBebe, saveBebe } from "../data/bebe";
@@ -33,6 +34,7 @@ import {
   Users,
   Headphones,
   Lock,
+  UserRound,
 } from "lucide-react";
 
 const inputClass =
@@ -83,6 +85,12 @@ const hojas = {
     desc: "Por país, embarazo y postparto",
     Component: Tramites,
   },
+  cuenta: {
+    icon: <UserRound className="w-5 h-5" />,
+    title: "Mi cuenta",
+    desc: "Nombre, apellido, email y contraseña",
+    Component: CuentaPanel,
+  },
   "preferencias-contenido": {
     icon: <Headphones className="w-5 h-5" />,
     title: "Preferencias de contenido",
@@ -128,7 +136,7 @@ const grupos = {
 
 const gruposOrden = ["checklists", "contactos", "partner", "tramites"];
 
-const ajustesItems = ["preferencias-contenido", "privacidad"];
+const ajustesItems = ["cuenta", "preferencias-contenido", "privacidad"];
 
 const CANTIDAD_OPTIONS = [
   { value: 1, label: "1 bebé" },
@@ -183,7 +191,7 @@ export default function PerfilPanel({ onLogout }) {
     return (
       <HubList
         title="Ajustes"
-        subtitle="Tu contenido, tu privacidad y tu cuenta"
+        subtitle="Tu cuenta, tu contenido y tu privacidad"
         items={ajustesItems}
         onBack={backToPerfil}
         onOpen={setView}
