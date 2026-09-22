@@ -32,7 +32,7 @@ import {
   Home,
   FolderOpen,
   Users,
-  Headphones,
+  Bell,
   Lock,
   UserRound,
 } from "lucide-react";
@@ -92,9 +92,9 @@ const hojas = {
     Component: CuentaPanel,
   },
   "preferencias-contenido": {
-    icon: <Headphones className="w-5 h-5" />,
-    title: "Preferencias de contenido",
-    desc: "Tipos favoritos, idioma, notificaciones",
+    icon: <Bell className="w-5 h-5" />,
+    title: "Notificaciones",
+    desc: "Recordatorios de citas y otros avisos",
     Component: PreferenciasContenido,
   },
   privacidad: {
@@ -191,7 +191,7 @@ export default function PerfilPanel({ onLogout }) {
     return (
       <HubList
         title="Ajustes"
-        subtitle="Tu cuenta, tu contenido y tu privacidad"
+        subtitle="Tu cuenta, tus notificaciones y tu privacidad"
         items={ajustesItems}
         onBack={backToPerfil}
         onOpen={setView}

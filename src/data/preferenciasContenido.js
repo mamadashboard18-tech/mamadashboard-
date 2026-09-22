@@ -1,17 +1,17 @@
 const STORAGE_KEY = "mama-dashboard:preferencias-contenido";
 
 export const emptyPreferencias = {
-  tipos: { podcast: true, meditacion: true, nutricion: false, ejercicio: true },
-  idioma: "es",
-  frecuencia: "diaria",
+  notificaciones: { citas: true, resto: true },
 };
 
 export function loadPreferencias() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    return saved ? { ...emptyPreferencias, ...saved } : { ...emptyPreferencias };
+    return saved?.notificaciones
+      ? { notificaciones: { ...emptyPreferencias.notificaciones, ...saved.notificaciones } }
+      : { notificaciones: { ...emptyPreferencias.notificaciones } };
   } catch {
-    return { ...emptyPreferencias };
+    return { notificaciones: { ...emptyPreferencias.notificaciones } };
   }
 }
 
