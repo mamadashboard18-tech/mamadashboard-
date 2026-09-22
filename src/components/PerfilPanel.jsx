@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Header from "./Header";
 import FeatureCard from "./FeatureCard";
 import HistorialEmbarazo from "./HistorialEmbarazo";
-import ContactosMedicos from "./ContactosMedicos";
-import ContactosEmergencia from "./ContactosEmergencia";
+import Contactos from "./Contactos";
+import BackButton from "./BackButton";
 import PlanParto from "./PlanParto";
 import ChecklistHospital from "./ChecklistHospital";
 import ListaCompras from "./ListaCompras";
@@ -23,7 +23,9 @@ import {
   NotebookPen,
   Backpack,
   Phone,
-  ShieldAlert,
+  ListChecks,
+  Settings,
+  LogOut,
   ShoppingBag,
   Heart,
   Home,
@@ -38,80 +40,95 @@ const inputClass =
 
 const primaryButtonStyle = { background: "var(--gradient-hero)" };
 
-const seccionesTarjetas = [
-  {
+const hojas = {
+  historial: {
     icon: <BookOpen className="w-5 h-5" />,
     title: "Historial de mi embarazo",
     desc: "Todo lo que fuiste registrando, con exportación a PDF",
-    view: "historial",
+    Component: HistorialEmbarazo,
   },
-  {
+  "plan-parto": {
     icon: <NotebookPen className="w-5 h-5" />,
     title: "Plan de parto interactivo",
     desc: "Generador personalizable, exportable en PDF para el equipo médico",
-    view: "plan-parto",
+    Component: PlanParto,
   },
-  {
+  "checklist-hospital": {
     icon: <Backpack className="w-5 h-5" />,
     title: "Checklist del hospital",
     desc: "Bolsa, documentos, personas de contacto",
-    view: "checklist-hospital",
+    Component: ChecklistHospital,
   },
-  {
-    icon: <Phone className="w-5 h-5" />,
-    title: "Contactos del equipo médico",
-    desc: "Todos los teléfonos importantes, a mano para una emergencia",
-    view: "contactos-medicos",
-  },
-  {
-    icon: <ShieldAlert className="w-5 h-5" />,
-    title: "Contactos de emergencia",
-    desc: "Familia y allegados, a un toque",
-    view: "contactos-emergencia",
-  },
-  {
+  "lista-compras": {
     icon: <ShoppingBag className="w-5 h-5" />,
     title: "Lista de compras",
     desc: "Por categoría, con sugerencias",
-    view: "lista-compras",
+    Component: ListaCompras,
   },
-  {
+  "lista-nombres": {
     icon: <Heart className="w-5 h-5" />,
     title: "Lista de nombres",
     desc: "Tu shortlist, marcá tus favoritos",
-    view: "lista-nombres",
+    Component: ListaNombres,
   },
-  {
+  "checklist-nursery": {
     icon: <Home className="w-5 h-5" />,
     title: "Checklist de nursery",
     desc: "Progreso del cuarto del bebé",
-    view: "checklist-nursery",
+    Component: ChecklistNursery,
   },
-  {
+  tramites: {
     icon: <FolderOpen className="w-5 h-5" />,
-    title: "Trámites y documentos",
+    title: "Trámites",
     desc: "Por país, embarazo y postparto",
-    view: "tramites",
+    Component: Tramites,
   },
-  {
-    icon: <Users className="w-5 h-5" />,
-    title: "Tu partner",
-    desc: "Invitalo para que vea tus citas, síntomas y reciba tus notas",
-    view: "partner",
-  },
-  {
+  "preferencias-contenido": {
     icon: <Headphones className="w-5 h-5" />,
     title: "Preferencias de contenido",
     desc: "Tipos favoritos, idioma, notificaciones",
-    view: "preferencias-contenido",
+    Component: PreferenciasContenido,
   },
-  {
+  privacidad: {
     icon: <Lock className="w-5 h-5" />,
     title: "Privacidad",
     desc: "Conectá o desconectá Google Calendar y controlá tus datos compartidos",
-    view: "privacidad",
+    Component: PrivacidadPanel,
   },
-];
+};
+
+// Secciones del perfil. Las que tienen `items` abren un listado intermedio;
+// las que tienen `Component` abren directo esa pantalla.
+const grupos = {
+  checklists: {
+    icon: <ListChecks className="w-5 h-5" />,
+    title: "Checklists",
+    desc: "Bolso del hospital, compras, nombres y nursery",
+    items: ["checklist-hospital", "lista-compras", "lista-nombres", "checklist-nursery"],
+  },
+  contactos: {
+    icon: <Phone className="w-5 h-5" />,
+    title: "Contactos",
+    desc: "Equipo médico y contactos de emergencia",
+    Component: Contactos,
+  },
+  partner: {
+    icon: <Users className="w-5 h-5" />,
+    title: "Tu partner",
+    desc: "Invitalo para que vea tus citas, síntomas y reciba tus notas",
+    Component: PartnerManagement,
+  },
+  tramites: {
+    icon: <FolderOpen className="w-5 h-5" />,
+    title: "Trámites y documentos",
+    desc: "Trámites, plan de parto e historial del embarazo",
+    items: ["tramites", "plan-parto", "historial"],
+  },
+};
+
+const gruposOrden = ["checklists", "contactos", "partner", "tramites"];
+
+const ajustesItems = ["preferencias-contenido", "privacidad"];
 
 const CANTIDAD_OPTIONS = [
   { value: 1, label: "1 bebé" },
@@ -135,7 +152,8 @@ function toggleOptionClass(active) {
 }
 
 export default function PerfilPanel({ onLogout }) {
-  const [view, setView] = useState("list");
+  const [grupo, setGrupo] = useState(null);
+  const [view, setView] = useState(null);
   const [perfil, setPerfil] = useState(emptyPerfil);
   const [saved, setSaved] = useState(false);
   const [bebe, setBebe] = useState(emptyBebe);
@@ -147,52 +165,46 @@ export default function PerfilPanel({ onLogout }) {
     setBebe(loadBebe());
   }, []);
 
-  if (view === "historial") {
-    return <HistorialEmbarazo onBack={() => setView("list")} />;
+  const openGrupo = (id) => {
+    setGrupo(id);
+    setView(null);
+  };
+  const backToPerfil = () => {
+    setGrupo(null);
+    setView(null);
+  };
+
+  if (view) {
+    const { Component } = hojas[view];
+    return <Component onBack={() => setView(null)} />;
   }
 
-  if (view === "contactos-medicos") {
-    return <ContactosMedicos onBack={() => setView("list")} />;
+  if (grupo === "ajustes") {
+    return (
+      <HubList
+        title="Ajustes"
+        subtitle="Tu contenido, tu privacidad y tu cuenta"
+        items={ajustesItems}
+        onBack={backToPerfil}
+        onOpen={setView}
+      >
+        <button
+          onClick={onLogout}
+          className="mt-6 flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium"
+        >
+          <LogOut className="w-4 h-4" />
+          Cerrar sesión
+        </button>
+      </HubList>
+    );
   }
 
-  if (view === "contactos-emergencia") {
-    return <ContactosEmergencia onBack={() => setView("list")} />;
-  }
-
-  if (view === "lista-compras") {
-    return <ListaCompras onBack={() => setView("list")} />;
-  }
-
-  if (view === "lista-nombres") {
-    return <ListaNombres onBack={() => setView("list")} />;
-  }
-
-  if (view === "checklist-nursery") {
-    return <ChecklistNursery onBack={() => setView("list")} />;
-  }
-
-  if (view === "tramites") {
-    return <Tramites onBack={() => setView("list")} />;
-  }
-
-  if (view === "preferencias-contenido") {
-    return <PreferenciasContenido onBack={() => setView("list")} />;
-  }
-
-  if (view === "plan-parto") {
-    return <PlanParto onBack={() => setView("list")} />;
-  }
-
-  if (view === "checklist-hospital") {
-    return <ChecklistHospital onBack={() => setView("list")} />;
-  }
-
-  if (view === "partner") {
-    return <PartnerManagement onBack={() => setView("list")} />;
-  }
-
-  if (view === "privacidad") {
-    return <PrivacidadPanel onBack={() => setView("list")} />;
+  if (grupo) {
+    const g = grupos[grupo];
+    if (g.Component) return <g.Component onBack={backToPerfil} />;
+    return (
+      <HubList title={g.title} subtitle={g.desc} items={g.items} onBack={backToPerfil} onOpen={setView} />
+    );
   }
 
   const update = (field, value) => {
@@ -231,10 +243,18 @@ export default function PerfilPanel({ onLogout }) {
 
   return (
     <div>
-      <Header
-        title="Mi Perfil"
-        subtitle="Tus datos y preferencias"
-      />
+      <div className="flex items-start justify-between gap-4">
+        <Header title="Mi Perfil" subtitle="Tus datos y los de tu bebé" />
+        <button
+          type="button"
+          onClick={() => openGrupo("ajustes")}
+          aria-label="Ajustes"
+          title="Ajustes"
+          className="w-10 h-10 rounded-full bg-white border border-[var(--border-soft)] shadow-sm flex items-center justify-center text-ink-muted hover:text-brand-pink hover:border-brand-pink transition-colors shrink-0"
+        >
+          <Settings className="w-5 h-5" />
+        </button>
+      </div>
 
       <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-6 shadow-sm mb-6">
         <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-4">
@@ -457,26 +477,45 @@ export default function PerfilPanel({ onLogout }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-        {seccionesTarjetas.map((t, i) => (
-          <FeatureCard
-            key={t.title}
-            icon={t.icon}
-            title={t.title}
-            desc={t.desc}
-            tint={i % 2 === 0 ? "pink" : "purple"}
-            onClick={() => setView(t.view)}
-          />
-        ))}
+        {gruposOrden.map((id, i) => {
+          const g = grupos[id];
+          return (
+            <FeatureCard
+              key={id}
+              icon={g.icon}
+              title={g.title}
+              desc={g.desc}
+              tint={i % 2 === 0 ? "pink" : "purple"}
+              onClick={() => openGrupo(id)}
+            />
+          );
+        })}
       </div>
+    </div>
+  );
+}
 
-      <div className="mt-6 pt-6 border-t border-[var(--border-soft)]">
-        <button
-          onClick={onLogout}
-          className="text-sm text-red-500 hover:text-red-600 font-medium"
-        >
-          Cerrar sesión
-        </button>
+function HubList({ title, subtitle, items, onBack, onOpen, children }) {
+  return (
+    <div>
+      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
+      <Header title={title} subtitle={subtitle} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {items.map((id, i) => {
+          const h = hojas[id];
+          return (
+            <FeatureCard
+              key={id}
+              icon={h.icon}
+              title={h.title}
+              desc={h.desc}
+              tint={i % 2 === 0 ? "pink" : "purple"}
+              onClick={() => onOpen(id)}
+            />
+          );
+        })}
       </div>
+      {children}
     </div>
   );
 }

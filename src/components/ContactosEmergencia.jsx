@@ -11,7 +11,7 @@ const inputClass =
 
 const primaryButtonStyle = { background: "var(--gradient-hero)" };
 
-export default function ContactosEmergencia({ onBack }) {
+export default function ContactosEmergencia({ onBack, embedded = false }) {
   const [contactos, setContactos] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
@@ -63,12 +63,16 @@ export default function ContactosEmergencia({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
+      {!embedded && (
+        <>
+          <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
 
-      <Header
-        title="Contactos de emergencia"
-        subtitle="Familia y allegados, a un toque en caso de urgencia"
-      />
+          <Header
+            title="Contactos de emergencia"
+            subtitle="Familia y allegados, a un toque en caso de urgencia"
+          />
+        </>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm">

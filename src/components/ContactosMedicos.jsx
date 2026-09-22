@@ -9,7 +9,7 @@ const inputClass =
   "w-full border border-[var(--border-soft)] rounded-xl p-2 text-sm text-ink bg-white mb-3 focus:outline-none focus:border-brand-pink transition-colors";
 const primaryButtonStyle = { background: "var(--gradient-hero)" };
 
-export default function ContactosMedicos({ onBack }) {
+export default function ContactosMedicos({ onBack, embedded = false }) {
   const [contactos, setContactos] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
@@ -58,12 +58,16 @@ export default function ContactosMedicos({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
+      {!embedded && (
+        <>
+          <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
 
-      <Header
-        title="Contactos del equipo médico"
-        subtitle="A mano para una emergencia"
-      />
+          <Header
+            title="Contactos del equipo médico"
+            subtitle="A mano para una emergencia"
+          />
+        </>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm">
