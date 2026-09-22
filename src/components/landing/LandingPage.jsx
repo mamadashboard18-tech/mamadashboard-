@@ -372,6 +372,81 @@ function useInView() {
   return [ref, inView];
 }
 
+/* Scroll reveal (same feel as pasito.app): each tagged block starts slightly
+   lower, scaled down and transparent, then eases in the first time it enters
+   the viewport. Siblings stagger a little. Uses the individual `translate` /
+   `scale` properties so it never clobbers an element's own `transform`, and
+   drops the tag once done so hover transitions go back to normal. Watches
+   for LazySection mounts with a MutationObserver. */
+const REVEAL_SELECTOR = [
+  "[data-reveal]",
+  ".photo-mosaic > *",
+  ".inside-app-grid .cell-group > *",
+  ".inside-app-grid .cell-phone",
+  ".experience-grid > *",
+  ".partner-bento > *",
+].join(",");
+
+function useScrollReveal() {
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const seen = new WeakSet();
+    const timers = new Set();
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          io.unobserve(el);
+          el.setAttribute("data-reveal-visible", "");
+          const delay = parseInt(el.style.getPropertyValue("--reveal-delay"), 10) || 0;
+          const t = setTimeout(() => {
+            timers.delete(t);
+            el.removeAttribute("data-reveal-el");
+            el.removeAttribute("data-reveal-visible");
+            el.style.removeProperty("--reveal-delay");
+          }, 760 + delay);
+          timers.add(t);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+    );
+
+    const scan = () => {
+      root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
+        if (seen.has(el)) return;
+        seen.add(el);
+        // Nested inside something that already reveals — let the parent carry it.
+        if (el.parentElement?.closest("[data-reveal-el]")) return;
+        const siblings = [...el.parentElement.children].filter((c) => c.matches(REVEAL_SELECTOR));
+        const index = Math.max(0, siblings.indexOf(el));
+        el.style.setProperty("--reveal-delay", `${(index % 4) * 55}ms`);
+        el.setAttribute("data-reveal-el", "");
+        io.observe(el);
+      });
+    };
+
+    scan();
+    root.setAttribute("data-motion-ready", "");
+    const mo = new MutationObserver(scan);
+    mo.observe(root, { childList: true, subtree: true });
+
+    return () => {
+      mo.disconnect();
+      io.disconnect();
+      timers.forEach(clearTimeout);
+    };
+  }, []);
+
+  return rootRef;
+}
+
 /* Mounts its children only once the section is getting close to the
    viewport (large rootMargin = mounted well before it's actually visible,
    so scrolling in never shows a blank gap) instead of on first page load.
@@ -629,9 +704,10 @@ function AppShowcase() {
 
 export default function LandingPage({ onGoToAuth, onDevPreview }) {
   const [numbersRef, numbersInView] = useInView();
+  const revealRef = useScrollReveal();
 
   return (
-    <div style={{ background: C.bg, fontFamily: "Inter, system-ui, sans-serif", color: C.ink, overflowX: "hidden" }}>
+    <div ref={revealRef} style={{ background: C.bg, fontFamily: "Inter, system-ui, sans-serif", color: C.ink, overflowX: "hidden" }}>
       <style>{`html{scroll-behavior:smooth}`}</style>
 
       {/* HEADER + HERO share one gradient backdrop so the nav reads as part of the same scene */}
@@ -748,12 +824,14 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           <div aria-hidden="true" className="absolute rounded-full pointer-events-none" style={{ bottom: -60, right: -40, width: 320, height: 320, background: C.purple, opacity: 0.14, filter: "blur(90px)" }} />
           <span
             aria-hidden="true"
+            data-reveal
             className="font-heading block relative z-[1]"
             style={{ fontSize: "clamp(48px,6vw,66px)", lineHeight: 1, color: C.pink, opacity: 0.28, marginBottom: -6 }}
           >
             “
           </span>
           <p
+            data-reveal
             className="font-heading text-pretty relative z-[1]"
             style={{
               fontWeight: 700,
@@ -777,13 +855,14 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* POR QUÉ ACUNA APP */}
       <LazySection minHeight={500}>
         <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
-          <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 44px" }}>
+          <p data-reveal className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 44px" }}>
             Por qué Acuna App
           </p>
           <div className="flex flex-col">
             {pilares.map((p, i) => (
             <div
               key={p.number}
+              data-reveal
               className="grid [grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))]"
               style={{
                 gap: "clamp(12px,3vw,48px)",
@@ -823,7 +902,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* ADENTRO DE LA APP */}
       <section id="adentro" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
         <div className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
-          <div className="flex items-end justify-between gap-5 flex-wrap mb-10">
+          <div data-reveal className="flex items-end justify-between gap-5 flex-wrap mb-10">
             <h2 className="font-heading" style={{ fontSize: "clamp(28px,3.4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", margin: 0 }}>
               Adentro de la app
             </h2>
@@ -866,15 +945,15 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           reveal + count-up so the section pulls the eye without inventing any data. */}
       <LazySection minHeight={520}>
         <section ref={numbersRef} className="max-w-[1120px] mx-auto" style={{ padding: "clamp(56px,8vw,100px) 24px" }}>
-          <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
+          <p data-reveal className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
             Tu embarazo, de punta a punta
           </p>
-          <h2 className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 40px", maxWidth: "26em" }}>
+          <h2 data-reveal className="font-heading text-pretty" style={{ fontSize: "clamp(26px,3.2vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, margin: "0 0 40px", maxWidth: "26em" }}>
             Contenido pensado semana a semana, no un calendario genérico.
           </h2>
 
           <div className="grid items-center" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(min(300px,100%),1fr))", gap: "clamp(32px,5vw,64px)" }}>
-            <div className="flex flex-col items-center">
+            <div data-reveal className="flex flex-col items-center">
               <div role="img" aria-label="Gráfico circular: 40 semanas de embarazo divididas en 3 trimestres">
                 <TrimesterRing active={numbersInView} />
               </div>
@@ -890,7 +969,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
               </div>
             </div>
 
-            <div className="flex flex-col gap-3.5">
+            <div data-reveal className="flex flex-col gap-3.5">
               {[
                 { n: 3, label: "Trimestres, cada uno con su guía", iconPath: "M4 20h16 M8 20V10 M12 20V4 M16 20V13" },
                 { n: 6, label: "Áreas en un solo lugar", iconPath: "M12 20.5C12 20.5 4.5 16.2 4.5 10.6A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7.5 3C19.5 16.2 12 20.5 12 20.5Z" },
@@ -906,7 +985,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* MODO ACOMPAÑANTE */}
       <section id="acompanante" className="bg-white" style={{ borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}>
         <div className="max-w-[1120px] mx-auto" style={{ padding: "clamp(64px,9vw,110px) 24px" }}>
-          <div className="max-w-[640px] mb-10">
+          <div data-reveal className="max-w-[640px] mb-10">
             <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.purple, margin: "0 0 14px" }}>
               Modo acompañante
             </p>
@@ -1001,7 +1080,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* NOTA */}
       <LazySection minHeight={140}>
         <section className="max-w-[880px] mx-auto" style={{ padding: "clamp(56px,7vw,84px) 24px 0" }}>
-          <p className="text-pretty" style={{ fontSize: 15.5, lineHeight: 1.75, color: C.muted, margin: 0 }}>
+          <p data-reveal className="text-pretty" style={{ fontSize: 15.5, lineHeight: 1.75, color: C.muted, margin: 0 }}>
             Acuna App te ayuda a organizarte y a cuidar tu bienestar emocional durante el embarazo
             y el postparto. No reemplaza la consulta con tu médico, no da diagnósticos ni indica
             tratamientos. Para eso siempre vas a tener a tu equipo de salud de confianza.
@@ -1012,6 +1091,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* CTA FINAL */}
       <section id="crear" className="max-w-[1120px] mx-auto" style={{ padding: "clamp(48px,7vw,90px) 24px clamp(64px,9vw,110px)" }}>
         <div
+          data-reveal
           className="relative overflow-hidden"
           style={{ borderRadius: 34, background: gradientBrandPanel, boxShadow: "0 24px 60px rgba(226,111,206,0.3)", padding: "clamp(40px,6vw,76px) clamp(26px,5vw,64px)" }}
         >
@@ -1053,7 +1133,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
       {/* ASÍ SE SIENTE — beneficios reales, no testimonios inventados */}
       <LazySection minHeight={760}>
         <section className="max-w-[1120px] mx-auto" style={{ padding: "0 24px clamp(64px,9vw,110px)" }}>
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
+        <div data-reveal className="flex flex-wrap items-end justify-between gap-6 mb-8">
           <div>
             <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
               Así se siente
@@ -1189,7 +1269,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           className="relative z-[1] max-w-[1120px] mx-auto grid items-center [grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))]"
           style={{ padding: "clamp(56px,8vw,100px) 24px", gap: "clamp(40px,5vw,64px)" }}
         >
-          <div className="flex justify-center sm:justify-start">
+          <div data-reveal className="flex justify-center sm:justify-start">
             {/* Polaroid — white card frame, tilted, a little washi-tape strip pinning it down */}
             <div className="relative" style={{ transform: "rotate(-4deg)" }}>
               <div
@@ -1217,7 +1297,7 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
             </div>
           </div>
 
-          <div>
+          <div data-reveal>
             <p className="uppercase" style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.08em", color: C.pink, margin: "0 0 14px" }}>
               Quién soy
             </p>
