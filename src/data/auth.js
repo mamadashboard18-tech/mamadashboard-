@@ -139,8 +139,8 @@ export async function logout() {
 }
 
 export async function getCuenta() {
-  const { data } = await supabase.auth.getUser();
-  return mapUser(data.user);
+  const { data } = await supabase.auth.getSession();
+  return mapUser(data.session?.user);
 }
 
 export async function updateCuenta({ nombre, apellido, fechaNacimiento, celular }) {

@@ -345,9 +345,15 @@ function PasswordCuenta({ cuenta }) {
 
 export default function CuentaPanel({ onBack }) {
   const [cuenta, setCuenta] = useState(null);
+  const [estado, setEstado] = useState("cargando"); // cargando | listo | sin-sesion
 
   useEffect(() => {
-    getCuenta().then(setCuenta);
+    getCuenta()
+      .then((c) => {
+        setCuenta(c);
+        setEstado(c ? "listo" : "sin-sesion");
+      })
+      .catch(() => setEstado("sin-sesion"));
   }, []);
 
   return (
@@ -355,9 +361,17 @@ export default function CuentaPanel({ onBack }) {
       <BackButton onBack={onBack} label="Volver a Ajustes" className="mb-4" />
       <Header title="Mi cuenta" subtitle="Tus datos de acceso e información personal" />
 
-      {!cuenta ? (
-        <p className="text-sm text-ink-muted">Cargando…</p>
-      ) : (
+      {estado === "cargando" && <p className="text-sm text-ink-muted">Cargando…</p>}
+
+      {estado === "sin-sesion" && (
+        <div className={cardClass}>
+          <p className="text-sm text-ink-muted">
+            No pudimos cargar los datos de tu cuenta. Cerrá sesión y volvé a entrar para editarlos.
+          </p>
+        </div>
+      )}
+
+      {estado === "listo" && cuenta && (
         <>
           <DatosCuenta cuenta={cuenta} onSaved={setCuenta} />
           <EmailCuenta cuenta={cuenta} onSaved={setCuenta} />
