@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paleta Mamá Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fdf6fa;
+    --ink: #241d2b;
+    --muted: #71667a;
+    --line: rgba(155, 93, 229, 0.15);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 1080px; margin: 0 auto; padding: 48px 16px 80px; }
+  h1, h2, h3 { font-family: "Plus Jakarta Sans", system-ui, sans-serif; margin: 0; }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+  .lede { color: var(--muted); margin: 8px 0 0; max-width: 60ch; line-height: 1.5; }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .mode { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+  .mode-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .mode-head h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; color: #fff; }
+  .mode p.note { color: var(--muted); margin: 8px 0 0; font-size: 14px; line-height: 1.5; max-width: 70ch; }
+
+  h3 { font-size: 15px; font-weight: 700; margin: 32px 0 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .sw {
+    background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+    cursor: pointer; text-align: left; padding: 0; font: inherit; color: inherit;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .sw:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(155, 93, 229, 0.12); }
+  .chip { height: 84px; border-bottom: 1px solid rgba(0,0,0,0.04); background-image:
+      linear-gradient(45deg, #eee 25%, transparent 25%), linear-gradient(-45deg, #eee 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #eee 75%), linear-gradient(-45deg, transparent 75%, #eee 75%);
+    background-size: 12px 12px; background-position: 0 0, 0 6px, 6px -6px, -6px 0; position: relative; }
+  .chip i { position: absolute; inset: 0; }
+  .meta { padding: 10px 12px 12px; }
+  .name { font-weight: 600; font-size: 13px; }
+  .hex { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--muted); margin-top: 2px; word-break: break-all; }
+  .var { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #9b5de5; margin-top: 4px; word-break: break-all; }
+  .use { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+  .grads { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .grad { background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; cursor: pointer; text-align: left; padding: 0; font: inherit; color: inherit; transition: transform .2s, box-shadow .2s; }
+  .grad:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(155, 93, 229, 0.12); }
+  .grad .fill { height: 150px; }
+  .grad pre { margin: 6px 0 0; white-space: pre-wrap; font-size: 11px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1.45; }
+
+  .type { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .type div { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+  .type .sample { font-size: 28px; color: var(--ink); }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0;
+    background: var(--ink); color: #fff; font-size: 13px; padding: 10px 16px; border-radius: 999px; transition: .25s; pointer-events: none; }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Paleta de colores y degradados</h1>
+  <p class="lede">Mamá Dashboard: modo mamá y modo partner (acompañante). Los valores salen de <code>src/index.css</code> y de la landing.</p>
+  <p class="hint">Tocá cualquier color o degradado para copiar su valor.</p>
+
+  <!-- ================= MAMÁ ================= -->
+  <section class="mode">
+    <div class="mode-head">
+      <h2>App de la mamá</h2>
+      <span class="pill" style="background: linear-gradient(135deg, #ff6f9f 0%, #e26fce 50%, #a875ea 100%)">Modo mamá</span>
+    </div>
+    <p class="note">Rosa y violeta de marca, sacados del degradado principal (#e26fce → #9b5de5).</p>
+
+    <h3>Marca</h3>
+    <div class="grid" data-swatches='[
+      ["Brand pink","#e26fce","--brand-pink","Color principal, botones y acentos"],
+      ["Brand purple","#9b5de5","--brand-purple","Segundo color de marca"],
+      ["Brand magenta","#c22ea6","--brand-magenta","Texto/acentos sobre rosa"],
+      ["Brand pink light","#fce3f6","--brand-pink-light","Fondos suaves rosas"],
+      ["Brand purple light","#ede1fb","--brand-purple-light","Fondos suaves violetas"],
+      ["Brand teal","#2ee6d6","--brand-teal","Acento puntual"]
+    ]'></div>
+
+    <h3>Colores de los degradados</h3>
+    <div class="grid" data-swatches='[
+      ["Rose","#ff6f9f","","Inicio del degradado hero"],
+      ["Peach","#ff9a6a","","Brillo cálido de la tarjeta hero"],
+      ["Purple hero","#a875ea","","Final del degradado hero"],
+      ["Purple grad","#9b6ee0","","Final de la tarjeta hero"],
+      ["Deep plum","#3a2159","","Landing, fondos oscuros"]
+    ]'></div>
+
+    <h3>Superficies y texto</h3>
+    <div class="grid" data-swatches='[
+      ["Fondo","#fdf6fa","--bg","Fondo general de la app"],
+      ["Superficie","#ffffff","--surface","Tarjetas"],
+      ["Ink","#241d2b","--ink","Texto principal"],
+      ["Párrafo","#5c5266","","Texto de párrafos (landing)"],
+      ["Ink muted","#71667a","--ink-muted","Texto secundario"],
+      ["Faint","#857d93","","Texto terciario"],
+      ["Very faint","#a89fb0","","Placeholders, metadatos"],
+      ["Hairline","#c9c0d0","","Líneas finas"],
+      ["Borde suave","rgba(155, 93, 229, 0.15)","--border-soft","Bordes de tarjetas"]
+    ]'></div>
+
+    <h3>Degradados</h3>
+    <div class="grads" data-grads='[
+      ["Hero","--gradient-hero","linear-gradient(135deg, #ff6f9f 0%, #e26fce 50%, #a875ea 100%)","Header, CTA principales, pills"],
+      ["Alternativo","--gradient-alt","linear-gradient(135deg, #9b5de5 0%, #e26fce 100%)","Variante violeta → rosa"],
+      ["Tarjeta hero","--gradient-hero-card","radial-gradient(120% 150% at 12% 0%, #ff6f9f 0%, rgba(255, 111, 159, 0) 55%),\nradial-gradient(130% 130% at 78% 30%, #ff9a6a 0%, rgba(255, 154, 106, 0) 50%),\nradial-gradient(140% 160% at 90% 100%, #9b5de5 0%, rgba(155, 93, 229, 0) 60%),\nlinear-gradient(160deg, #ff6f9f 0%, #e26fce 55%, #9b6ee0 100%)","Tarjeta principal de Inicio (semana de embarazo)"],
+      ["Rose → pink","","linear-gradient(135deg, #ff6f9f, #e26fce)","Botones e íconos de la landing"],
+      ["Rose → purple","","linear-gradient(135deg, #ff6f9f, #9b6ee0)","Acentos de la landing"],
+      ["Tinte suave","","linear-gradient(135deg, rgba(226,111,206,0.10) 0%, rgba(155,93,229,0.10) 100%)","Fondos de chips y tarjetas suaves"]
+    ]'></div>
+  </section>
+
+  <!-- ================= PARTNER ================= -->
+  <section class="mode">
+    <div class="mode-head">
+      <h2>App del partner</h2>
+      <span class="pill" style="background: linear-gradient(135deg, #f0b87a 0%, #c08fe0 45%, #5b21b6 100%)">Modo acompañante</span>
+    </div>
+    <p class="note">Paleta propia, separada del rosa/violeta de la mamá por decisión de producto: violeta más profundo con toques cálidos de durazno y dorado.</p>
+
+    <h3>Marca</h3>
+    <div class="grid" data-swatches='[
+      ["Partner violet","#7c3aed","--partner-violet","Color principal del partner"],
+      ["Violet deep","#5b21b6","--partner-violet-deep","Hover, texto sobre violeta claro"],
+      ["Gold","#d6a244","--partner-gold","Acento cálido, destacados"],
+      ["Green bg","#ddeecb","--partner-green-bg","Fondo de estados completados"],
+      ["Green text","#4c7a34","--partner-green-text","Texto de estados completados"]
+    ]'></div>
+
+    <h3>Transparencias de violeta</h3>
+    <div class="grid" data-swatches='[
+      ["Violet fill","rgba(124, 58, 237, 0.14)","--partner-violet-fill","Fondos de íconos y chips"],
+      ["Violet fill soft","rgba(124, 58, 237, 0.12)","--partner-violet-fill-soft","Fondos más suaves"],
+      ["Violet border","rgba(124, 58, 237, 0.15)","--partner-violet-border","Bordes"]
+    ]'></div>
+
+    <h3>Superficies y bordes</h3>
+    <div class="grid" data-swatches='[
+      ["Surface tint","#f5eefe","--partner-surface-tint","Fondos de tarjetas tintadas"],
+      ["Border","#efe6fb","--partner-border","Bordes de tarjetas"],
+      ["Dashed border","#e4d3f9","--partner-dashed-border","Bordes punteados, estados vacíos"]
+    ]'></div>
+
+    <h3>Texto</h3>
+    <div class="grid" data-swatches='[
+      ["Ink","#2e2a35","--partner-ink","Texto principal"],
+      ["Ink secondary","#4a4351","--partner-ink-secondary","Texto de párrafos"],
+      ["Ink muted","#857d93","--partner-ink-muted","Texto secundario"],
+      ["Ink faint","#a89fb0","--partner-ink-faint","Metadatos"]
+    ]'></div>
+
+    <h3>Blobs de fondo</h3>
+    <div class="grid" data-swatches='[
+      ["Blob peach","#f4d9c7","--partner-blob-peach","Manchas ambientales"],
+      ["Blob lavender","#c9b6f2","--partner-blob-lavender","Manchas ambientales"],
+      ["Blob violet","#7c3aed","--partner-blob-violet","Manchas ambientales"]
+    ]'></div>
+
+    <h3>Degradados</h3>
+    <div class="grads" data-grads='[
+      ["Partner","--partner-gradient","linear-gradient(135deg, #f0b87a 0%, #c08fe0 45%, #5b21b6 100%)","Tarjeta principal, CTA, pills"],
+      ["Fondo de página","--partner-gradient-page","linear-gradient(135deg, #f4e4d6 0%, #e6d8f0 45%, #c9b6f2 100%)","Fondo general del modo partner"],
+      ["Nota","--partner-gradient-note","linear-gradient(135deg, #f3ebfd 0%, #e7d9fa 100%)","Tarjetas de notas y mensajes"]
+    ]'></div>
+  </section>
+
+  <!-- ================= TIPOGRAFÍA ================= -->
+  <section class="mode">
+    <div class="mode-head"><h2>Tipografía (compartida)</h2></div>
+    <div class="type" style="margin-top: 16px">
+      <div><div class="sample" style="font-family: 'Plus Jakarta Sans'; font-weight: 800">Semana 24</div><div class="hex">Plus Jakarta Sans · 500–800</div><div class="var">--font-heading</div></div>
+      <div><div class="sample" style="font-family: 'Inter'">Tu bebé crece</div><div class="hex">Inter · 400–700</div><div class="var">--font-body</div></div>
+      <div><div class="sample" style="font-family: 'Caveat'; font-weight: 700">con amor ♡</div><div class="hex">Caveat · 600–700</div><div class="var">--font-script</div></div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+  const toast = document.getElementById("toast");
+  let t;
+  function copy(text) {
+    const done = () => { toast.textContent = "Copiado: " + (text.length > 60 ? text.slice(0, 57) + "…" : text); toast.classList.add("on"); clearTimeout(t); t = setTimeout(() => toast.classList.remove("on"), 1600); };
+    try { navigator.clipboard.writeText(text).then(done, done); } catch (e) { done(); }
+  }
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+
+  document.querySelectorAll("[data-swatches]").forEach((el) => {
+    JSON.parse(el.dataset.swatches).forEach(([name, value, cssVar, use]) => {
+      const b = document.createElement("button");
+      b.className = "sw";
+      b.innerHTML = `<div class="chip"><i style="background:${value}"></i></div>
+        <div class="meta"><div class="name">${esc(name)}</div><div class="hex">${esc(value)}</div>
+        ${cssVar ? `<div class="var">var(${cssVar})</div>` : ""}<div class="use">${esc(use)}</div></div>`;
+      b.onclick = () => copy(value);
+      el.appendChild(b);
+    });
+  });
+
+  document.querySelectorAll("[data-grads]").forEach((el) => {
+    JSON.parse(el.dataset.grads).forEach(([name, cssVar, value, use]) => {
+      const b = document.createElement("button");
+      b.className = "grad";
+      b.innerHTML = `<div class="fill" style="background:${value.replace(/\n/g, " ")}"></div>
+        <div class="meta"><div class="name">${esc(name)}</div>
+        ${cssVar ? `<div class="var">var(${cssVar})</div>` : ""}<div class="use">${esc(use)}</div>
+        <pre>${esc(value)}</pre></div>`;
+      b.onclick = () => copy(value.replace(/\n/g, " "));
+      el.appendChild(b);
+    });
+  });
+</script>
+</body>
+</html>
