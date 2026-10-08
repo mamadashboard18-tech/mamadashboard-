@@ -8,37 +8,37 @@ const sizes = [
   { emoji: "🫐", name: "un arándano" }, // 7
   { emoji: "🍓", name: "una frambuesa" }, // 8
   { emoji: "🍇", name: "una uva" }, // 9
-  { emoji: "🍊", name: "un kumquat" }, // 10
+  { emoji: "🍊", name: "un quinoto" }, // 10
   { emoji: "🟣", name: "un higo" }, // 11
   { emoji: "🍋", name: "una lima" }, // 12
   { emoji: "🫛", name: "una vaina de arvejas" }, // 13
   { emoji: "🍋", name: "un limón" }, // 14
   { emoji: "🍎", name: "una manzana" }, // 15
-  { emoji: "🥑", name: "un aguacate" }, // 16
+  { emoji: "🥑", name: "una palta" }, // 16
   { emoji: "🥔", name: "un nabo" }, // 17
-  { emoji: "🫑", name: "un pimiento" }, // 18
+  { emoji: "🫑", name: "un morrón" }, // 18
   { emoji: "🍅", name: "un tomate" }, // 19
   { emoji: "🍌", name: "una banana" }, // 20
   { emoji: "🥕", name: "una zanahoria" }, // 21
-  { emoji: "🎃", name: "una calabaza espagueti" }, // 22
-  { emoji: "🍊", name: "una toronja" }, // 23
-  { emoji: "🌽", name: "una mazorca de maíz" }, // 24
-  { emoji: "🥔", name: "una rutabaga" }, // 25
+  { emoji: "🎃", name: "un zapallo espagueti" }, // 22
+  { emoji: "🍊", name: "un pomelo" }, // 23
+  { emoji: "🌽", name: "un choclo" }, // 24
+  { emoji: "🥔", name: "un nabo sueco" }, // 25
   { emoji: "🥒", name: "un pepino grande" }, // 26
   { emoji: "🥦", name: "una coliflor" }, // 27
   { emoji: "🍆", name: "una berenjena" }, // 28
-  { emoji: "🎃", name: "una calabaza butternut" }, // 29
+  { emoji: "🎃", name: "un zapallo anco" }, // 29
   { emoji: "🥬", name: "un repollo" }, // 30
   { emoji: "🥥", name: "un coco" }, // 31
-  { emoji: "🥔", name: "una jícama" }, // 32
-  { emoji: "🍍", name: "una piña" }, // 33
-  { emoji: "🍈", name: "un melón cantaloupe" }, // 34
-  { emoji: "🍈", name: "un melón verde" }, // 35
+  { emoji: "🍍", name: "un ananá chico" }, // 32
+  { emoji: "🍍", name: "un ananá" }, // 33
+  { emoji: "🍈", name: "un melón" }, // 34
+  { emoji: "🍈", name: "un melón rocío de miel" }, // 35
   { emoji: "🥬", name: "una lechuga romana" }, // 36
-  { emoji: "🥬", name: "una acelga" }, // 37
+  { emoji: "🥬", name: "un atado de acelga" }, // 37
   { emoji: "🥬", name: "un puerro" }, // 38
-  { emoji: "🍉", name: "una sandía pequeña" }, // 39
-  { emoji: "🎃", name: "una calabaza pequeña" }, // 40
+  { emoji: "🍉", name: "una sandía chica" }, // 39
+  { emoji: "🎃", name: "un zapallo" }, // 40
 ];
 
 // Promedios de referencia (tablas de crecimiento fetal tipo OMS/Hadlock). Hasta la semana 19
