@@ -19,9 +19,8 @@ import {
   Apple,
   MessageCircle,
   CalendarDays,
-  Sprout,
 } from "lucide-react";
-import CircularProgress from "./CircularProgress";
+import TamanoBebe from "./TamanoBebe";
 import RegistroDiarioModal from "./RegistroDiarioModal";
 import ContenidoDiarioModal from "./ContenidoDiarioModal";
 import InicioPostparto from "./InicioPostparto";
@@ -313,7 +312,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
               Semana {semanaMostrada} de {totalWeeks}
             </p>
             <span className="bg-white/28 text-white text-[15px] font-bold px-3 py-1 rounded-full">
-              {trimesterLabel[data.trimester]}
+              {trimesterLabel[data.trimester]} · {porcentaje}%
             </span>
           </div>
 
@@ -341,24 +340,8 @@ export default function InicioPanel({ nombre, onNavigate }) {
             <span>S.{semanaActual}</span>
           </div>
 
-          <div className="flex items-center gap-3 mb-3">
-            <CircularProgress value={porcentaje} size={120} stroke={8}>
-              <span className="font-heading text-[30px] font-bold leading-none">{porcentaje}%</span>
-            </CircularProgress>
-
-            <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-[52px] h-[52px] rounded-full bg-white/24 flex items-center justify-center shrink-0">
-                <Sprout className="w-6 h-6 text-white" strokeWidth={1.75} />
-              </div>
-              <div className="text-left min-w-0">
-                <p className="text-white text-[17px] opacity-90 leading-tight">Tu bebé es del tamaño de</p>
-                <p className="text-white text-[19px] font-bold leading-tight mt-0.5">{data.size.name}</p>
-                <p className="text-white text-[17px] opacity-90 leading-tight mt-0.5">
-                  {data.weight ? `≈ ${data.weight} g` : "—"}
-                  {data.length ? ` · ≈ ${data.length} cm` : ""}
-                </p>
-              </div>
-            </div>
+          <div className="mb-4">
+            <TamanoBebe size={data.size} length={data.length} weight={data.weight} />
           </div>
 
           <div className="bg-white/20 rounded-[18px] px-4 py-3">

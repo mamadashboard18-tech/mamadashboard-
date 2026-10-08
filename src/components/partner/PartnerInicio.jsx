@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Activity, ChevronRight, Phone, Quote, Stethoscope, X } from "lucide-react";
-import CircularProgress from "../CircularProgress";
+import TamanoBebe from "../TamanoBebe";
 import { consejoPartnerSintoma, porQuePasaSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
 import { getBibliotecaPorCategoria, getRecomendacionesHoy, tipoIconoComponent } from "../../data/multimedia";
@@ -37,29 +37,17 @@ export default function PartnerInicio({ data }) {
           className="rounded-[24px] p-6 mb-[22px]"
           style={{ background: "var(--partner-gradient)", boxShadow: "0 12px 28px rgba(91,33,182,0.28)" }}
         >
-          <div className="flex items-center justify-between mb-[18px]">
+          <div className="flex items-center justify-between mb-4">
             <p className="text-white text-[17px] font-bold">
               Semana {data.semanaActual} de {totalWeeks}
             </p>
             <span className="bg-white/28 text-white text-[13px] font-bold px-3 py-[5px] rounded-full">
-              {trimesterLabel[info.trimester]}
+              {trimesterLabel[info.trimester]} · {porcentaje}%
             </span>
           </div>
 
-          <div className="flex items-center gap-4 mb-4">
-            <CircularProgress value={porcentaje} size={74} stroke={10}>
-              <span className="font-heading text-[19px] font-extrabold leading-none">{porcentaje}%</span>
-            </CircularProgress>
-            <div className="min-w-0">
-              <p className="text-white text-sm opacity-90">Tu bebé es del tamaño de</p>
-              <p className="text-white text-lg font-bold mt-0.5">
-                {info.size.emoji} {info.size.name}
-              </p>
-              <p className="text-white text-[13px] opacity-85 mt-1">
-                {info.weight ? `≈ ${info.weight} g` : "—"}
-                {info.length ? ` · ≈ ${info.length} cm` : ""}
-              </p>
-            </div>
+          <div className="mb-4">
+            <TamanoBebe size={info.size} length={info.length} weight={info.weight} label="El bebé es del tamaño de" />
           </div>
 
           <div className="bg-white/20 rounded-[18px] px-4 py-3.5">
