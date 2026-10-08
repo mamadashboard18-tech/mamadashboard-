@@ -53,7 +53,7 @@ async function handleGetData(req, res, supabaseAdmin, link) {
   const todayISO = new Date().toISOString().slice(0, 10);
   const catorceDiasAtras = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-  const [{ data: perfil }, { data: citas }, { data: sintomas }, { data: notas }] = await Promise.all([
+  const [{ data: perfil }, { data: citas }, { data: sintomas }, { data: notas }, { data: contactos }] = await Promise.all([
     supabaseAdmin
       .from("profiles")
       .select("semana_actual")
@@ -77,6 +77,11 @@ async function handleGetData(req, res, supabaseAdmin, link) {
       .eq("mother_id", link.mother_id)
       .order("created_at", { ascending: false })
       .limit(20),
+    supabaseAdmin
+      .from("contactos_compartidos")
+      .select("id, nombre, rol, telefono")
+      .eq("mother_id", link.mother_id)
+      .order("id", { ascending: true }),
   ]);
 
   const notasSinLeer = (notas || []).filter((n) => !n.leida_at).map((n) => n.id);
@@ -94,6 +99,7 @@ async function handleGetData(req, res, supabaseAdmin, link) {
     citas: citas || [],
     sintomas: sintomas || [],
     notas: notas || [],
+    contactos: contactos || [],
   });
 }
 

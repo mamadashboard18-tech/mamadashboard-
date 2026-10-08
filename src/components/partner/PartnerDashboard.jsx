@@ -61,6 +61,10 @@ export default function PartnerDashboard({ initialActive = "inicio" }) {
           { id: "n1", texto: "Hoy me sentí mejor, gracias por acompañarme", created_at: new Date().toISOString() },
           { id: "n2", texto: "¿Podés pasar a buscar las vitaminas que me recetó la doctora?", created_at: iso(plus(-2)) },
         ],
+        contactos: [
+          { id: "k1", nombre: "Dra. Laura Paz", rol: "Obstetra", telefono: "11 5555 5555" },
+          { id: "k2", nombre: "Sanatorio Mater", rol: "Hospital / maternidad", telefono: "11 4444 4444" },
+        ],
       });
       return;
     }

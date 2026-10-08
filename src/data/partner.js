@@ -163,6 +163,34 @@ export async function syncSintomasCompartidos(fecha, sintomas) {
   });
 }
 
+// Reemplaza el espejo completo: sube los contactos marcados para compartir y
+// borra los que ya no están (eliminados o dejados de compartir).
+export async function syncContactosCompartidos(contactos) {
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return;
+  const motherId = userData.user.id;
+
+  const compartidos = contactos.filter((c) => c.compartirPartner ?? true);
+  const ids = compartidos.map((c) => c.id);
+
+  let borrar = supabase.from("contactos_compartidos").delete().eq("mother_id", motherId);
+  if (ids.length > 0) borrar = borrar.not("id", "in", `(${ids.map((id) => `"${id}"`).join(",")})`);
+  await borrar;
+
+  if (compartidos.length === 0) return;
+  const updatedAt = new Date().toISOString();
+  await supabase.from("contactos_compartidos").upsert(
+    compartidos.map((c) => ({
+      id: c.id,
+      mother_id: motherId,
+      nombre: c.nombre,
+      rol: c.rol || null,
+      telefono: c.telefono || null,
+      updated_at: updatedAt,
+    }))
+  );
+}
+
 // ---------- Lado partner ----------
 
 export async function isPartnerSession(userId) {

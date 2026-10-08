@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Save, Pencil, Trash2, Phone } from "lucide-react";
+import { Save, Pencil, Trash2, Phone, Users } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
+import ToggleSwitch from "./ToggleSwitch";
 import { loadContactos, saveContactos, rolesSugeridos } from "../data/contactosMedicos";
+import { getPartnerStatus, syncContactosCompartidos } from "../data/partner";
 
-const emptyForm = { nombre: "", rol: rolesSugeridos[0], telefono: "" };
+const emptyForm = { nombre: "", rol: rolesSugeridos[0], telefono: "", compartirPartner: true };
 const inputClass =
   "w-full border border-[var(--border-soft)] rounded-xl p-2 text-sm text-ink bg-white mb-3 focus:outline-none focus:border-brand-pink transition-colors";
 const primaryButtonStyle = { background: "var(--gradient-hero)" };
@@ -13,10 +15,22 @@ export default function ContactosMedicos({ onBack, embedded = false }) {
   const [contactos, setContactos] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
+  const [hasPartner, setHasPartner] = useState(false);
 
   useEffect(() => {
-    setContactos(loadContactos());
+    const guardados = loadContactos();
+    setContactos(guardados);
+    getPartnerStatus().then((s) => {
+      setHasPartner(s.hasPartner);
+      if (s.hasPartner) syncContactosCompartidos(guardados);
+    });
   }, []);
+
+  const persistir = (next) => {
+    setContactos(next);
+    saveContactos(next);
+    if (hasPartner) syncContactosCompartidos(next);
+  };
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -30,21 +44,23 @@ export default function ContactosMedicos({ onBack, embedded = false }) {
     } else {
       next = [...contactos, { ...form, id: Date.now().toString() }];
     }
-    setContactos(next);
-    saveContactos(next);
+    persistir(next);
     setForm(emptyForm);
     setEditingId(null);
   };
 
   const handleEditar = (c) => {
-    setForm({ nombre: c.nombre, rol: c.rol, telefono: c.telefono });
+    setForm({
+      nombre: c.nombre,
+      rol: c.rol,
+      telefono: c.telefono,
+      compartirPartner: c.compartirPartner ?? true,
+    });
     setEditingId(c.id);
   };
 
   const handleEliminar = (id) => {
-    const next = contactos.filter((c) => c.id !== id);
-    setContactos(next);
-    saveContactos(next);
+    persistir(contactos.filter((c) => c.id !== id));
     if (editingId === id) {
       setEditingId(null);
       setForm(emptyForm);
@@ -104,6 +120,23 @@ export default function ContactosMedicos({ onBack, embedded = false }) {
             className={inputClass}
           />
 
+          {hasPartner && (
+            <div className="border border-[var(--border-soft)] rounded-xl px-3 py-2.5 flex items-center gap-3 mb-3">
+              <span className="w-8 h-8 rounded-full bg-brand-purple-light/60 flex items-center justify-center text-brand-purple shrink-0">
+                <Users className="w-4 h-4" strokeWidth={1.8} />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-ink">Compartir con mi partner</p>
+                <p className="text-xs text-ink-muted">Va a poder verlo y llamar desde su cuenta</p>
+              </div>
+              <ToggleSwitch
+                checked={form.compartirPartner}
+                onChange={() => updateField("compartirPartner", !form.compartirPartner)}
+                label="Compartir con mi partner"
+              />
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
             <button
               onClick={handleGuardar}
@@ -147,6 +180,12 @@ export default function ContactosMedicos({ onBack, embedded = false }) {
                     <p className="text-xs text-ink-muted">
                       {c.rol} {c.telefono && `· ${c.telefono}`}
                     </p>
+                    {hasPartner && (c.compartirPartner ?? true) && (
+                      <p className="flex items-center gap-1 text-[11px] font-medium text-brand-purple mt-0.5">
+                        <Users className="w-3 h-3" strokeWidth={2} />
+                        Compartido con tu partner
+                      </p>
+                    )}
                   </div>
                   <div className="flex items-center gap-3">
                     {c.telefono && (

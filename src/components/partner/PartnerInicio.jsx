@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Activity, ChevronRight, Quote, X } from "lucide-react";
+import { Activity, ChevronRight, Phone, Quote, Stethoscope, X } from "lucide-react";
 import CircularProgress from "../CircularProgress";
 import { consejoPartnerSintoma, porQuePasaSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
@@ -159,6 +159,46 @@ export default function PartnerInicio({ data }) {
               </div>
             );
           })}
+        </div>
+      )}
+
+      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">
+        Contactos del equipo médico
+      </p>
+      {!data.contactos?.length ? (
+        <div className="mb-[22px]">
+          <EmptyCard>Todavía no compartió contactos.</EmptyCard>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2.5 mb-[22px]">
+          {data.contactos.map((c) => (
+            <div
+              key={c.id}
+              className="flex items-center gap-3 bg-white rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]"
+            >
+              <span className="w-[38px] h-[38px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
+                <Stethoscope className="w-[17px] h-[17px]" strokeWidth={1.8} />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-partner-ink truncate">{c.nombre}</p>
+                <p className="text-[12.5px] text-partner-ink-muted truncate">
+                  {c.rol}
+                  {c.telefono && ` · ${c.telefono}`}
+                </p>
+              </div>
+              {c.telefono && (
+                <a
+                  href={`tel:${c.telefono.replace(/\s+/g, "")}`}
+                  aria-label={`Llamar a ${c.nombre}`}
+                  title="Llamar"
+                  className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white shrink-0"
+                  style={{ background: "var(--partner-gradient)" }}
+                >
+                  <Phone className="w-4 h-4" strokeWidth={2} />
+                </a>
+              )}
+            </div>
+          ))}
         </div>
       )}
 
