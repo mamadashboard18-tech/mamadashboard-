@@ -80,6 +80,14 @@ export default function PartnerDashboard({ initialActive = "inicio" }) {
 
   useEffect(load, []);
 
+  useEffect(() => {
+    const tituloAnterior = document.title;
+    document.title = "Acompañar · Acuna App";
+    return () => {
+      document.title = tituloAnterior;
+    };
+  }, []);
+
   const handleRsvp = async (citaId, respuesta) => {
     setData((prev) => ({
       ...prev,
