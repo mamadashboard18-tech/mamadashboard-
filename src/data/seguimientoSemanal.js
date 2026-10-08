@@ -1,3 +1,4 @@
+// img: ilustración propia (generada en Canva) en public/bebe; si falta o no carga se usa el emoji.
 const sizes = [
   { emoji: "🔬", name: "Todavía no hay embarazo", sinTamano: true }, // 1
   { emoji: "🔬", name: "Se acerca la ovulación", sinTamano: true }, // 2
@@ -14,7 +15,7 @@ const sizes = [
   { emoji: "🫛", name: "una vaina de arvejas" }, // 13
   { emoji: "🍋", name: "un limón" }, // 14
   { emoji: "🍎", name: "una manzana" }, // 15
-  { emoji: "🥑", name: "una palta" }, // 16
+  { img: "/bebe/semana-16.png", emoji: "🥑", name: "una palta" }, // 16
   { emoji: "🥔", name: "un nabo" }, // 17
   { emoji: "🫑", name: "un morrón" }, // 18
   { emoji: "🍅", name: "un tomate" }, // 19
