@@ -1,10 +1,10 @@
-import { Home, CalendarDays, Sparkles, Headphones, Users } from "lucide-react";
+import { Home, CalendarDays, NotebookPen, Headphones, Users } from "lucide-react";
 import { sections } from "../data/sections";
 
 const icons = {
   inicio: Home,
   citas: CalendarDays,
-  bienestar: Sparkles,
+  bienestar: NotebookPen,
   multimedia: Headphones,
   comunidad: Users,
 };
