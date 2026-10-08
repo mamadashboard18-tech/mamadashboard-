@@ -1,7 +1,7 @@
 const sizes = [
-  { emoji: "🔬", name: "óvulo no fecundado aún" }, // 1
-  { emoji: "🔬", name: "ovulación en curso" }, // 2
-  { emoji: "🔬", name: "fecundación reciente" }, // 3
+  { emoji: "🔬", name: "Todavía no hay embarazo", sinTamano: true }, // 1
+  { emoji: "🔬", name: "Se acerca la ovulación", sinTamano: true }, // 2
+  { emoji: "🔬", name: "Fecundación reciente", sinTamano: true }, // 3
   { emoji: "🌱", name: "una semilla de amapola" }, // 4
   { emoji: "🌱", name: "una semilla de sésamo" }, // 5
   { emoji: "🫘", name: "una lenteja" }, // 6
@@ -41,6 +41,8 @@ const sizes = [
   { emoji: "🎃", name: "una calabaza pequeña" }, // 40
 ];
 
+// Promedios de referencia (tablas de crecimiento fetal tipo OMS/Hadlock). Hasta la semana 19
+// la longitud es cabeza-nalgas; desde la 20, cabeza-talón (por eso el salto entre 19 y 20).
 const lengths = [
   null, null, null, null, null, null,
   1.3, 1.6, 2.3, 3.1, 4.1, 5.4, 7.4, 8.7, 10.1, 11.6, 13, 14.2, 15.3, 25.6,
@@ -66,8 +68,8 @@ const milestones = [
   "Todos los órganos principales comenzaron a desarrollarse.",
   "Los dedos de manos y pies empiezan a definirse.",
   "Los huesos y cartílagos se están formando.",
-  "Tu bebé empieza a moverse, aunque todavía no lo sientas.",
-  "Se completó el desarrollo de los órganos principales.",
+  "Ya hace pequeños movimientos, aunque todavía no los sientas.",
+  "Ya se formaron sus órganos principales; ahora van a crecer y madurar.",
   "Termina el primer trimestre. ¡Vas muy bien!",
   "Tu bebé puede hacer muecas y fruncir el ceño.",
   "Puede percibir la luz a través de los párpados cerrados.",
@@ -82,14 +84,14 @@ const milestones = [
   "Alcanza un hito de viabilidad con cuidados médicos intensivos.",
   "Su piel comienza a volverse menos transparente.",
   "Sus ojos empiezan a abrirse.",
-  "Responde a sonidos y reconoce tu voz.",
+  "Responde a los sonidos y puede empezar a reconocer tu voz.",
   "Empieza el tercer trimestre. Puede parpadear y entrar en fase de sueño REM.",
   "Sus músculos y pulmones siguen madurando.",
   "Su cerebro se desarrolla muy rápidamente.",
   "Puede girar la cabeza y sus huesos se endurecen, salvo el cráneo.",
   "Practica la respiración usando líquido amniótico.",
   "Los huesos de su cráneo permanecen blandos para facilitar el parto.",
-  "Su sistema nervioso central sigue maduro y en desarrollo.",
+  "Su sistema nervioso central sigue madurando.",
   "Sus riñones están completamente desarrollados.",
   "Sigue ganando peso rápidamente de cara al parto.",
   "Se considera oficialmente 'a término temprano'.",
@@ -117,7 +119,8 @@ const symptomSets = {
 };
 
 export function trimesterOf(week) {
-  if (week <= 12) return 1;
+  // ACOG: 1er trimestre hasta 13+6, 2do de 14+0 a 27+6, 3ro desde 28+0
+  if (week <= 13) return 1;
   if (week <= 27) return 2;
   return 3;
 }

@@ -341,7 +341,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
           </div>
 
           <div className="mb-4">
-            <TamanoBebe size={data.size} length={data.length} weight={data.weight} />
+            <TamanoBebe week={semanaMostrada} size={data.size} length={data.length} weight={data.weight} />
           </div>
 
           <div className="bg-white/20 rounded-[18px] px-4 py-3">

@@ -47,7 +47,7 @@ export default function PartnerInicio({ data }) {
           </div>
 
           <div className="mb-4">
-            <TamanoBebe size={info.size} length={info.length} weight={info.weight} label="El bebé es del tamaño de" />
+            <TamanoBebe week={data.semanaActual} size={info.size} length={info.length} weight={info.weight} label="El bebé es del tamaño de" />
           </div>
 
           <div className="bg-white/20 rounded-[18px] px-4 py-3.5">
