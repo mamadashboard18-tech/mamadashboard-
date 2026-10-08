@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LogOut, User } from "lucide-react";
+import { User } from "lucide-react";
 import { fetchPartnerData, sendRsvp } from "../../data/partner";
 import { logout } from "../../data/auth";
 import PartnerAmbientBlobs from "./PartnerAmbientBlobs";
@@ -123,24 +123,14 @@ export default function PartnerDashboard({ initialActive = "inicio" }) {
               {data.motherNombre || "tu pareja"}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setActive("perfil")}
-              aria-label="Tu perfil"
-              title="Tu perfil"
-              className="w-[38px] h-[38px] rounded-full bg-partner-violet/12 flex items-center justify-center text-partner-violet cursor-pointer"
-            >
-              <User className="w-4 h-4" strokeWidth={1.8} />
-            </button>
-            <button
-              onClick={handleLogout}
-              aria-label="Cerrar sesión"
-              title="Cerrar sesión"
-              className="w-[38px] h-[38px] rounded-full bg-partner-violet/12 flex items-center justify-center text-partner-violet cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" strokeWidth={1.8} />
-            </button>
-          </div>
+          <button
+            onClick={() => setActive("perfil")}
+            aria-label="Tu perfil"
+            title="Tu perfil"
+            className="w-[38px] h-[38px] rounded-full bg-partner-violet/12 flex items-center justify-center text-partner-violet cursor-pointer"
+          >
+            <User className="w-4 h-4" strokeWidth={1.8} />
+          </button>
         </div>
 
         <main className="flex-1 overflow-y-auto px-[18px] py-5 pb-[110px] lg:px-10 lg:py-10 lg:pb-[60px]">

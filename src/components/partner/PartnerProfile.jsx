@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, LogOut } from "lucide-react";
 import {
   getPartnerProfile,
   updatePartnerProfile,
@@ -173,8 +173,9 @@ export default function PartnerProfile({ motherNombre, onBack, onLogout }) {
 
       <button
         onClick={onLogout}
-        className="text-[14.5px] font-semibold text-partner-ink-muted hover:text-partner-violet-deep transition-colors cursor-pointer"
+        className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium cursor-pointer"
       >
+        <LogOut className="w-4 h-4" />
         Cerrar sesión
       </button>
     </div>
