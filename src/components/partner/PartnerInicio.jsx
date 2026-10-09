@@ -3,7 +3,7 @@ import { Activity, ChevronRight, Phone, Quote, Stethoscope, X } from "lucide-rea
 import TamanoBebe from "../TamanoBebe";
 import { consejoPartnerSintoma, porQuePasaSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
-import { getBibliotecaPorCategoria, getRecomendacionesHoy, tipoIconoComponent } from "../../data/multimedia";
+import { getRecomendadoPartner, getRecomendacionPorSintomas, tipoIconoComponent } from "../../data/multimedia";
 
 const trimesterLabel = { 1: "1er trimestre", 2: "2do trimestre", 3: "3er trimestre" };
 
@@ -27,7 +27,7 @@ function EmptyCard({ children }) {
 export default function PartnerInicio({ data }) {
   const info = data.semanaActual ? getWeekData(data.semanaActual) : null;
   const porcentaje = data.semanaActual ? Math.round((data.semanaActual / totalWeeks) * 100) : 0;
-  const contenidoRecomendado = getBibliotecaPorCategoria("pareja_acompanante").slice(0, 2);
+  const contenidoRecomendado = data.semanaActual ? getRecomendadoPartner(data.semanaActual) : [];
   const [sintomaAbierto, setSintomaAbierto] = useState(null);
 
   return (
@@ -97,7 +97,7 @@ export default function PartnerInicio({ data }) {
         <div className="flex flex-col gap-3 mb-[22px]">
           {data.sintomas.map((registro) => {
             const recomendacion = data.semanaActual
-              ? getRecomendacionesHoy(data.semanaActual, registro.sintomas).porSintomas[0]?.titulo
+              ? getRecomendacionPorSintomas(data.semanaActual, registro.sintomas)
               : null;
             return (
               <div
@@ -133,16 +133,18 @@ export default function PartnerInicio({ data }) {
                   })}
                 </div>
                 {recomendacion && (
-                  <button
-                    type="button"
-                    className="w-full mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2 text-left cursor-pointer"
+                  <a
+                    href={recomendacion.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2 text-left cursor-pointer hover:opacity-80 transition-opacity"
                   >
                     <Activity className="w-[15px] h-[15px] text-partner-violet shrink-0" strokeWidth={1.8} />
                     <p className="flex-1 min-w-0 text-[12.5px] font-semibold text-partner-violet-deep line-clamp-1">
-                      {recomendacion}
+                      {recomendacion.titulo}
                     </p>
                     <ChevronRight className="w-[13px] h-[13px] text-partner-dashed-border shrink-0" strokeWidth={2} />
-                  </button>
+                  </a>
                 )}
               </div>
             );

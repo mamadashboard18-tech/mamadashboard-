@@ -78,6 +78,26 @@ export function getRecomendacionesHoy(semana, sintomas = []) {
   return { semanal, porSintomas };
 }
 
+// Para el acompañante: lo que pasa en la semana actual (mismo contenido semanal que ve
+// la mamá) + un contenido pensado para acompañantes que rota según la semana. Durante el
+// embarazo se dejan afuera los de posparto, y solo entran items con link (las frases no
+// se pueden abrir).
+export function getRecomendadoPartner(semana) {
+  const deLaSemana = getContenidoSemana(semana, "embarazo")
+    .filter((item) => item.link && item.tipo !== "frase")
+    .slice(0, 2);
+  const paraAcompanantes = getBibliotecaPorCategoria("pareja_acompanante").filter(
+    (item) => item.link && !/pos(t)?parto/i.test(item.titulo)
+  );
+  const rotado = paraAcompanantes.length ? [paraAcompanantes[semana % paraAcompanantes.length]] : [];
+  return [...deLaSemana, ...rotado];
+}
+
+// Primer contenido con link relacionado con los síntomas registrados (o null).
+export function getRecomendacionPorSintomas(semana, sintomas = []) {
+  return getRecomendacionesHoy(semana, sintomas).porSintomas.find((item) => item.link) || null;
+}
+
 export { semanal, biblioteca };
 
 // Contenido curado de influencers y famosas hablando de maternidad, embarazo y
