@@ -336,23 +336,25 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
 
         {eligiendoConsigna && (
           <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-2xl p-2 mb-3">
-            <div className="flex items-center justify-between px-2 pt-1 pb-2">
+            <div className="flex items-center justify-between pl-2 pb-1">
               <p className="text-xs font-bold text-ink-muted uppercase tracking-wide">Elegí una consigna</p>
               <button
                 type="button"
                 onClick={() => setEligiendoConsigna(false)}
-                className="text-xs text-ink-muted hover:text-ink cursor-pointer"
+                aria-label="Cerrar consignas"
+                title="Cerrar"
+                className="w-7 h-7 rounded-full flex items-center justify-center text-ink-muted hover:bg-white hover:text-ink transition-colors cursor-pointer"
               >
-                Cancelar
+                <X className="w-4 h-4" strokeWidth={2} />
               </button>
             </div>
-            <ul className="flex flex-col gap-1">
+            <ul className="flex flex-col max-h-[168px] overflow-y-auto overscroll-contain">
               {prompts.map((p) => (
                 <li key={p}>
                   <button
                     type="button"
                     onClick={() => elegirConsigna(p)}
-                    className={`w-full text-left text-sm rounded-xl px-3 py-2.5 flex items-start gap-2 cursor-pointer transition-colors ${
+                    className={`w-full text-left text-[13px] leading-snug rounded-xl px-2.5 py-2 flex items-start gap-2 cursor-pointer transition-colors ${
                       p === prompt
                         ? "bg-white text-brand-pink font-bold"
                         : "text-ink hover:bg-white"
