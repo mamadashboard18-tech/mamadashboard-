@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { X, BookOpen, Star, MessageCircle, EyeOff, Lock, Save, Trash2, Pencil, FileText } from "lucide-react";
+import { X, BookOpen, Star, MessageCircle, EyeOff, Lock, Save, Trash2, Pencil, FileText, Check, Heart } from "lucide-react";
 import AttachButtons from "./AttachButtons";
 import { loadEntradaDelDia, guardarEntradaDelDia, eliminarEntrada } from "../data/diario";
-import { prompts, nuevoPromptAleatorio, toISODate } from "../data/diarioLibre";
+import { prompts, toISODate } from "../data/diarioLibre";
+import { getPartnerStatus, syncNotaDiarioCompartida } from "../data/partner";
 import {
   diarioDesbloqueado,
   descifrarConClave,
@@ -40,17 +41,20 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
   const [cargando, setCargando] = useState(eraPrivada && diarioDesbloqueado());
   const [titulo, setTitulo] = useState(eraPrivada ? "" : existente?.titulo ?? "");
   const [texto, setTexto] = useState(eraPrivada ? "" : existente?.texto ?? "");
-  const [mostrarConsigna, setMostrarConsigna] = useState(Boolean(existente?.prompt));
   const [prompt, setPrompt] = useState(existente?.prompt ?? null);
+  const [eligiendoConsigna, setEligiendoConsigna] = useState(false);
   const [archivos, setArchivos] = useState(existente?.archivos ?? []);
   const [destacado, setDestacado] = useState(existente?.destacado ?? false);
   const [oculto, setOculto] = useState(existente?.oculto ?? false);
   const [privada, setPrivada] = useState(eraPrivada);
+  const [hasPartner, setHasPartner] = useState(false);
+  const [compartirPartner, setCompartirPartner] = useState(Boolean(existente?.partnerNoteId));
   const [mostrarDesbloqueo, setMostrarDesbloqueo] = useState(null);
   const [semanaActual, setSemanaActual] = useState(24);
 
   useEffect(() => {
     loadPerfil().then((p) => setSemanaActual(p.semanaActual));
+    getPartnerStatus().then((s) => setHasPartner(s.hasPartner));
   }, []);
 
   useEffect(() => {
@@ -66,9 +70,9 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
 
   const semana = semanaEnFecha(fecha, semanaActual, new Date());
 
-  const toggleConsigna = () => {
-    if (!mostrarConsigna) setPrompt((p) => p || prompts[Math.floor(Math.random() * prompts.length)]);
-    setMostrarConsigna((v) => !v);
+  const elegirConsigna = (p) => {
+    setPrompt(p);
+    setEligiendoConsigna(false);
   };
 
   const handleArchivos = (fileList) => {
@@ -107,6 +111,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
       setPrivada(false);
       return;
     }
+    setCompartirPartner(false);
     if (!tienePassword()) {
       setMostrarDesbloqueo("crear");
       return;
@@ -120,7 +125,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
 
   const handleGuardar = async () => {
     const payload = {
-      prompt: mostrarConsigna ? prompt : null,
+      prompt,
       archivos,
       destacado,
       oculto,
@@ -143,6 +148,15 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
       payload.textoCifrado = null;
     }
 
+    // Bloqueada nunca se comparte: el partner no tiene el PIN.
+    const compartir = hasPartner && compartirPartner && !privada;
+    const textoNota = compartir
+      ? [prompt && `"${prompt}"`, titulo.trim(), texto.trim()].filter(Boolean).join("\n\n")
+      : "";
+    if (compartir || existente?.partnerNoteId) {
+      payload.partnerNoteId = await syncNotaDiarioCompartida(existente?.partnerNoteId, textoNota);
+    }
+
     guardarEntradaDelDia(fecha, payload);
     onSaved?.();
     onClose();
@@ -150,6 +164,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
 
   const handleEliminar = () => {
     if (!window.confirm("¿Eliminar esta entrada para siempre? No se puede deshacer.")) return;
+    if (existente?.partnerNoteId) syncNotaDiarioCompartida(existente.partnerNoteId, "");
     eliminarEntrada(fecha);
     onSaved?.();
     onClose();
@@ -285,7 +300,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           <textarea
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
-            placeholder="Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos..."
+            placeholder={prompt || "Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos..."}
             className="w-full min-h-[260px] rounded-[22px] border border-[rgba(226,111,206,0.2)] bg-white p-5 pb-14 text-base text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink resize-none box-border"
             style={{ boxShadow: "0 2px 16px rgba(155,93,229,0.08)" }}
             rows={9}
@@ -293,24 +308,57 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           />
           <button
             type="button"
-            onClick={toggleConsigna}
+            onClick={() => (prompt ? setPrompt(null) : setEligiendoConsigna((v) => !v))}
             className="absolute left-4 bottom-4 inline-flex items-center gap-1.5 text-xs font-bold text-brand-pink border border-dashed border-[rgba(226,111,206,0.5)] rounded-full px-3 py-1.5 bg-white/90 hover:bg-brand-pink-light/40 transition-colors cursor-pointer"
           >
             <MessageCircle className="w-3.5 h-3.5" strokeWidth={2} />
-            {mostrarConsigna ? "Usando una consigna" : "Usar una consigna"}
+            {prompt ? "Quitar consigna" : "Usar una consigna"}
           </button>
         </div>
 
-        {mostrarConsigna && (
+        {prompt && !eligiendoConsigna && (
           <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-2xl p-3.5 mb-3 flex items-center justify-between gap-3">
             <p className="text-sm text-ink italic">"{prompt}"</p>
             <button
               type="button"
-              onClick={() => setPrompt(nuevoPromptAleatorio(prompt))}
+              onClick={() => setEligiendoConsigna(true)}
               className="text-xs text-brand-pink hover:underline whitespace-nowrap shrink-0 cursor-pointer"
             >
               Cambiar
             </button>
+          </div>
+        )}
+
+        {eligiendoConsigna && (
+          <div className="bg-[var(--bg)] border border-[var(--border-soft)] rounded-2xl p-2 mb-3">
+            <div className="flex items-center justify-between px-2 pt-1 pb-2">
+              <p className="text-xs font-bold text-ink-muted uppercase tracking-wide">Elegí una consigna</p>
+              <button
+                type="button"
+                onClick={() => setEligiendoConsigna(false)}
+                className="text-xs text-ink-muted hover:text-ink cursor-pointer"
+              >
+                Cancelar
+              </button>
+            </div>
+            <ul className="flex flex-col gap-1">
+              {prompts.map((p) => (
+                <li key={p}>
+                  <button
+                    type="button"
+                    onClick={() => elegirConsigna(p)}
+                    className={`w-full text-left text-sm rounded-xl px-3 py-2.5 flex items-start gap-2 cursor-pointer transition-colors ${
+                      p === prompt
+                        ? "bg-white text-brand-pink font-bold"
+                        : "text-ink hover:bg-white"
+                    }`}
+                  >
+                    <span className="flex-1">{p}</span>
+                    {p === prompt && <Check className="w-4 h-4 shrink-0 mt-0.5" strokeWidth={2.2} />}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
@@ -359,11 +407,41 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
             <p className="text-base font-bold text-ink flex-1">Bloquear</p>
             <ToggleSwitch checked={privada} onChange={handleTogglePrivada} label="Bloquear" />
           </div>
+          {hasPartner && (
+            <>
+              <div className="h-px bg-[rgba(155,93,229,0.1)] mx-3.5" />
+              <div className="flex items-center gap-3 px-3.5 py-3.5">
+                <span className="w-9 h-9 rounded-full bg-[rgba(226,111,206,0.12)] text-brand-pink flex items-center justify-center shrink-0">
+                  <Heart className="w-4 h-4" strokeWidth={1.8} />
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-base font-bold text-ink">Compartir con mi partner</p>
+                  {privada && (
+                    <p className="text-xs text-ink-muted mt-0.5">Desbloqueala para poder compartirla</p>
+                  )}
+                </div>
+                <ToggleSwitch
+                  checked={compartirPartner && !privada}
+                  onChange={() => !privada && setCompartirPartner((v) => !v)}
+                  label="Compartir con mi partner"
+                />
+              </div>
+            </>
+          )}
         </div>
 
         <p className="text-sm text-[#8a7f92] flex items-center gap-1.5 mb-3">
-          <Lock className="w-3.5 h-3.5" strokeWidth={2} />
-          Privado, solo vos podés verlo
+          {hasPartner && compartirPartner && !privada ? (
+            <>
+              <Heart className="w-3.5 h-3.5" strokeWidth={2} />
+              Tu partner va a poder leerla
+            </>
+          ) : (
+            <>
+              <Lock className="w-3.5 h-3.5" strokeWidth={2} />
+              Privado, solo vos podés verlo
+            </>
+          )}
         </p>
 
         <div className="flex items-center gap-3">

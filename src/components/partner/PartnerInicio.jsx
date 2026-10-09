@@ -205,7 +205,7 @@ export default function PartnerInicio({ data }) {
             >
               <Quote className="w-5 h-5 text-partner-violet shrink-0 mt-0.5" strokeWidth={1.8} />
               <div className="flex-1 min-w-0">
-                <p className="text-[14.5px] italic text-[#3d3646] leading-relaxed">{nota.texto}</p>
+                <p className="text-[14.5px] italic text-[#3d3646] leading-relaxed whitespace-pre-line">{nota.texto}</p>
                 <p className="text-xs text-[#9186a0] mt-2">
                   {new Date(nota.created_at).toLocaleDateString("es-AR", {
                     day: "numeric",

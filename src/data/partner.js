@@ -95,6 +95,34 @@ export async function sendPartnerNote(texto) {
   return { ok: !error };
 }
 
+// Una entrada del diario compartida queda espejada en una sola nota: si ya
+// existe se actualiza, si se deja de compartir se borra.
+export async function syncNotaDiarioCompartida(noteId, texto) {
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) return noteId || null;
+
+  if (!texto?.trim()) {
+    if (noteId) await supabase.from("partner_notes").delete().eq("id", noteId);
+    return null;
+  }
+
+  if (noteId) {
+    const { data } = await supabase
+      .from("partner_notes")
+      .update({ texto: texto.trim() })
+      .eq("id", noteId)
+      .select("id");
+    if (data?.length) return noteId;
+  }
+
+  const { data, error } = await supabase
+    .from("partner_notes")
+    .insert({ mother_id: userData.user.id, texto: texto.trim() })
+    .select("id")
+    .single();
+  return error ? null : data.id;
+}
+
 export async function listPartnerNotes() {
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return [];
