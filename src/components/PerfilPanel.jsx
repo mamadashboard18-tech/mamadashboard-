@@ -196,15 +196,7 @@ export default function PerfilPanel({ onLogout }) {
         items={ajustesItems}
         onBack={backToPerfil}
         onOpen={setView}
-      >
-        <button
-          onClick={onLogout}
-          className="mt-6 flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium"
-        >
-          <LogOut className="w-4 h-4" />
-          Cerrar sesión
-        </button>
-      </HubList>
+      />
     );
   }
 
@@ -500,6 +492,14 @@ export default function PerfilPanel({ onLogout }) {
           );
         })}
       </div>
+
+      <button
+        onClick={onLogout}
+        className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium"
+      >
+        <LogOut className="w-4 h-4" />
+        Cerrar sesión
+      </button>
     </div>
   );
 }
