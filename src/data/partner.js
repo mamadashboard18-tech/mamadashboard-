@@ -24,9 +24,16 @@ async function authFetch(url, options = {}) {
 
 // ---------- Lado mamá ----------
 
+// La vista previa del dashboard (solo en desarrollo) corre sin sesión: simulamos
+// un partner vinculado para poder ver los controles de compartir. Las funciones
+// de sync ya no escriben nada sin usuario, así que no se toca Supabase.
+const PARTNER_SIMULADO = { hasPartner: true, nombre: "Martín (simulado)", email: "partner@ejemplo.com", pendingInvite: null };
+
 export async function getPartnerStatus() {
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return { hasPartner: false, pendingInvite: null };
+  if (!userData.user) {
+    return import.meta.env.DEV ? PARTNER_SIMULADO : { hasPartner: false, pendingInvite: null };
+  }
 
   const { data: partner } = await supabase
     .from("partners")
@@ -99,7 +106,10 @@ export async function sendPartnerNote(texto) {
 // existe se actualiza, si se deja de compartir se borra.
 export async function syncNotaDiarioCompartida(noteId, texto) {
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return noteId || null;
+  if (!userData.user) {
+    if (!import.meta.env.DEV) return noteId || null;
+    return texto?.trim() ? noteId || "simulada" : null;
+  }
 
   if (!texto?.trim()) {
     if (noteId) await supabase.from("partner_notes").delete().eq("id", noteId);

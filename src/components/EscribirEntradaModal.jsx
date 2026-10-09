@@ -300,7 +300,12 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           <textarea
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
-            placeholder={prompt || "Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos..."}
+            placeholder={
+              prompt ||
+              (hasPartner && compartirPartner && !privada
+                ? "Escribí lo que quieras compartirle a tu partner..."
+                : "Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos...")
+            }
             className="w-full min-h-[260px] rounded-[22px] border border-[rgba(226,111,206,0.2)] bg-white p-5 pb-14 text-base text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink resize-none box-border"
             style={{ boxShadow: "0 2px 16px rgba(155,93,229,0.08)" }}
             rows={9}
