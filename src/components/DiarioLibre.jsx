@@ -11,6 +11,8 @@ import {
   Lock,
   Eye,
   EyeOff,
+  FileText,
+  X,
 } from "lucide-react";
 import EscribirEntradaModal from "./EscribirEntradaModal";
 import BackButton from "./BackButton";
@@ -354,7 +356,7 @@ export default function DiarioLibre({ onNavigate }) {
             onClick={() => setSelectedFecha(null)}
             className="text-ink-muted hover:text-ink px-1 shrink-0 cursor-pointer text-sm"
           >
-            ✕
+            <X className="w-4 h-4" strokeWidth={2} />
           </button>
         </div>
       )}
@@ -491,7 +493,7 @@ export default function DiarioLibre({ onNavigate }) {
                                   download={a.nombre}
                                   className="w-16 h-16 flex items-center justify-center bg-[var(--bg)] border border-[var(--border-soft)] rounded-xl text-xs text-ink-muted"
                                 >
-                                  📄
+                                  <FileText className="w-6 h-6" strokeWidth={1.6} />
                                 </a>
                               )
                             )}

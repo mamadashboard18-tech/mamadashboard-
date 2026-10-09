@@ -2,17 +2,6 @@ import { FileText, CirclePlay, Quote, BookOpen, Book, NotebookPen, Mic, Tv } fro
 import semanal from "./multimediaSemanal.json";
 import biblioteca from "./multimediaBiblioteca.json";
 
-export const tipoIcono = {
-  articulo: "📄",
-  video: "🎬",
-  frase: "💬",
-  guia: "📘",
-  libro: "📚",
-  plantilla: "📝",
-  podcast: "🎙️",
-  canal: "📺",
-};
-
 // Íconos de línea (lucide) equivalentes, para pantallas que usan el
 // lenguaje visual sin emojis (ej. modo partner).
 export const tipoIconoComponent = {

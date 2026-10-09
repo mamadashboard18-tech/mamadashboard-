@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { Flame, NotebookPen, Lightbulb, CircleCheck } from "lucide-react";
 import RegistroDiarioModal from "./RegistroDiarioModal";
+import { tipoIcono } from "../data/citasIconos";
 import RecuperacionPostparto from "./RecuperacionPostparto";
 import { diasConBebe } from "../data/bebe";
 import { getSemanaPostpartoData, semanaPostpartoDesde } from "../data/recuperacionPostparto";
@@ -10,18 +12,6 @@ import {
   iconoSintomaPostparto,
   esSintomaDeAtencionPostparto,
 } from "../data/sintomasPostparto";
-
-const tipoCitaIconos = {
-  "Control obstétrico": "🩺",
-  "Ecografía": "🖼️",
-  "Análisis de sangre": "🩸",
-  "Curso de preparto": "🎒",
-  "Odontología": "🦷",
-  "Nutrición": "🥗",
-  "Psicología perinatal": "💬",
-  "Primera consulta postparto": "💬",
-  "Otro": "🗓️",
-};
 
 function formatFechaLarga(iso) {
   const d = new Date(iso + "T00:00:00");
@@ -51,6 +41,7 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
       .filter((c) => c.fecha >= todayISO)
       .sort((a, b) => (a.fecha + a.hora).localeCompare(b.fecha + b.hora))[0];
   }, [citas, todayISO]);
+  const CitaIcono = tipoIcono(proximaCita?.tipo);
 
   const streak = useMemo(() => calcularStreak(registros, todayISO), [registros, todayISO]);
 
@@ -71,7 +62,8 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
         <div className="flex items-center gap-2">
           {streak > 0 && (
             <span className="flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
-              🔥 {streak} {streak === 1 ? "día seguido" : "días seguidos"}
+              <Flame className="w-3.5 h-3.5" strokeWidth={2} />
+              {streak} {streak === 1 ? "día seguido" : "días seguidos"}
             </span>
           )}
           <span className="text-xs px-3 py-1.5 rounded-full font-medium" style={{ background: "#ede9fe", color: "var(--lavender)" }}>
@@ -120,7 +112,7 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
               onClick={() => setModalAbierto(true)}
               className="w-full flex items-center gap-3 text-left bg-rose-50 border border-rose-100 rounded-xl p-3 hover:border-rose-300 transition-colors"
             >
-              <span className="text-xl shrink-0">📝</span>
+              <NotebookPen className="w-5 h-5 text-rose-500 shrink-0" strokeWidth={1.8} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">Registro de hoy</p>
                 <p className="text-xs text-gray-500 truncate">
@@ -135,7 +127,7 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
               onClick={() => setModalAbierto(true)}
               className="w-full flex items-center gap-3 text-left bg-white border border-dashed border-rose-200 rounded-xl p-3 hover:border-rose-400 transition-colors"
             >
-              <span className="text-xl shrink-0">📝</span>
+              <NotebookPen className="w-5 h-5 text-rose-500 shrink-0" strokeWidth={1.8} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
                   Completá tu registro de hoy
@@ -160,7 +152,7 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
                 className="w-full text-left bg-rose-50 border border-rose-100 rounded-xl p-3 hover:border-rose-300 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-xl">{tipoCitaIconos[proximaCita.tipo] || "🗓️"}</span>
+                  <CitaIcono className="w-5 h-5 text-rose-500 shrink-0" strokeWidth={1.8} />
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{proximaCita.tipo}</p>
                     <p className="text-xs text-gray-500 capitalize truncate">
@@ -183,15 +175,19 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
 
           {sintomasAtencionHoy.length > 0 ? (
             <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-800 text-sm">
-              <p className="font-medium mb-1">💡 Vale la pena comentarlo con tu médico</p>
+              <p className="font-medium mb-1 flex items-center gap-1.5">
+                <Lightbulb className="w-4 h-4 shrink-0" strokeWidth={2} />
+                Vale la pena comentarlo con tu médico
+              </p>
               <p>
                 Hoy registraste: {sintomasAtencionHoy.join(", ")}. Esto no es un diagnóstico, es
                 solo una sugerencia basada en lo que registraste vos misma.
               </p>
             </div>
           ) : (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-800 text-sm">
-              ⚠️ Sin alertas activas. Todo en orden hoy.
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-800 text-sm flex items-center gap-1.5">
+              <CircleCheck className="w-4 h-4 shrink-0" strokeWidth={2} />
+              Sin alertas activas. Todo en orden hoy.
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Check } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
 import {
@@ -94,7 +94,7 @@ export default function ChecklistHospital({ onBack }) {
                             : "border-rose-200"
                         }`}
                       >
-                        {checked && "✓"}
+                        {checked && <Check className="w-3.5 h-3.5" strokeWidth={3} />}
                       </span>
                       <span className={checked ? "text-gray-400 line-through" : "text-gray-700"}>
                         {item}
@@ -129,7 +129,7 @@ export default function ChecklistHospital({ onBack }) {
                             : "border-rose-200"
                         }`}
                       >
-                        {checked && "✓"}
+                        {checked && <Check className="w-3.5 h-3.5" strokeWidth={3} />}
                       </span>
                       <span className={checked ? "text-gray-400 line-through" : "text-gray-700"}>
                         {p.texto}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Save } from "lucide-react";
+import { Save, Check } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
 import {
@@ -167,7 +167,8 @@ export default function RecuperacionPostparto({ onBack }) {
                     : "bg-rose-50 text-gray-700 border-rose-100 hover:border-rose-300"
                 }`}
               >
-                {checked ? "✓ " : ""}{s}
+                {checked && <Check className="w-3.5 h-3.5 inline -mt-0.5 mr-1" strokeWidth={2.6} />}
+                {s}
               </button>
             );
           })}
@@ -191,7 +192,7 @@ export default function RecuperacionPostparto({ onBack }) {
           >
             <Save className="w-4 h-4" />
           </button>
-          {saved && <span className="text-sm text-green-600">Guardado ✓</span>}
+          {saved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
         </div>
       </div>
     </div>

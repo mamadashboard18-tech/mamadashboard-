@@ -1,7 +1,8 @@
-import { X } from "lucide-react";
-import { tipoIcono, getRecomendacionesHoy } from "../data/multimedia";
+import { X, FileText } from "lucide-react";
+import { tipoIconoComponent, getRecomendacionesHoy } from "../data/multimedia";
 
 function ContentCard({ item, tint }) {
+  const Icono = tipoIconoComponent[item.tipo] || FileText;
   const isLink = Boolean(item.link);
   const Wrapper = isLink ? "a" : "div";
   const wrapperProps = isLink ? { href: item.link, target: "_blank", rel: "noreferrer" } : {};
@@ -15,9 +16,7 @@ function ContentCard({ item, tint }) {
       {...wrapperProps}
       className={`flex items-start gap-3 rounded-2xl p-3.5 transition-colors ${tintClass} ${isLink ? "cursor-pointer" : ""}`}
     >
-      <span className="text-xl shrink-0 leading-none mt-0.5" aria-hidden="true">
-        {tipoIcono[item.tipo] || "📄"}
-      </span>
+      <Icono className="w-5 h-5 text-brand-purple shrink-0 mt-0.5" strokeWidth={1.8} aria-hidden="true" />
       <div className="min-w-0 flex-1">
         <p className="text-sm font-bold text-ink leading-snug">{item.titulo}</p>
         {item.autor && <p className="text-xs text-ink-muted mt-1">{item.autor}</p>}

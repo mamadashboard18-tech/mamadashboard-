@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Save, Trash2 } from "lucide-react";
+import { Save, Trash2, Check, Paperclip, FileText } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
 import { loadPlan, savePlan, emptyPlan } from "../data/planParto";
@@ -283,7 +283,8 @@ export default function PlanParto({ onBack }) {
             </p>
 
             <label className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-medium px-4 py-2 rounded-xl cursor-pointer hover:bg-rose-100 transition-colors">
-              📎 Subir archivo
+              <Paperclip className="w-4 h-4" strokeWidth={1.9} />
+              Subir archivo
               <input
                 type="file"
                 multiple
@@ -307,7 +308,8 @@ export default function PlanParto({ onBack }) {
                       download={a.nombre}
                       className="text-sm text-gray-700 hover:text-rose-600 truncate mr-3"
                     >
-                      📄 {a.nombre}{" "}
+                      <FileText className="w-4 h-4 inline -mt-0.5 mr-1" strokeWidth={1.8} />
+                      {a.nombre}{" "}
                       <span className="text-xs text-gray-400">
                         ({Math.round(a.tamano / 1024)} KB)
                       </span>
@@ -342,7 +344,7 @@ export default function PlanParto({ onBack }) {
           >
             Exportar / Imprimir PDF
           </button>
-          {saved && <span className="text-sm text-green-600">Guardado ✓</span>}
+          {saved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
         </div>
       </div>
 

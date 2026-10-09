@@ -35,6 +35,7 @@ import {
   Bell,
   Lock,
   UserRound,
+  Check,
 } from "lucide-react";
 
 const inputClass =
@@ -362,7 +363,7 @@ export default function PerfilPanel({ onLogout }) {
           >
             <Save className="w-4 h-4" />
           </button>
-          {saved && <span className="text-sm text-green-600">Guardado ✓</span>}
+          {saved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
         </div>
       </div>
 
@@ -478,7 +479,7 @@ export default function PerfilPanel({ onLogout }) {
               >
                 Cancelar
               </button>
-              {bebeSaved && <span className="text-sm text-green-600">Guardado ✓</span>}
+              {bebeSaved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
             </div>
           </div>
         )}

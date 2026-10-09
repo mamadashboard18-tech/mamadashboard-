@@ -105,6 +105,6 @@ export async function descifrarConClave(cifrado) {
     );
     return new TextDecoder().decode(plano);
   } catch {
-    return "⚠️ No se pudo desbloquear esta entrada.";
+    return "No se pudo desbloquear esta entrada.";
   }
 }

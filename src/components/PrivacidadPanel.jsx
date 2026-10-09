@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CalendarCheck, CalendarDays } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
 import {
@@ -54,7 +55,7 @@ export default function PrivacidadPanel({ onBack }) {
           }`}
         >
           {googleMsg === "success"
-            ? "✓ Google Calendar conectado."
+            ? "Google Calendar conectado."
             : "No se pudo conectar tu Google Calendar. Intentá de nuevo."}
         </div>
       )}
@@ -72,7 +73,10 @@ export default function PrivacidadPanel({ onBack }) {
           <div className="flex items-center gap-3 text-sm">
             {googleConnected ? (
               <>
-                <span className="text-gray-600">📅 Google Calendar conectado</span>
+                <span className="text-gray-600 inline-flex items-center gap-1.5">
+                  <CalendarCheck className="w-4 h-4" strokeWidth={1.8} />
+                  Google Calendar conectado
+                </span>
                 <button
                   onClick={handleDesconectar}
                   className="text-gray-400 hover:text-red-500 hover:underline"
@@ -85,7 +89,8 @@ export default function PrivacidadPanel({ onBack }) {
                 onClick={handleConectar}
                 className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
               >
-                📅 Conectar Google Calendar
+                <CalendarDays className="w-4 h-4 inline -mt-0.5 mr-1.5" strokeWidth={1.9} />
+                Conectar Google Calendar
               </button>
             )}
           </div>

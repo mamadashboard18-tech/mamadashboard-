@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Check, X } from "lucide-react";
 
 const inputClassByVariant = {
   rose: "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300",
@@ -89,7 +90,7 @@ export function PasswordChecklist({ password }) {
               passed ? "text-green-600" : "text-gray-400"
             }`}
           >
-            <span>{passed ? "✓" : "✕"}</span>
+            {passed ? <Check className="w-3.5 h-3.5" strokeWidth={2.4} /> : <X className="w-3.5 h-3.5" strokeWidth={2.4} />}
             {rule.label}
           </li>
         );

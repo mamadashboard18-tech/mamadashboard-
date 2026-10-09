@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Save } from "lucide-react";
+import { Save, Check } from "lucide-react";
 import Header from "./Header";
 import BackButton from "./BackButton";
 import { PasswordInput, PasswordChecklist, PASSWORD_RULES } from "./auth/PasswordInput";
@@ -23,7 +23,10 @@ const sectionTitleClass = "text-sm font-semibold text-ink-muted uppercase tracki
 function Feedback({ status }) {
   if (!status) return null;
   return (
-    <span className={`text-sm ${status.ok ? "text-green-600" : "text-red-500"}`}>{status.msg}</span>
+    <span className={`text-sm inline-flex items-center gap-1 ${status.ok ? "text-green-600" : "text-red-500"}`}>
+      {status.ok && <Check className="w-4 h-4" strokeWidth={2.2} />}
+      {status.msg}
+    </span>
   );
 }
 
@@ -65,7 +68,7 @@ function DatosCuenta({ cuenta, onSaved }) {
       return;
     }
     onSaved(result.user);
-    setStatus({ ok: true, msg: "Guardado ✓" });
+    setStatus({ ok: true, msg: "Guardado" });
   };
 
   return (
@@ -172,7 +175,7 @@ function EmailCuenta({ cuenta, onSaved }) {
     }
     if (result.user) onSaved(result.user);
     reset();
-    setStatus({ ok: true, msg: "Email actualizado ✓" });
+    setStatus({ ok: true, msg: "Email actualizado" });
   };
 
   return (
@@ -306,7 +309,7 @@ function PasswordCuenta({ cuenta }) {
     setActual("");
     setNueva("");
     setRepetir("");
-    setStatus({ ok: true, msg: "Contraseña actualizada ✓" });
+    setStatus({ ok: true, msg: "Contraseña actualizada" });
   };
 
   const onChange = (setter) => (e) => {

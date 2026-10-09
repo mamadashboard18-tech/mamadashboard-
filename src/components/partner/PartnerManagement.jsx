@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, Users, Link2 } from "lucide-react";
+import { ChevronLeft, Users, Link2, Check } from "lucide-react";
 import PartnerAmbientBlobs from "./PartnerAmbientBlobs";
 import {
   getPartnerStatus,
@@ -147,7 +147,7 @@ export default function PartnerManagement({ onBack }) {
                   className="text-white text-sm font-bold px-[18px] py-2.5 rounded-full transition-opacity hover:opacity-90 whitespace-nowrap cursor-pointer"
                   style={{ background: "var(--partner-gradient)" }}
                 >
-                  {copied ? "Copiado ✓" : "Copiar"}
+                  {copied ? <>Copiado<Check className="w-3.5 h-3.5 inline -mt-0.5 ml-1" strokeWidth={2.4} /></> : "Copiar"}
                 </button>
               </div>
               <button
@@ -215,7 +215,7 @@ export default function PartnerManagement({ onBack }) {
                         n.leida_at ? "font-semibold text-partner-ink-muted" : "font-bold text-partner-violet-deep"
                       }`}
                     >
-                      {n.leida_at ? "Leída ✓" : "No leída"}
+                      {n.leida_at ? <>Leída<Check className="w-3.5 h-3.5 inline -mt-0.5 ml-1" strokeWidth={2.4} /></> : "No leída"}
                     </span>
                   </div>
                 ))}

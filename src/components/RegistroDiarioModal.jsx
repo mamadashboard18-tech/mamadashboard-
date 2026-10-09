@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, Save, Users } from "lucide-react";
+import { X, Save, Users, FileText, TriangleAlert, Lightbulb, Lock } from "lucide-react";
 import AttachButtons from "./AttachButtons";
 import ToggleSwitch from "./ToggleSwitch";
 import {
@@ -265,9 +265,12 @@ export default function RegistroDiarioModal({
             <div className="grid grid-cols-2 gap-[10px] mb-3">
               {catalogoRestante.map((s) => renderChip(s))}
             </div>
-            <p className="text-sm text-[#92400e] bg-[rgba(234,179,8,0.14)] rounded-[14px] px-3.5 py-3 mb-3.5 leading-relaxed">
-              🟡 Los síntomas en amarillo pueden valer la pena comentarlos con tu médico — no es un
-              diagnóstico, solo una sugerencia.
+            <p className="flex items-start gap-2 text-sm text-[#92400e] bg-[rgba(234,179,8,0.14)] rounded-[14px] px-3.5 py-3 mb-3.5 leading-relaxed">
+              <TriangleAlert className="w-4 h-4 shrink-0 mt-0.5" strokeWidth={2} />
+              <span>
+                Los síntomas en amarillo pueden valer la pena comentarlos con tu médico — no es un
+                diagnóstico, solo una sugerencia.
+              </span>
             </p>
 
             <p className="text-[15px] text-[#6b5f78] mb-2">¿No está en la lista? Escribilo vos</p>
@@ -307,7 +310,8 @@ export default function RegistroDiarioModal({
           }`}
           style={mostrarConsigna ? { background: "var(--gradient-hero)" } : undefined}
         >
-          💭 {mostrarConsigna ? "Usando una consigna" : "Usar una consigna"}
+          <Lightbulb className="w-4 h-4 inline -mt-0.5 mr-1.5" strokeWidth={1.9} />
+          {mostrarConsigna ? "Usando una consigna" : "Usar una consigna"}
         </button>
 
         {mostrarConsigna && (
@@ -346,7 +350,7 @@ export default function RegistroDiarioModal({
                   />
                 ) : (
                   <div className="w-16 h-16 flex items-center justify-center bg-[var(--bg)] border border-[var(--border-soft)] rounded-xl text-xs text-ink-muted text-center px-1">
-                    📄
+                    <FileText className="w-6 h-6" strokeWidth={1.6} />
                   </div>
                 )}
                 <button
@@ -362,7 +366,10 @@ export default function RegistroDiarioModal({
         )}
 
         <div className="flex items-center justify-between gap-3">
-          <p className="text-base text-[#8a7f92] flex items-center gap-1.5">🔒 Privado, solo vos podés verlo</p>
+          <p className="text-base text-[#8a7f92] flex items-center gap-1.5">
+            <Lock className="w-4 h-4" strokeWidth={1.9} />
+            Privado, solo vos podés verlo
+          </p>
           <button
             type="button"
             onClick={handleGuardar}

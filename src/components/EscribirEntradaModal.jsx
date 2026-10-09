@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, BookOpen, Star, MessageCircle, EyeOff, Lock, Save, Trash2, Pencil } from "lucide-react";
+import { X, BookOpen, Star, MessageCircle, EyeOff, Lock, Save, Trash2, Pencil, FileText } from "lucide-react";
 import AttachButtons from "./AttachButtons";
 import { loadEntradaDelDia, guardarEntradaDelDia, eliminarEntrada } from "../data/diario";
 import { prompts, nuevoPromptAleatorio, toISODate } from "../data/diarioLibre";
@@ -328,7 +328,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
                   />
                 ) : (
                   <div className="w-16 h-16 flex items-center justify-center bg-[var(--bg)] border border-[var(--border-soft)] rounded-xl text-xs text-ink-muted text-center px-1">
-                    📄
+                    <FileText className="w-6 h-6" strokeWidth={1.6} />
                   </div>
                 )}
                 <button

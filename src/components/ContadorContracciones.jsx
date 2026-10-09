@@ -74,7 +74,10 @@ export default function ContadorContracciones({ onBack, onNavigate }) {
       <BackButton onBack={onBack} label="Volver a Inicio" className="mb-4" />
 
       <h2 className="font-heading text-[26px] font-extrabold text-ink leading-tight mb-2.5">
-        ⏱️ Contador de contracciones
+        <span className="inline-flex items-center gap-2.5">
+          <Timer className="w-[26px] h-[26px] text-brand-pink shrink-0" strokeWidth={1.7} />
+          Contador de contracciones
+        </span>
       </h2>
       <p className="text-[17px] text-ink-muted leading-relaxed mb-[22px]">Cronometrá cada contracción</p>
 

@@ -13,17 +13,10 @@ import {
   Bell,
   Users,
   TestTube2,
-  Stethoscope,
-  ScanLine,
-  Droplet,
-  Backpack,
-  Smile,
-  Apple,
-  MessageCircle,
-  Baby,
   Save,
   Trash2,
 } from "lucide-react";
+import { tipoIcono, TIPO_PRIMERA_CONSULTA_POSTPARTO } from "../data/citasIconos";
 import GuiaExamenes from "./GuiaExamenes";
 import ToggleSwitch from "./ToggleSwitch";
 import {
@@ -54,27 +47,10 @@ import {
   getPartnerStatus,
 } from "../data/partner";
 
-const TIPO_PRIMERA_CONSULTA_POSTPARTO = "Primera consulta postparto";
 const GOOGLE_PROMPT_KEY = "mama-dashboard:google-calendar-prompted";
 const monthShortLabels = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 const horasDelDia = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0"));
 const minutosDelDia = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"];
-
-const tipoIconos = {
-  "Control obstétrico": Stethoscope,
-  "Ecografía": ScanLine,
-  "Análisis de sangre": Droplet,
-  "Curso de preparto": Backpack,
-  "Odontología": Smile,
-  "Nutrición": Apple,
-  "Psicología perinatal": MessageCircle,
-  [TIPO_PRIMERA_CONSULTA_POSTPARTO]: Baby,
-  Otro: CalendarDays,
-};
-
-function tipoIcono(tipo) {
-  return tipoIconos[tipo] || CalendarDays;
-}
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, LogOut } from "lucide-react";
+import { ChevronLeft, LogOut, Check } from "lucide-react";
 import {
   getPartnerProfile,
   updatePartnerProfile,
@@ -111,7 +111,7 @@ export default function PartnerProfile({ motherNombre, onBack, onLogout }) {
             className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-opacity hover:opacity-90 whitespace-nowrap cursor-pointer"
             style={{ background: "var(--partner-gradient)" }}
           >
-            {nombreSaved ? "Guardado ✓" : "Guardar"}
+            {nombreSaved ? <>Guardado<Check className="w-3.5 h-3.5 inline -mt-0.5 ml-1" strokeWidth={2.4} /></> : "Guardar"}
           </button>
         </div>
         {nombreError && <p className="text-sm text-red-500 -mt-3 mb-3">{nombreError}</p>}
@@ -142,7 +142,7 @@ export default function PartnerProfile({ motherNombre, onBack, onLogout }) {
         >
           {passwordSaving ? "Guardando…" : "Actualizar contraseña"}
         </button>
-        {passwordSaved && <span className="text-sm text-partner-green-text ml-3">Actualizada ✓</span>}
+        {passwordSaved && <span className="text-sm text-partner-green-text ml-3">Actualizada<Check className="w-3.5 h-3.5 inline -mt-0.5 ml-1" strokeWidth={2.4} /></span>}
       </div>
 
       <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">Notificaciones</p>
