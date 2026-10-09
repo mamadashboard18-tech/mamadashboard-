@@ -459,3 +459,18 @@ button:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* iOS Safari: native date inputs ignore width (overflow their grid cell) and
+   collapse in height when empty. Normalize them to behave like text inputs. */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 2.75rem;
+  display: block;
+}
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.25em;
+}
