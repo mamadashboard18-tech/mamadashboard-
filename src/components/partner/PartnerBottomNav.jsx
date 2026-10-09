@@ -4,7 +4,7 @@ export default function PartnerBottomNav({ active, onSelect, citasPendientesRsvp
   return (
     <nav
       className="no-print safe-bottom fixed bottom-0 inset-x-0 z-30 lg:hidden bg-white border-t border-partner-border"
-      aria-label="Navegación de partner"
+      aria-label="Navegación de acompañante"
     >
       <div className="grid grid-cols-3">
         <button

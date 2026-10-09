@@ -99,7 +99,7 @@ export default function ContactosMedicos({ onBack, embedded = false }) {
                     hasPartner && (c.compartirPartner ?? true) && (
                       <span className="flex items-center gap-1 text-[11px] font-bold text-brand-purple mt-1">
                         <Users className="w-3 h-3" strokeWidth={2} />
-                        Compartido con tu partner
+                        Compartido con tu acompañante
                       </span>
                     )
                   }
@@ -145,11 +145,11 @@ export default function ContactosMedicos({ onBack, embedded = false }) {
 
           {hasPartner && (
             <div className="bg-[var(--bg)] rounded-[20px] px-3.5 mb-4">
-              <ToggleRow icon={Users} titulo="Compartir con mi partner" detalle="Va a poder verlo y llamar desde su cuenta">
+              <ToggleRow icon={Users} titulo="Compartir con mi acompañante" detalle="Va a poder verlo y llamar desde su cuenta">
                 <ToggleSwitch
                   checked={form.compartirPartner}
                   onChange={() => updateField("compartirPartner", !form.compartirPartner)}
-                  label="Compartir con mi partner"
+                  label="Compartir con mi acompañante"
                 />
               </ToggleRow>
             </div>

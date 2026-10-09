@@ -148,7 +148,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
       payload.textoCifrado = null;
     }
 
-    // Bloqueada nunca se comparte: el partner no tiene el PIN.
+    // Bloqueada nunca se comparte: tu acompañante no tiene el PIN.
     const compartir = hasPartner && compartirPartner && !privada;
     const textoNota = compartir
       ? [prompt && `"${prompt}"`, titulo.trim(), texto.trim()].filter(Boolean).join("\n\n")
@@ -303,7 +303,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
             placeholder={
               prompt ||
               (hasPartner && compartirPartner && !privada
-                ? "Escribí lo que quieras compartirle a tu partner..."
+                ? "Escribí lo que quieras compartirle a tu acompañante..."
                 : "Escribí lo que quieras, sin filtro y sin juicio. Esto es solo para vos...")
             }
             className="w-full min-h-[260px] rounded-[22px] border border-[rgba(226,111,206,0.2)] bg-white p-5 pb-14 text-base text-ink placeholder:text-ink-muted focus:outline-none focus:border-brand-pink resize-none box-border"
@@ -422,7 +422,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
                   <Heart className="w-4 h-4" strokeWidth={1.8} />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-base font-bold text-ink">Compartir con mi partner</p>
+                  <p className="text-base font-bold text-ink">Compartir con mi acompañante</p>
                   {privada && (
                     <p className="text-xs text-ink-muted mt-0.5">Desbloqueala para poder compartirla</p>
                   )}
@@ -430,7 +430,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
                 <ToggleSwitch
                   checked={compartirPartner && !privada}
                   onChange={() => !privada && setCompartirPartner((v) => !v)}
-                  label="Compartir con mi partner"
+                  label="Compartir con mi acompañante"
                 />
               </div>
             </>
@@ -441,7 +441,7 @@ export default function EscribirEntradaModal({ fecha, onClose, onSaved }) {
           {hasPartner && compartirPartner && !privada ? (
             <>
               <Heart className="w-3.5 h-3.5" strokeWidth={2} />
-              Tu partner va a poder leerla
+              Tu acompañante va a poder leerla
             </>
           ) : (
             <>

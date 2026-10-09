@@ -78,7 +78,7 @@ export default async function handler(req, res) {
     // cuenta en vez de bloquear la invitación.
     const existingUser = await findUserByEmail(supabaseAdmin, normalizedEmail);
     if (!existingUser) {
-      res.status(400).json({ error: "Ya existe una cuenta con ese email. Usá otro email para el partner." });
+      res.status(400).json({ error: "Ya existe una cuenta con ese email. Usá otro email para tu acompañante." });
       return;
     }
 
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
       .maybeSingle();
 
     if (yaEsPartnerActivo) {
-      res.status(400).json({ error: "Ese email ya está vinculado como partner de otra cuenta. Usá otro email." });
+      res.status(400).json({ error: "Ese email ya está vinculado como acompañante de otra cuenta. Usá otro email." });
       return;
     }
 

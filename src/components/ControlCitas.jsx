@@ -397,12 +397,12 @@ export default function ControlCitas({ onNavigate }) {
           {item.cita.lugar && <p className="text-sm text-ink-muted truncate mt-0.5">{item.cita.lugar}</p>}
           {rsvp === "puede" && (
             <span className="inline-block mt-1.5 text-xs font-bold text-brand-purple bg-[rgba(155,93,229,0.1)] border border-[rgba(155,93,229,0.25)] rounded-full px-2.5 py-0.5">
-              Tu partner va a poder ir
+              Tu acompañante va a poder ir
             </span>
           )}
           {rsvp === "no_puede" && (
             <span className="inline-block mt-1.5 text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">
-              Tu partner no va a poder ir
+              Tu acompañante no va a poder ir
             </span>
           )}
         </div>
@@ -942,13 +942,13 @@ export default function ControlCitas({ onNavigate }) {
                   <Users className="w-4 h-4" strokeWidth={1.8} />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[15px] font-bold text-ink">Compartir con mi partner</p>
+                  <p className="text-[15px] font-bold text-ink">Compartir con mi acompañante</p>
                   <p className="text-xs text-[#8a7f92] mt-0.5">Va a poder confirmar si puede ir</p>
                 </div>
                 <ToggleSwitch
                   checked={draft.compartirPartner}
                   onChange={() => updateDraft("compartirPartner", !draft.compartirPartner)}
-                  label="Compartir con mi partner"
+                  label="Compartir con mi acompañante"
                 />
               </div>
             )}

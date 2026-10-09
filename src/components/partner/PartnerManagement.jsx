@@ -60,7 +60,7 @@ export default function PartnerManagement({ onBack }) {
   };
 
   const handleQuitarPartner = async () => {
-    if (!window.confirm(`¿Quitar a ${status.nombre} como partner? Va a dejar de ver tus citas, síntomas y notas.`)) {
+    if (!window.confirm(`¿Quitar a ${status.nombre} como acompañante? Va a dejar de ver tus citas, síntomas y notas.`)) {
       return;
     }
     await removePartner();
@@ -85,13 +85,13 @@ export default function PartnerManagement({ onBack }) {
       <PantallaTop
         onBack={onBack}
         icon={Users}
-        title="Tu partner"
+        title="Tu acompañante"
         subtitle="Compartí citas, síntomas y notas con quien te acompaña."
       />
 
       {status.hasPartner ? (
         <div className="bg-white rounded-[24px] border border-[var(--border-soft)] p-5 mb-5" style={cardShadow}>
-          <SectionLabel icon={HeartHandshake} className="mb-4">Partner vinculado</SectionLabel>
+          <SectionLabel icon={HeartHandshake} className="mb-4">Vinculado a tu cuenta</SectionLabel>
           <div className="flex items-center justify-between flex-wrap gap-3.5">
             <div className="flex items-center gap-3">
               <span
@@ -109,14 +109,14 @@ export default function PartnerManagement({ onBack }) {
               onClick={handleQuitarPartner}
               className="text-sm font-semibold text-ink-muted hover:text-brand-pink cursor-pointer"
             >
-              Quitar partner
+              Quitar acompañante
             </button>
           </div>
         </div>
       ) : (
         <div className="bg-white rounded-[24px] border border-[var(--border-soft)] p-5 mb-5" style={cardShadow}>
           <SectionLabel icon={Link2}>
-            {status.pendingInvite ? "Invitación pendiente" : "Invitar a tu partner"}
+            {status.pendingInvite ? "Invitación pendiente" : "Invitar a tu acompañante"}
           </SectionLabel>
 
           {status.pendingInvite ? (
@@ -151,7 +151,7 @@ export default function PartnerManagement({ onBack }) {
             <div>
               <p className="text-sm text-ink-muted mb-[18px] leading-relaxed">
                 Generá un link único y mandaselo por WhatsApp o como prefieras. Solo con ese link
-                puede crear su cuenta de partner.
+                puede crear su cuenta de acompañante.
               </p>
               <button
                 onClick={handleGenerarLink}

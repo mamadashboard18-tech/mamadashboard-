@@ -120,8 +120,8 @@ const grupos = {
   },
   partner: {
     icon: <Users className="w-5 h-5" />,
-    title: "Tu partner",
-    desc: "Invitalo para que vea tus citas, síntomas y reciba tus notas",
+    title: "Tu acompañante",
+    desc: "Invitá a quien te acompaña a ver tus citas, síntomas y notas",
     Component: PartnerManagement,
   },
   tramites: {

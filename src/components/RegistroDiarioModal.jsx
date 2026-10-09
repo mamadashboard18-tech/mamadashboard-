@@ -241,13 +241,13 @@ export default function RegistroDiarioModal({
               <Users className="w-4 h-4" strokeWidth={1.8} />
             </span>
             <div className="flex-1 min-w-0">
-              <p className="text-[15px] font-bold text-ink">Compartir con mi partner</p>
+              <p className="text-[15px] font-bold text-ink">Compartir con mi acompañante</p>
               <p className="text-xs text-[#8a7f92] mt-0.5">Va a ver los síntomas de hoy y los tips de cómo ayudar</p>
             </div>
             <ToggleSwitch
               checked={compartirPartner}
               onChange={() => setCompartirPartner((v) => !v)}
-              label="Compartir con mi partner"
+              label="Compartir con mi acompañante"
             />
           </div>
         )}

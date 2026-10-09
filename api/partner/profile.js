@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     .maybeSingle();
 
   if (!link) {
-    res.status(403).json({ error: "Esta cuenta no está vinculada como partner." });
+    res.status(403).json({ error: "Esta cuenta no está vinculada como acompañante." });
     return;
   }
 
