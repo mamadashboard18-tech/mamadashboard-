@@ -20,6 +20,19 @@ export default async function handler(req, res) {
 
   const supabaseAdmin = getSupabaseAdmin();
 
+  // ?task=keepalive: Supabase (plan gratis) pausa el proyecto tras ~7 días sin actividad.
+  // Vercel Cron llama así una vez por día (ver vercel.json) solo para generar actividad.
+  // Vive en este archivo porque el plan Hobby de Vercel permite como máximo 12 funciones.
+  if (req.query?.task === "keepalive") {
+    const { error: pingError } = await supabaseAdmin.from("profiles").select("id").limit(1);
+    if (pingError) {
+      res.status(500).json({ error: "No se pudo consultar Supabase." });
+      return;
+    }
+    res.status(200).json({ ok: true, at: new Date().toISOString() });
+    return;
+  }
+
   const { data: citas, error } = await supabaseAdmin
     .from("citas_compartidas")
     .select("id, mother_id, fecha, hora, tipo, medico, lugar, partner_rsvp")
