@@ -26,6 +26,7 @@ const previewPanels = {
   citas: ControlCitas,
   bienestar: BienestarPanel,
   multimedia: MultimediaPanel,
+  comunidad: ComunidadPanel,
 };
 
 /* Static, read-only screen render used by the landing page's phone mockups.
@@ -188,7 +189,7 @@ export default function App() {
           ) : active === "perfil" ? (
             <PerfilPanel onLogout={handleLogout} />
           ) : active === "comunidad" ? (
-            <ComunidadPanel nombre={user?.nombre} />
+            <ComunidadPanel onNavigate={handleNavigate} />
           ) : active === "multimedia" ? (
             <MultimediaPanel onNavigate={handleNavigate} />
           ) : (
