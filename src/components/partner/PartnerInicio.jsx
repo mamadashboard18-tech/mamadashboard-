@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Activity, ChevronRight, Phone, Quote, Stethoscope, X } from "lucide-react";
+import { createPortal } from "react-dom";
+import { Activity, BookOpen, ChevronRight, Phone, Quote, Stethoscope, X } from "lucide-react";
 import TamanoBebe from "../TamanoBebe";
 import { consejoPartnerSintoma, porQuePasaSintoma } from "../../data/sintomas";
 import { getWeekData, totalWeeks } from "../../data/seguimientoSemanal";
@@ -29,12 +30,21 @@ export default function PartnerInicio({ data }) {
   const porcentaje = data.semanaActual ? Math.round((data.semanaActual / totalWeeks) * 100) : 0;
   const contenidoRecomendado = data.semanaActual ? getRecomendadoPartner(data.semanaActual) : [];
   const [sintomaAbierto, setSintomaAbierto] = useState(null);
+  const [seccionAbierta, setSeccionAbierta] = useState(null);
+
+  const secciones = [
+    { id: "contenido", titulo: "Contenido", Icon: BookOpen, count: contenidoRecomendado.length },
+    { id: "sintomas", titulo: "Síntomas", Icon: Activity, count: data.sintomas.length },
+    { id: "contactos", titulo: "Contactos", Icon: Stethoscope, count: data.contactos?.length || 0 },
+    { id: "notas", titulo: "Notas", Icon: Quote, count: data.notas.length },
+  ];
+  const seccion = secciones.find((x) => x.id === seccionAbierta);
 
   return (
     <div>
       {data.semanaActual && info && (
         <div
-          className="rounded-[24px] p-6 mb-[22px]"
+          className="rounded-[24px] p-6 mb-4"
           style={{ background: "var(--partner-gradient)", boxShadow: "0 12px 28px rgba(91,33,182,0.28)" }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -57,172 +67,223 @@ export default function PartnerInicio({ data }) {
         </div>
       )}
 
-      {contenidoRecomendado.length > 0 && (
-        <>
-          <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">
-            Contenido recomendado para vos según la semana
-          </p>
-          <div className="flex flex-col gap-2.5 mb-[26px]">
-            {contenidoRecomendado.map((item, i) => {
-              const Icon = tipoIconoComponent[item.tipo] || Activity;
-              const card = (
-                <div className="flex items-center gap-3 bg-white rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]">
-                  <span className="w-[38px] h-[38px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
-                    <Icon className="w-[17px] h-[17px]" strokeWidth={1.8} />
-                  </span>
-                  <p className="flex-1 min-w-0 text-sm font-bold text-partner-ink line-clamp-2">{item.titulo}</p>
-                  <ChevronRight className="w-3.5 h-3.5 text-partner-dashed-border shrink-0" strokeWidth={2} />
-                </div>
-              );
-              return item.link ? (
-                <a key={i} href={item.link} target="_blank" rel="noreferrer" className="block">
-                  {card}
-                </a>
-              ) : (
-                <div key={i}>{card}</div>
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">
-        Síntomas recientes y cómo podés ayudar
-      </p>
-      {data.sintomas.length === 0 ? (
-        <div className="mb-[22px]">
-          <EmptyCard>Todavía no compartió síntomas.</EmptyCard>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3 mb-[22px]">
-          {data.sintomas.map((registro) => {
-            const recomendacion = data.semanaActual
-              ? getRecomendacionPorSintomas(data.semanaActual, registro.sintomas)
-              : null;
-            return (
-              <div
-                key={registro.fecha}
-                className="bg-white rounded-[22px] p-5 shadow-[0_6px_26px_rgba(91,33,182,0.10)]"
-              >
-                <span className="inline-block bg-partner-violet/12 text-partner-violet text-[11px] font-extrabold uppercase tracking-wide px-3 py-[5px] rounded-full mb-4">
-                  {formatFecha(registro.fecha)}
-                </span>
-                <div className="flex flex-col gap-2">
-                  {registro.sintomas.map((label) => {
-                    const consejo = consejoPartnerSintoma(label);
-                    const porQue = porQuePasaSintoma(label);
-                    return (
-                      <button
-                        key={label}
-                        type="button"
-                        onClick={() => consejo && setSintomaAbierto({ label, consejo, porQue })}
-                        className={`w-full flex items-center gap-2.5 text-left ${consejo ? "cursor-pointer" : ""}`}
-                      >
-                        <span className="w-8 h-8 rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
-                          <Activity className="w-[15px] h-[15px]" strokeWidth={1.8} />
-                        </span>
-                        <p className="flex-1 min-w-0 text-[14.5px] font-bold text-partner-ink">{label}</p>
-                        {consejo && (
-                          <span className="flex items-center gap-1 text-[12px] font-bold text-partner-violet shrink-0">
-                            Cómo ayudar
-                            <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.2} />
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-                {recomendacion && (
-                  <a
-                    href={recomendacion.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2 text-left cursor-pointer hover:opacity-80 transition-opacity"
-                  >
-                    <Activity className="w-[15px] h-[15px] text-partner-violet shrink-0" strokeWidth={1.8} />
-                    <p className="flex-1 min-w-0 text-[12.5px] font-semibold text-partner-violet-deep line-clamp-1">
-                      {recomendacion.titulo}
-                    </p>
-                    <ChevronRight className="w-[13px] h-[13px] text-partner-dashed-border shrink-0" strokeWidth={2} />
-                  </a>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">
-        Contactos del equipo médico
-      </p>
-      {!data.contactos?.length ? (
-        <div className="mb-[22px]">
-          <EmptyCard>Todavía no compartió contactos.</EmptyCard>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2.5 mb-[22px]">
-          {data.contactos.map((c) => (
-            <div
-              key={c.id}
-              className="flex items-center gap-3 bg-white rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]"
-            >
-              <span className="w-[38px] h-[38px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
-                <Stethoscope className="w-[17px] h-[17px]" strokeWidth={1.8} />
+      <div className="grid grid-cols-2 gap-3">
+        {secciones.map(({ id, titulo, Icon, count }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setSeccionAbierta(id)}
+            className="relative flex flex-col items-start gap-3 bg-white rounded-[22px] p-4 text-left shadow-[0_6px_20px_rgba(91,33,182,0.08)] cursor-pointer active:scale-[0.98] transition-transform"
+          >
+            <span className="w-[42px] h-[42px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet">
+              <Icon className="w-[19px] h-[19px]" strokeWidth={1.8} />
+            </span>
+            <span className="flex items-center justify-between w-full">
+              <span className="text-[15px] font-bold text-partner-ink">{titulo}</span>
+              <ChevronRight className="w-4 h-4 text-partner-dashed-border" strokeWidth={2} />
+            </span>
+            {count > 0 && (
+              <span className="absolute top-3.5 right-3.5 min-w-[22px] h-[22px] px-1.5 rounded-full bg-partner-violet text-white text-[11px] font-extrabold flex items-center justify-center">
+                {count}
               </span>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-partner-ink truncate">{c.nombre}</p>
-                <p className="text-[12.5px] text-partner-ink-muted truncate">
-                  {c.rol}
-                  {c.telefono && ` · ${c.telefono}`}
-                </p>
-              </div>
-              {c.telefono && (
-                <a
-                  href={`tel:${c.telefono.replace(/\s+/g, "")}`}
-                  aria-label={`Llamar a ${c.nombre}`}
-                  title="Llamar"
-                  className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white shrink-0"
-                  style={{ background: "var(--partner-gradient)" }}
-                >
-                  <Phone className="w-4 h-4" strokeWidth={2} />
-                </a>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {seccion && createPortal(
+        <div
+          className="fixed inset-0 z-[70] flex items-end justify-center bg-black/40 backdrop-blur-sm"
+          onClick={() => setSeccionAbierta(null)}
+        >
+          <div
+            className="w-full max-w-lg max-h-[85vh] flex flex-col bg-partner-surface-tint rounded-t-[26px] shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <p className="text-[18px] font-bold text-partner-ink">{seccion.titulo}</p>
+              <button
+                type="button"
+                onClick={() => setSeccionAbierta(null)}
+                aria-label="Cerrar"
+                className="w-8 h-8 rounded-full bg-partner-violet/10 flex items-center justify-center text-partner-violet-deep cursor-pointer"
+              >
+                <X className="w-4 h-4" strokeWidth={2.2} />
+              </button>
+            </div>
+            <div className="overflow-y-auto px-5 pb-8">
+              {seccionAbierta === "contenido" && (
+                contenidoRecomendado.length === 0 ? (
+                  <EmptyCard>No hay contenido para esta semana.</EmptyCard>
+                ) : (
+                  <div className="flex flex-col gap-2.5">
+                    {contenidoRecomendado.map((item, i) => {
+                      const Icon = tipoIconoComponent[item.tipo] || Activity;
+                      const card = (
+                        <div className="flex items-center gap-3 bg-white rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]">
+                          <span className="w-[38px] h-[38px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
+                            <Icon className="w-[17px] h-[17px]" strokeWidth={1.8} />
+                          </span>
+                          <p className="flex-1 min-w-0 text-sm font-bold text-partner-ink line-clamp-2">{item.titulo}</p>
+                          <ChevronRight className="w-3.5 h-3.5 text-partner-dashed-border shrink-0" strokeWidth={2} />
+                        </div>
+                      );
+                      return item.link ? (
+                        <a key={i} href={item.link} target="_blank" rel="noreferrer" className="block">
+                          {card}
+                        </a>
+                      ) : (
+                        <div key={i}>{card}</div>
+                      );
+                    })}
+                  </div>
+                )
+              )}
+              {seccionAbierta === "sintomas" && (
+                <>
+                  {data.sintomas.length === 0 ? (
+                    <div>
+                      <EmptyCard>Todavía no compartió síntomas.</EmptyCard>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {data.sintomas.map((registro) => {
+                        const recomendacion = data.semanaActual
+                          ? getRecomendacionPorSintomas(data.semanaActual, registro.sintomas)
+                          : null;
+                        return (
+                          <div
+                            key={registro.fecha}
+                            className="bg-white rounded-[22px] p-5 shadow-[0_6px_26px_rgba(91,33,182,0.10)]"
+                          >
+                            <span className="inline-block bg-partner-violet/12 text-partner-violet text-[11px] font-extrabold uppercase tracking-wide px-3 py-[5px] rounded-full mb-4">
+                              {formatFecha(registro.fecha)}
+                            </span>
+                            <div className="flex flex-col gap-2">
+                              {registro.sintomas.map((label) => {
+                                const consejo = consejoPartnerSintoma(label);
+                                const porQue = porQuePasaSintoma(label);
+                                return (
+                                  <button
+                                    key={label}
+                                    type="button"
+                                    onClick={() => consejo && setSintomaAbierto({ label, consejo, porQue })}
+                                    className={`w-full flex items-center gap-2.5 text-left ${consejo ? "cursor-pointer" : ""}`}
+                                  >
+                                    <span className="w-8 h-8 rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
+                                      <Activity className="w-[15px] h-[15px]" strokeWidth={1.8} />
+                                    </span>
+                                    <p className="flex-1 min-w-0 text-[14.5px] font-bold text-partner-ink">{label}</p>
+                                    {consejo && (
+                                      <span className="flex items-center gap-1 text-[12px] font-bold text-partner-violet shrink-0">
+                                        Cómo ayudar
+                                        <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.2} />
+                                      </span>
+                                    )}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            {recomendacion && (
+                              <a
+                                href={recomendacion.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="w-full mt-3.5 pt-3.5 border-t border-partner-violet/10 flex items-center gap-2 text-left cursor-pointer hover:opacity-80 transition-opacity"
+                              >
+                                <Activity className="w-[15px] h-[15px] text-partner-violet shrink-0" strokeWidth={1.8} />
+                                <p className="flex-1 min-w-0 text-[12.5px] font-semibold text-partner-violet-deep line-clamp-1">
+                                  {recomendacion.titulo}
+                                </p>
+                                <ChevronRight className="w-[13px] h-[13px] text-partner-dashed-border shrink-0" strokeWidth={2} />
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              )}
+              {seccionAbierta === "contactos" && (
+                <>
+                  {!data.contactos?.length ? (
+                    <div>
+                      <EmptyCard>Todavía no compartió contactos.</EmptyCard>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-2.5">
+                      {data.contactos.map((c) => (
+                        <div
+                          key={c.id}
+                          className="flex items-center gap-3 bg-white rounded-[18px] px-4 py-3.5 shadow-[0_6px_20px_rgba(91,33,182,0.08)]"
+                        >
+                          <span className="w-[38px] h-[38px] rounded-full bg-partner-violet/14 flex items-center justify-center text-partner-violet shrink-0">
+                            <Stethoscope className="w-[17px] h-[17px]" strokeWidth={1.8} />
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-partner-ink truncate">{c.nombre}</p>
+                            <p className="text-[12.5px] text-partner-ink-muted truncate">
+                              {c.rol}
+                              {c.telefono && ` · ${c.telefono}`}
+                            </p>
+                          </div>
+                          {c.telefono && (
+                            <a
+                              href={`tel:${c.telefono.replace(/\s+/g, "")}`}
+                              aria-label={`Llamar a ${c.nombre}`}
+                              title="Llamar"
+                              className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white shrink-0"
+                              style={{ background: "var(--partner-gradient)" }}
+                            >
+                              <Phone className="w-4 h-4" strokeWidth={2} />
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+              {seccionAbierta === "notas" && (
+                <>
+                  {data.notas.length === 0 ? (
+                    <EmptyCard>Todavía no te mandó ninguna nota.</EmptyCard>
+                  ) : (
+                    <div className="flex flex-col gap-2.5">
+                      {data.notas.map((nota) => (
+                        <div
+                          key={nota.id}
+                          className="flex items-start gap-3 rounded-[22px] px-[18px] py-4"
+                          style={{ background: "var(--partner-gradient-note)" }}
+                        >
+                          <Quote className="w-5 h-5 text-partner-violet shrink-0 mt-0.5" strokeWidth={1.8} />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[14.5px] italic text-[#3d3646] leading-relaxed whitespace-pre-line">{nota.texto}</p>
+                            <p className="text-xs text-[#9186a0] mt-2">
+                              {new Date(nota.created_at).toLocaleDateString("es-AR", {
+                                day: "numeric",
+                                month: "long",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
-          ))}
-        </div>
+          </div>
+        </div>,
+        document.body
       )}
 
-      <p className="text-[13px] font-bold tracking-wide text-partner-violet uppercase mb-3">Notas para vos</p>
-      {data.notas.length === 0 ? (
-        <EmptyCard>Todavía no te mandó ninguna nota.</EmptyCard>
-      ) : (
-        <div className="flex flex-col gap-2.5">
-          {data.notas.map((nota) => (
-            <div
-              key={nota.id}
-              className="flex items-start gap-3 rounded-[22px] px-[18px] py-4"
-              style={{ background: "var(--partner-gradient-note)" }}
-            >
-              <Quote className="w-5 h-5 text-partner-violet shrink-0 mt-0.5" strokeWidth={1.8} />
-              <div className="flex-1 min-w-0">
-                <p className="text-[14.5px] italic text-[#3d3646] leading-relaxed whitespace-pre-line">{nota.texto}</p>
-                <p className="text-xs text-[#9186a0] mt-2">
-                  {new Date(nota.created_at).toLocaleDateString("es-AR", {
-                    day: "numeric",
-                    month: "long",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {sintomaAbierto && (
+      {sintomaAbierto && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-5"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 backdrop-blur-sm px-5"
           onClick={() => setSintomaAbierto(null)}
         >
           <div
@@ -261,7 +322,8 @@ export default function PartnerInicio({ data }) {
               </span>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
