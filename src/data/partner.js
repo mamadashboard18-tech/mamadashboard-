@@ -27,12 +27,17 @@ async function authFetch(url, options = {}) {
 // La vista previa del dashboard (solo en desarrollo) corre sin sesión: simulamos
 // un partner vinculado para poder ver los controles de compartir. Las funciones
 // de sync ya no escriben nada sin usuario, así que no se toca Supabase.
+// Con ?sin_partner en la URL arranca sin vincular, para ver el flujo de invitación.
 const PARTNER_SIMULADO = { hasPartner: true, nombre: "Martín (simulado)", email: "partner@ejemplo.com", pendingInvite: null };
+let estadoSimulado =
+  typeof window !== "undefined" && new URLSearchParams(window.location.search).has("sin_partner")
+    ? { hasPartner: false, pendingInvite: null }
+    : PARTNER_SIMULADO;
 
 export async function getPartnerStatus() {
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
-    return import.meta.env.DEV ? PARTNER_SIMULADO : { hasPartner: false, pendingInvite: null };
+    return import.meta.env.DEV ? estadoSimulado : { hasPartner: false, pendingInvite: null };
   }
 
   const { data: partner } = await supabase
@@ -66,7 +71,13 @@ export async function getPartnerStatus() {
 
 export async function createInvite() {
   const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) return { ok: false, error: "No autenticado." };
+  if (!userData.user) {
+    if (!import.meta.env.DEV) return { ok: false, error: "No autenticado." };
+    const token = "simulado";
+    const expiresAt = new Date(Date.now() + 7 * 864e5).toISOString();
+    estadoSimulado = { hasPartner: false, pendingInvite: { token, url: buildInviteUrl(token), expiresAt } };
+    return { ok: true, url: buildInviteUrl(token) };
+  }
 
   await supabase
     .from("partner_invites")
@@ -84,6 +95,10 @@ export async function createInvite() {
 }
 
 export async function revokeInvite(token) {
+  if (import.meta.env.DEV && token === "simulado") {
+    estadoSimulado = { hasPartner: false, pendingInvite: null };
+    return;
+  }
   await supabase.from("partner_invites").update({ status: "revoked" }).eq("token", token);
 }
 
