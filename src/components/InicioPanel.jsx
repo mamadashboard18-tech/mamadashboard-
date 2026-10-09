@@ -307,11 +307,11 @@ export default function InicioPanel({ nombre, onNavigate }) {
         />
 
         <div className="relative z-10">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-white text-[19px] font-bold">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <p className="text-white text-[17px] sm:text-[19px] font-bold whitespace-nowrap">
               Semana {semanaMostrada} de {totalWeeks}
             </p>
-            <span className="bg-white/28 text-white text-[15px] font-bold px-3 py-1 rounded-full">
+            <span className="bg-white/28 text-white text-[13px] sm:text-[15px] font-bold px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap">
               {trimesterLabel[data.trimester]} · {porcentaje}%
             </span>
           </div>
