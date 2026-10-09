@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { BookOpen, Printer } from "lucide-react";
+import { PantallaTop, Card, Vacio, BotonSecundario } from "./ui/Perfil";
 import { loadRegistros, animoOpciones } from "../data/registroDiario";
 import { iconoSintoma } from "../data/sintomas";
 
@@ -20,58 +20,66 @@ export default function HistorialEmbarazo({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="no-print mb-4" />
-
       <div className="no-print">
-        <div className="flex items-start justify-between">
-          <Header
-            title="Historial de mi embarazo"
-            subtitle="Todo lo que fuiste registrando"
-          />
-          <button
-            onClick={handleExportar}
-            className="bg-white border border-rose-300 text-rose-500 text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-50 transition-colors whitespace-nowrap"
-          >
-            Exportar / Imprimir PDF
-          </button>
-        </div>
+        <PantallaTop
+          onBack={onBack}
+          icon={BookOpen}
+          title="Historial de mi embarazo"
+          subtitle="Todo lo que fuiste registrando"
+        />
 
-        <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-          {entradas.length === 0 ? (
-            <p className="text-sm text-gray-400">
+        <BotonSecundario icon={Printer} onClick={handleExportar} className="mb-5 text-sm px-4 py-2.5">
+          Exportar / Imprimir PDF
+        </BotonSecundario>
+
+        {entradas.length === 0 ? (
+          <Card>
+            <Vacio icon={BookOpen}>
               Todavía no registraste ningún día. Hacelo desde el botón + en Inicio.
-            </p>
-          ) : (
-            <ul className="space-y-3">
-              {entradas.map((r) => (
-                <li key={r.fecha} className="border-b border-rose-50 last:border-0 pb-3 last:pb-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="text-sm font-medium text-gray-700">{r.fecha}</p>
-                    {emojiAnimo(r.animo) && <span className="text-base">{emojiAnimo(r.animo)}</span>}
+            </Vacio>
+          </Card>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {entradas.map((r) => (
+              <li key={r.fecha}>
+                <Card className="p-4">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <p className="font-heading text-[15px] font-extrabold text-ink">{formatFecha(r.fecha)}</p>
+                    {emojiAnimo(r.animo) && (
+                      <span className="w-9 h-9 rounded-full bg-brand-pink-light/60 flex items-center justify-center text-lg">
+                        {emojiAnimo(r.animo)}
+                      </span>
+                    )}
                   </div>
                   {r.sintomas?.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-1">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
                       {r.sintomas.map((s) => (
                         <span
                           key={s}
-                          className="text-xs bg-rose-50 text-gray-600 px-2 py-0.5 rounded-full"
+                          className="text-xs font-medium bg-[rgba(155,93,229,0.1)] text-brand-purple px-2.5 py-1 rounded-full"
                         >
                           {iconoSintoma(s)} {s}
                         </span>
                       ))}
                     </div>
                   )}
-                  {r.nota && <p className="text-xs text-gray-500">{r.nota}</p>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  {r.nota && <p className="text-sm text-ink-muted leading-relaxed">{r.nota}</p>}
+                </Card>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <HistorialPreview entradas={entradas} />
     </div>
   );
+}
+
+function formatFecha(iso) {
+  const d = new Date(iso + "T00:00:00");
+  const texto = d.toLocaleDateString("es-AR", { weekday: "long", day: "numeric", month: "long" });
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 function HistorialPreview({ entradas }) {

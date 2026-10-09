@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { CalendarCheck, CalendarDays } from "lucide-react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { CalendarCheck, CalendarDays, Lock, CheckCircle2, AlertCircle } from "lucide-react";
+import { PantallaTop, Card, SectionLabel, BotonPrimario } from "./ui/Perfil";
 import {
   getGoogleCalendarStatus,
   connectGoogleCalendar,
@@ -39,63 +38,60 @@ export default function PrivacidadPanel({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver" className="mb-4" />
-
-      <Header
+      <PantallaTop
+        onBack={onBack}
+        backLabel="Volver a Ajustes"
+        icon={Lock}
         title="Privacidad"
         subtitle="Tus datos, bajo tu control"
       />
 
       {googleMsg && (
         <div
-          className={`mb-4 text-sm rounded-xl px-4 py-2 ${
-            googleMsg === "success"
-              ? "bg-green-50 text-green-700 border border-green-100"
-              : "bg-red-50 text-red-600 border border-red-100"
+          className={`mb-4 text-sm font-medium rounded-[18px] px-4 py-3 flex items-center gap-2 ${
+            googleMsg === "success" ? "bg-brand-purple-light/70 text-brand-purple" : "bg-red-50 text-red-600"
           }`}
         >
+          {googleMsg === "success" ? (
+            <CheckCircle2 className="w-4 h-4 shrink-0" strokeWidth={2} />
+          ) : (
+            <AlertCircle className="w-4 h-4 shrink-0" strokeWidth={2} />
+          )}
           {googleMsg === "success"
             ? "Google Calendar conectado."
             : "No se pudo conectar tu Google Calendar. Intentá de nuevo."}
         </div>
       )}
 
-      <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm">
-        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
-          Google Calendar
-        </p>
-        <p className="text-sm text-gray-500 mb-4">
+      <Card>
+        <SectionLabel icon={CalendarDays}>Google Calendar</SectionLabel>
+        <p className="text-[15px] text-ink-muted mb-4 leading-relaxed">
           Conectá tu Google Calendar para ver cuándo estás ocupada y sincronizar tus citas
           automáticamente.
         </p>
 
-        {!googleLoading && (
-          <div className="flex items-center gap-3 text-sm">
-            {googleConnected ? (
-              <>
-                <span className="text-gray-600 inline-flex items-center gap-1.5">
+        {!googleLoading &&
+          (googleConnected ? (
+            <div className="flex items-center justify-between gap-3 flex-wrap bg-[var(--bg)] rounded-[18px] px-4 py-3">
+              <span className="text-[15px] font-bold text-ink inline-flex items-center gap-2">
+                <span className="w-8 h-8 rounded-full bg-brand-purple-light/80 text-brand-purple flex items-center justify-center">
                   <CalendarCheck className="w-4 h-4" strokeWidth={1.8} />
-                  Google Calendar conectado
                 </span>
-                <button
-                  onClick={handleDesconectar}
-                  className="text-gray-400 hover:text-red-500 hover:underline"
-                >
-                  Desconectar
-                </button>
-              </>
-            ) : (
+                Conectado
+              </span>
               <button
-                onClick={handleConectar}
-                className="bg-rose-500 text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-600 transition-colors"
+                onClick={handleDesconectar}
+                className="text-sm font-bold text-ink-muted hover:text-red-500 cursor-pointer"
               >
-                <CalendarDays className="w-4 h-4 inline -mt-0.5 mr-1.5" strokeWidth={1.9} />
-                Conectar Google Calendar
+                Desconectar
               </button>
-            )}
-          </div>
-        )}
-      </div>
+            </div>
+          ) : (
+            <BotonPrimario icon={CalendarDays} onClick={handleConectar}>
+              Conectar Google Calendar
+            </BotonPrimario>
+          ))}
+      </Card>
     </div>
   );
 }

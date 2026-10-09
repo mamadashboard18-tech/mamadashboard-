@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Star, Trash2 } from "lucide-react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { Heart, Star, Trash2 } from "lucide-react";
+import { PantallaTop, Card, Segmentado, AgregarInput, IconAction, Vacio } from "./ui/Perfil";
 import { loadNombres, saveNombres } from "../data/listaNombres";
 
 const CATEGORIA_OPTIONS = [
@@ -39,88 +38,48 @@ export default function ListaNombres({ onBack }) {
     persist(nombres.filter((n) => n.id !== id));
   };
 
-  const filtrados = nombres.filter((n) => n.categoria === categoria);
+  const filtrados = nombres
+    .filter((n) => n.categoria === categoria)
+    .sort((a, b) => Number(b.fav) - Number(a.fav));
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
+      <PantallaTop onBack={onBack} icon={Heart} title="Lista de nombres" subtitle="Tu shortlist, marcá tus favoritos" />
 
-      <Header
-        title="Lista de nombres"
-        subtitle="Tu shortlist, marcá tus favoritos"
-      />
-
-      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm">
-        <div className="flex gap-2 mb-4">
-          {CATEGORIA_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => setCategoria(opt.value)}
-              className={`flex-1 text-sm font-medium py-2 rounded-xl border transition-colors ${
-                categoria === opt.value
-                  ? "bg-brand-pink text-white border-brand-pink"
-                  : "bg-white text-ink-muted border-[var(--border-soft)] hover:border-brand-pink"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
+      <Card>
+        <Segmentado opciones={CATEGORIA_OPTIONS} value={categoria} onChange={setCategoria} className="mb-4" />
 
         {filtrados.length === 0 ? (
-          <p className="text-sm text-ink-muted/70 text-center py-6">
-            Todavía no agregaste nombres acá
-          </p>
+          <Vacio icon={Heart}>Todavía no agregaste nombres acá. Sumá el primero abajo.</Vacio>
         ) : (
-          <ul className="space-y-2 mb-4">
+          <ul className="flex flex-col gap-2 mb-4">
             {filtrados.map((n) => (
               <li
                 key={n.id}
-                className="flex items-center justify-between gap-2 bg-brand-pink-light/30 border border-[var(--border-soft)] rounded-xl px-3 py-2.5"
+                className={`flex items-center justify-between gap-2 rounded-[18px] pl-4 pr-2 py-2 border ${
+                  n.fav
+                    ? "bg-brand-pink-light/50 border-[rgba(226,111,206,0.3)]"
+                    : "bg-[var(--bg)] border-[var(--border-soft)]"
+                }`}
               >
-                <span className="text-sm font-medium text-ink">{n.nombre}</span>
-                <div className="flex items-center gap-3">
-                  <button
+                <span className="font-heading text-[17px] font-bold text-ink truncate">{n.nombre}</span>
+                <div className="flex items-center gap-1 shrink-0">
+                  <IconAction
+                    icon={Star}
+                    label={n.fav ? "Quitar de favoritos" : "Marcar como favorito"}
                     onClick={() => toggleFav(n.id)}
-                    aria-label="Marcar como favorito"
-                    title="Favorito"
-                    className={n.fav ? "text-brand-pink" : "text-ink-muted/60 hover:text-brand-pink"}
-                  >
-                    <Star className="w-4 h-4" fill={n.fav ? "currentColor" : "none"} />
-                  </button>
-                  <button
-                    onClick={() => eliminar(n.id)}
-                    aria-label="Eliminar"
-                    title="Eliminar"
-                    className="text-ink-muted/60 hover:text-red-500"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                    tono={n.fav ? "rosa" : "neutro"}
+                    filled={n.fav}
+                  />
+                  <IconAction icon={Trash2} label="Eliminar" onClick={() => eliminar(n.id)} danger />
                 </div>
               </li>
             ))}
           </ul>
         )}
 
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={nuevoNombre}
-            onChange={(e) => setNuevoNombre(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && agregarNombre()}
-            placeholder="Nuevo nombre..."
-            className="flex-1 border border-[var(--border-soft)] rounded-xl p-2 text-sm text-ink bg-white focus:outline-none focus:border-brand-pink transition-colors"
-          />
-          <button
-            onClick={agregarNombre}
-            className="text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter] whitespace-nowrap"
-            style={{ background: "var(--gradient-hero)" }}
-          >
-            + Agregar
-          </button>
-        </div>
-      </div>
+        <AgregarInput value={nuevoNombre} onChange={setNuevoNombre} onAdd={agregarNombre} placeholder="Nuevo nombre..." />
+      </Card>
     </div>
   );
 }

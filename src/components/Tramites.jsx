@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { FolderOpen } from "lucide-react";
+import { PantallaTop, Card, Segmentado, Chip, CheckRow, ProgresoCard } from "./ui/Perfil";
 import { paises, tramitesPorPais, loadDone, saveDone } from "../data/tramites";
+
+const ETAPAS = [
+  { value: "embarazo", label: "Embarazo" },
+  { value: "postparto", label: "Postparto" },
+];
 
 export default function Tramites({ onBack }) {
   const [pais, setPais] = useState("AR");
@@ -24,79 +29,40 @@ export default function Tramites({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
-
-      <Header
-        title="Trámites y documentos"
+      <PantallaTop
+        onBack={onBack}
+        icon={FolderOpen}
+        title="Trámites"
         subtitle="Elegí tu país para ver la checklist correcta"
       />
 
-      <div className="flex gap-2 overflow-x-auto pb-1 mb-4">
+      <div className="flex gap-2 overflow-x-auto pb-1 mb-4 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {paises.map((p) => (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => setPais(p.id)}
-            className={`flex-shrink-0 text-sm font-medium px-4 py-2 rounded-full border transition-colors whitespace-nowrap ${
-              pais === p.id
-                ? "bg-brand-pink text-white border-brand-pink"
-                : "bg-white text-ink-muted border-[var(--border-soft)] hover:border-brand-pink"
-            }`}
-          >
+          <Chip key={p.id} activo={pais === p.id} onClick={() => setPais(p.id)}>
             {p.nombre}
-          </button>
+          </Chip>
         ))}
       </div>
 
-      <div className="flex gap-2 mb-5">
-        {[
-          { value: "embarazo", label: "Durante el embarazo" },
-          { value: "postparto", label: "Postparto" },
-        ].map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setTab(opt.value)}
-            className={`flex-1 text-sm font-medium py-2 rounded-xl border transition-colors ${
-              tab === opt.value
-                ? "bg-brand-pink text-white border-brand-pink"
-                : "bg-white text-ink-muted border-[var(--border-soft)] hover:border-brand-pink"
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
+      <Segmentado opciones={ETAPAS} value={tab} onChange={setTab} className="mb-5" />
+
+      <ProgresoCard hechos={items.filter((it) => done[it.id]).length} total={items.length} etiqueta="hechos" />
 
       {sinDatos && (
-        <p className="text-sm text-ink-muted/70 text-center py-4 mb-2">
+        <p className="text-sm text-ink-muted bg-brand-purple-light/50 rounded-[18px] px-4 py-3 mb-4 leading-relaxed">
           Estamos preparando esta checklist para {paisNombre}. Mientras tanto podés ver la de Argentina como referencia.
         </p>
       )}
 
-      <div className="space-y-3">
-        {items.map((it) => {
-          const checked = !!done[it.id];
-          return (
-            <div key={it.id} className="bg-white rounded-[20px] border border-[var(--border-soft)] p-4 shadow-sm">
-              <label className="flex items-start gap-3 w-full text-left cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={() => toggle(it.id)}
-                  className="w-5 h-5 mt-0.5 rounded border-[var(--border-soft)] accent-[var(--brand-pink)] cursor-pointer flex-shrink-0"
-                />
-                <span>
-                  <p className={`text-sm font-medium ${checked ? "text-ink-muted/60 line-through" : "text-ink"}`}>
-                    {it.titulo}
-                  </p>
-                  <p className="text-xs text-ink-muted mt-0.5">{it.desc}</p>
-                </span>
-              </label>
-            </div>
-          );
-        })}
-      </div>
+      <Card className="py-3">
+        <ul className="divide-y divide-[rgba(155,93,229,0.1)]">
+          {items.map((it) => (
+            <CheckRow key={it.id} checked={!!done[it.id]} onToggle={() => toggle(it.id)} detalle={it.desc}>
+              <span className="font-bold">{it.titulo}</span>
+            </CheckRow>
+          ))}
+        </ul>
+      </Card>
     </div>
   );
 }

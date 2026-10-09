@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Save, Trash2, Check, Paperclip, FileText } from "lucide-react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { Trash2, Paperclip, FileText, NotebookPen, Printer } from "lucide-react";
+import { PantallaTop, CheckRow, Select, BotonGuardar, BotonSecundario, Guardado, IconAction } from "./ui/Perfil";
+import { inputClass, textareaClass, labelClass, cardShadow } from "./ui/estilos";
 import { loadPlan, savePlan, emptyPlan } from "../data/planParto";
 
 const tipoPartoOpciones = [
@@ -14,14 +14,12 @@ const tipoPartoOpciones = [
 function Field({ label, children }) {
   return (
     <div className="mb-3">
-      <label className="text-xs text-gray-500 block mb-1">{label}</label>
+      <label className={labelClass}>{label}</label>
       {children}
     </div>
   );
 }
 
-const inputClass =
-  "w-full border border-rose-100 rounded-xl p-2 text-sm text-gray-700 focus:outline-none focus:border-rose-300";
 
 export default function PlanParto({ onBack }) {
   const [plan, setPlan] = useState(emptyPlan);
@@ -84,17 +82,17 @@ export default function PlanParto({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="no-print mb-4" />
-
       <div className="no-print">
-        <Header
-          title="Plan de parto interactivo"
-          subtitle="Exportable en PDF"
+        <PantallaTop
+          onBack={onBack}
+          icon={NotebookPen}
+          title="Plan de parto"
+          subtitle="Tus preferencias para el equipo médico, exportable en PDF"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bg-white rounded-[24px] border border-[var(--border-soft)] p-5" style={cardShadow}>
+            <p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-3">
               Datos generales
             </p>
             <Field label="Tu nombre">
@@ -105,7 +103,7 @@ export default function PlanParto({ onBack }) {
                 className={inputClass}
               />
             </Field>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3">
               <Field label="Fecha probable de parto">
                 <input
                   type="date"
@@ -142,20 +140,19 @@ export default function PlanParto({ onBack }) {
             </Field>
           </div>
 
-          <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <div className="bg-white rounded-[24px] border border-[var(--border-soft)] p-5" style={cardShadow}>
+            <p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-3">
               Preferencias de parto
             </p>
             <Field label="Tipo de parto deseado">
-              <select
+              <Select
                 value={plan.tipoPartoDeseado}
                 onChange={(e) => update("tipoPartoDeseado", e.target.value)}
-                className={inputClass}
               >
                 {tipoPartoOpciones.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
-              </select>
+              </Select>
             </Field>
             <Field label="Manejo del dolor">
               <input
@@ -186,8 +183,8 @@ export default function PlanParto({ onBack }) {
             </Field>
           </div>
 
-          <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <div className="bg-white rounded-[24px] border border-[var(--border-soft)] p-5" style={cardShadow}>
+            <p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-3">
               Intervenciones médicas
             </p>
             <Field label="Episiotomía">
@@ -219,37 +216,21 @@ export default function PlanParto({ onBack }) {
             </Field>
           </div>
 
-          <div className="bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <div className="bg-white rounded-[24px] border border-[var(--border-soft)] p-5" style={cardShadow}>
+            <p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-3">
               Después del nacimiento
             </p>
-            <label className="flex items-center gap-2 mb-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={plan.contactoPielAPiel}
-                onChange={(e) => update("contactoPielAPiel", e.target.checked)}
-                className="accent-rose-500 w-4 h-4"
-              />
-              <span className="text-sm text-gray-700">Contacto piel a piel inmediato</span>
-            </label>
-            <label className="flex items-center gap-2 mb-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={plan.cordonRetrasado}
-                onChange={(e) => update("cordonRetrasado", e.target.checked)}
-                className="accent-rose-500 w-4 h-4"
-              />
-              <span className="text-sm text-gray-700">Clampeo retrasado del cordón umbilical</span>
-            </label>
-            <label className="flex items-center gap-2 mb-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={plan.lactanciaInmediata}
-                onChange={(e) => update("lactanciaInmediata", e.target.checked)}
-                className="accent-rose-500 w-4 h-4"
-              />
-              <span className="text-sm text-gray-700">Lactancia en la primera hora</span>
-            </label>
+            <ul className="mb-3">
+              {[
+                ["contactoPielAPiel", "Contacto piel a piel inmediato"],
+                ["cordonRetrasado", "Clampeo retrasado del cordón umbilical"],
+                ["lactanciaInmediata", "Lactancia en la primera hora"],
+              ].map(([campo, texto]) => (
+                <CheckRow key={campo} checked={!!plan[campo]} onToggle={() => update(campo, !plan[campo])} tachar={false}>
+                  {texto}
+                </CheckRow>
+              ))}
+            </ul>
             <Field label="¿Quién corta el cordón?">
               <input
                 type="text"
@@ -261,28 +242,28 @@ export default function PlanParto({ onBack }) {
             </Field>
           </div>
 
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <div className="lg:col-span-2 bg-white rounded-[24px] border border-[var(--border-soft)] p-5" style={cardShadow}>
+            <p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-3">
               Notas para el equipo médico
             </p>
             <textarea
               value={plan.notasEquipoMedico}
               onChange={(e) => update("notasEquipoMedico", e.target.value)}
               placeholder="Cualquier otra preferencia, alergia o información relevante"
-              className={`${inputClass} resize-none`}
+              className={textareaClass}
               rows={3}
             />
           </div>
 
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-rose-100 p-5 shadow-sm">
-            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <div className="lg:col-span-2 bg-white rounded-[24px] border border-[var(--border-soft)] p-5" style={cardShadow}>
+            <p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-3">
               Archivos adjuntos
             </p>
-            <p className="text-xs text-gray-500 mb-3">
+            <p className="text-sm text-ink-muted mb-3 leading-relaxed">
               Subí estudios, ecografías o documentos para llevar junto al plan (máx. 4MB por archivo)
             </p>
 
-            <label className="inline-flex items-center gap-2 bg-rose-50 border border-rose-200 text-rose-600 text-sm font-medium px-4 py-2 rounded-xl cursor-pointer hover:bg-rose-100 transition-colors">
+            <label className="inline-flex items-center gap-2 bg-brand-pink-light/60 text-brand-pink text-sm font-bold px-4 py-2.5 rounded-full cursor-pointer hover:bg-brand-pink-light transition-colors">
               <Paperclip className="w-4 h-4" strokeWidth={1.9} />
               Subir archivo
               <input
@@ -297,31 +278,26 @@ export default function PlanParto({ onBack }) {
             </label>
 
             {plan.archivos.length > 0 && (
-              <ul className="mt-4 space-y-2">
+              <ul className="mt-4 flex flex-col gap-2">
                 {plan.archivos.map((a) => (
                   <li
                     key={a.id}
-                    className="flex items-center justify-between bg-rose-50 border border-rose-100 rounded-xl px-3 py-2"
+                    className="flex items-center gap-3 bg-[var(--bg)] border border-[var(--border-soft)] rounded-[18px] pl-3 pr-2 py-2"
                   >
+                    <span className="w-9 h-9 rounded-full bg-brand-purple-light/70 text-brand-purple flex items-center justify-center shrink-0">
+                      <FileText className="w-4 h-4" strokeWidth={1.8} />
+                    </span>
                     <a
                       href={a.dataUrl}
                       download={a.nombre}
-                      className="text-sm text-gray-700 hover:text-rose-600 truncate mr-3"
+                      className="flex-1 min-w-0 text-sm font-medium text-ink hover:text-brand-pink truncate"
                     >
-                      <FileText className="w-4 h-4 inline -mt-0.5 mr-1" strokeWidth={1.8} />
-                      {a.nombre}{" "}
-                      <span className="text-xs text-gray-400">
-                        ({Math.round(a.tamano / 1024)} KB)
+                      {a.nombre}
+                      <span className="block text-xs text-ink-muted font-normal">
+                        {Math.round(a.tamano / 1024)} KB
                       </span>
                     </a>
-                    <button
-                      onClick={() => eliminarArchivo(a.id)}
-                      aria-label="Eliminar"
-                      title="Eliminar"
-                      className="text-gray-400 hover:text-red-500 whitespace-nowrap"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    <IconAction icon={Trash2} label="Eliminar" onClick={() => eliminarArchivo(a.id)} danger />
                   </li>
                 ))}
               </ul>
@@ -330,21 +306,11 @@ export default function PlanParto({ onBack }) {
         </div>
 
         <div className="flex items-center gap-3 mt-6">
-          <button
-            onClick={handleGuardar}
-            aria-label="Guardar plan"
-            title="Guardar plan"
-            className="flex items-center justify-center w-10 h-10 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors"
-          >
-            <Save className="w-4 h-4" />
-          </button>
-          <button
-            onClick={handleExportar}
-            className="bg-white border border-rose-300 text-rose-500 text-sm font-medium px-4 py-2 rounded-xl hover:bg-rose-50 transition-colors"
-          >
-            Exportar / Imprimir PDF
-          </button>
-          {saved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
+          <BotonGuardar label="Guardar plan" onClick={handleGuardar} />
+          <BotonSecundario icon={Printer} onClick={handleExportar} className="text-sm px-4 py-2.5">
+            Exportar PDF
+          </BotonSecundario>
+          <Guardado visible={saved} />
         </div>
       </div>
 

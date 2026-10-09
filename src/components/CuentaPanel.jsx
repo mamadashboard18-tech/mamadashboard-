@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Save, Check } from "lucide-react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { Check, UserRound, Mail, KeyRound } from "lucide-react";
+import { PantallaTop, SectionLabel, BotonGuardar, BotonPrimario } from "./ui/Perfil";
+import { inputClass, labelClass, cardShadow } from "./ui/estilos";
 import { PasswordInput, PasswordChecklist, PASSWORD_RULES } from "./auth/PasswordInput";
 import {
   getCuenta,
@@ -11,20 +11,17 @@ import {
   confirmEmailChange,
 } from "../data/auth";
 
-const inputClass =
-  "w-full border border-[var(--border-soft)] rounded-xl p-2.5 text-sm text-ink bg-white focus:outline-none focus:border-brand-pink transition-colors";
-
-const primaryButtonStyle = { background: "var(--gradient-hero)" };
-
-const cardClass = "bg-white rounded-[20px] border border-[var(--border-soft)] p-6 shadow-sm mb-6";
-
-const sectionTitleClass = "text-sm font-semibold text-ink-muted uppercase tracking-wide mb-4";
+const cardClass = "bg-white rounded-[24px] border border-[var(--border-soft)] p-5 mb-5";
 
 function Feedback({ status }) {
   if (!status) return null;
   return (
-    <span className={`text-sm inline-flex items-center gap-1 ${status.ok ? "text-green-600" : "text-red-500"}`}>
-      {status.ok && <Check className="w-4 h-4" strokeWidth={2.2} />}
+    <span className={`text-sm font-bold inline-flex items-center gap-1.5 ${status.ok ? "text-brand-purple" : "text-red-500"}`}>
+      {status.ok && (
+        <span className="w-5 h-5 rounded-full bg-brand-purple-light flex items-center justify-center">
+          <Check className="w-3 h-3" strokeWidth={3} />
+        </span>
+      )}
       {status.msg}
     </span>
   );
@@ -32,15 +29,9 @@ function Feedback({ status }) {
 
 function PrimaryButton({ children, disabled, onClick }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter] disabled:opacity-50 whitespace-nowrap"
-      style={primaryButtonStyle}
-    >
+    <BotonPrimario onClick={onClick} disabled={disabled} className="text-sm px-4 py-2.5">
       {children}
-    </button>
+    </BotonPrimario>
   );
 }
 
@@ -72,11 +63,11 @@ function DatosCuenta({ cuenta, onSaved }) {
   };
 
   return (
-    <div className={cardClass}>
-      <p className={sectionTitleClass}>Datos de la cuenta</p>
+    <div className={cardClass} style={cardShadow}>
+      <SectionLabel icon={UserRound} className="mb-4">Datos de la cuenta</SectionLabel>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Nombre</label>
+          <label className={labelClass}>Nombre</label>
           <input
             type="text"
             value={form.nombre}
@@ -86,7 +77,7 @@ function DatosCuenta({ cuenta, onSaved }) {
           />
         </div>
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Apellido</label>
+          <label className={labelClass}>Apellido</label>
           <input
             type="text"
             value={form.apellido}
@@ -96,7 +87,7 @@ function DatosCuenta({ cuenta, onSaved }) {
           />
         </div>
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Fecha de nacimiento</label>
+          <label className={labelClass}>Fecha de nacimiento</label>
           <input
             type="date"
             value={form.fechaNacimiento}
@@ -106,7 +97,7 @@ function DatosCuenta({ cuenta, onSaved }) {
           />
         </div>
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Celular</label>
+          <label className={labelClass}>Celular</label>
           <input
             type="tel"
             value={form.celular}
@@ -118,16 +109,7 @@ function DatosCuenta({ cuenta, onSaved }) {
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <button
-          onClick={handleGuardar}
-          disabled={saving}
-          aria-label="Guardar datos"
-          title="Guardar datos"
-          className="flex items-center justify-center w-10 h-10 text-white rounded-full hover:brightness-105 transition-[filter] disabled:opacity-50"
-          style={primaryButtonStyle}
-        >
-          <Save className="w-4 h-4" />
-        </button>
+        <BotonGuardar label="Guardar datos" onClick={handleGuardar} disabled={saving} />
         <Feedback status={status} />
       </div>
     </div>
@@ -179,8 +161,8 @@ function EmailCuenta({ cuenta, onSaved }) {
   };
 
   return (
-    <div className={cardClass}>
-      <p className={sectionTitleClass}>Email</p>
+    <div className={cardClass} style={cardShadow}>
+      <SectionLabel icon={Mail} className="mb-4">Email</SectionLabel>
 
       {paso === "ver" && (
         <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -204,7 +186,7 @@ function EmailCuenta({ cuenta, onSaved }) {
                 setStatus(null);
                 setPaso("nuevo");
               }}
-              className="text-sm font-medium text-brand-pink hover:underline"
+              className="text-sm font-bold text-brand-pink hover:underline cursor-pointer"
             >
               Cambiar email
             </button>
@@ -214,7 +196,7 @@ function EmailCuenta({ cuenta, onSaved }) {
 
       {paso === "nuevo" && (
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Nuevo email</label>
+          <label className={labelClass}>Nuevo email</label>
           <input
             type="email"
             value={nuevoEmail}
@@ -233,7 +215,7 @@ function EmailCuenta({ cuenta, onSaved }) {
             <PrimaryButton onClick={handleEnviarCodigo} disabled={loading || !nuevoEmail.trim()}>
               Enviar código
             </PrimaryButton>
-            <button type="button" onClick={reset} className="text-sm text-ink-muted hover:text-brand-pink">
+            <button type="button" onClick={reset} className="text-sm font-bold text-ink-muted hover:text-brand-pink cursor-pointer">
               Cancelar
             </button>
             <Feedback status={status} />
@@ -264,7 +246,7 @@ function EmailCuenta({ cuenta, onSaved }) {
             <PrimaryButton onClick={handleConfirmar} disabled={loading || codigo.length !== 6}>
               Confirmar
             </PrimaryButton>
-            <button type="button" onClick={reset} className="text-sm text-ink-muted hover:text-brand-pink">
+            <button type="button" onClick={reset} className="text-sm font-bold text-ink-muted hover:text-brand-pink cursor-pointer">
               Cancelar
             </button>
             <Feedback status={status} />
@@ -284,8 +266,8 @@ function PasswordCuenta({ cuenta }) {
 
   if (cuenta.proveedor === "google") {
     return (
-      <div className={cardClass}>
-        <p className={sectionTitleClass}>Contraseña</p>
+      <div className={cardClass} style={cardShadow}>
+        <SectionLabel icon={KeyRound} className="mb-4">Contraseña</SectionLabel>
         <p className="text-sm text-ink-muted">
           Entrás con Google, así que no tenés una contraseña de Acuna App. Tu acceso se maneja desde tu cuenta de
           Google.
@@ -318,21 +300,21 @@ function PasswordCuenta({ cuenta }) {
   };
 
   return (
-    <div className={cardClass}>
-      <p className={sectionTitleClass}>Contraseña</p>
+    <div className={cardClass} style={cardShadow}>
+      <SectionLabel icon={KeyRound} className="mb-4">Contraseña</SectionLabel>
       <div className="space-y-4 max-w-md mb-4">
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Contraseña actual</label>
-          <PasswordInput value={actual} onChange={onChange(setActual)} autoComplete="current-password" />
+          <label className={labelClass}>Contraseña actual</label>
+          <PasswordInput variant="app" value={actual} onChange={onChange(setActual)} autoComplete="current-password" />
         </div>
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Nueva contraseña</label>
-          <PasswordInput value={nueva} onChange={onChange(setNueva)} autoComplete="new-password" />
+          <label className={labelClass}>Nueva contraseña</label>
+          <PasswordInput variant="app" value={nueva} onChange={onChange(setNueva)} autoComplete="new-password" />
           {nueva && <PasswordChecklist password={nueva} />}
         </div>
         <div>
-          <label className="text-xs text-ink-muted block mb-1">Repetí la nueva contraseña</label>
-          <PasswordInput value={repetir} onChange={onChange(setRepetir)} autoComplete="new-password" />
+          <label className={labelClass}>Repetí la nueva contraseña</label>
+          <PasswordInput variant="app" value={repetir} onChange={onChange(setRepetir)} autoComplete="new-password" />
           {repetir && !coinciden && <p className="text-xs text-red-500 mt-1">Las contraseñas no coinciden</p>}
         </div>
       </div>
@@ -361,13 +343,18 @@ export default function CuentaPanel({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Ajustes" className="mb-4" />
-      <Header title="Mi cuenta" subtitle="Tus datos de acceso e información personal" />
+      <PantallaTop
+        onBack={onBack}
+        backLabel="Volver a Ajustes"
+        icon={UserRound}
+        title="Mi cuenta"
+        subtitle="Tus datos de acceso e información personal"
+      />
 
       {estado === "cargando" && <p className="text-sm text-ink-muted">Cargando…</p>}
 
       {estado === "sin-sesion" && (
-        <div className={cardClass}>
+        <div className={cardClass} style={cardShadow}>
           <p className="text-sm text-ink-muted">
             No pudimos cargar los datos de tu cuenta. Cerrá sesión y volvé a entrar para editarlos.
           </p>

@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { Bell, CalendarClock, Sparkles } from "lucide-react";
+import { PantallaTop, Card, ToggleRow } from "./ui/Perfil";
 import ToggleSwitch from "./ToggleSwitch";
 import { emptyPreferencias, loadPreferencias, savePreferencias } from "../data/preferenciasContenido";
 
 const NOTIFICACIONES = [
   {
     id: "citas",
+    icon: CalendarClock,
     label: "Recordatorios de citas",
     desc: "Avisos antes de tus controles y turnos médicos",
   },
   {
     id: "resto",
+    icon: Sparkles,
     label: "Otras notificaciones",
     desc: "Novedades de tu semana, contenido nuevo y recordatorios del diario",
   },
@@ -35,27 +37,27 @@ export default function PreferenciasContenido({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Ajustes" className="mb-4" />
+      <PantallaTop
+        onBack={onBack}
+        backLabel="Volver a Ajustes"
+        icon={Bell}
+        title="Notificaciones"
+        subtitle="Elegí qué avisos querés recibir"
+      />
 
-      <Header title="Notificaciones" subtitle="Elegí qué avisos querés recibir" />
-
-      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-5 shadow-sm">
-        <div className="divide-y divide-[var(--border-soft)]">
+      <Card className="py-1">
+        <div className="divide-y divide-[rgba(155,93,229,0.1)]">
           {NOTIFICACIONES.map((n) => (
-            <div key={n.id} className="flex items-center justify-between gap-4 py-3">
-              <div>
-                <p className="text-sm text-ink">{n.label}</p>
-                <p className="text-xs text-ink-muted mt-0.5">{n.desc}</p>
-              </div>
+            <ToggleRow key={n.id} icon={n.icon} titulo={n.label} detalle={n.desc}>
               <ToggleSwitch
                 checked={prefs.notificaciones[n.id]}
                 onChange={() => toggle(n.id)}
                 label={n.label}
               />
-            </div>
+            </ToggleRow>
           ))}
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

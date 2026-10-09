@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Phone, ShieldAlert } from "lucide-react";
-import Header from "./Header";
-import BackButton from "./BackButton";
+import { PantallaTop } from "./ui/Perfil";
 import ContactosMedicos from "./ContactosMedicos";
 import ContactosEmergencia from "./ContactosEmergencia";
 
@@ -15,21 +14,25 @@ export default function Contactos({ onBack }) {
 
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
+      <PantallaTop
+        onBack={onBack}
+        icon={Phone}
+        title="Contactos"
+        subtitle="Tu equipo médico y tus personas de confianza, a un toque"
+      />
 
-      <Header title="Contactos" subtitle="Tu equipo médico y tus personas de confianza, a un toque" />
-
-      <div className="inline-flex bg-white border border-[var(--border-soft)] rounded-full p-1 mb-6 shadow-sm">
+      <div className="flex bg-white border border-[var(--border-soft)] rounded-full p-1 mb-5" style={{ boxShadow: "0 2px 16px rgba(155,93,229,0.08)" }}>
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             type="button"
             onClick={() => setTab(id)}
-            className={`flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-full transition-colors ${
-              tab === id ? "bg-brand-pink text-white" : "text-ink-muted hover:text-brand-pink"
+            className={`flex-1 flex items-center justify-center gap-1.5 text-sm font-bold px-4 py-2.5 rounded-full transition-colors cursor-pointer ${
+              tab === id ? "text-white" : "text-ink-muted hover:text-brand-pink"
             }`}
+            style={tab === id ? { background: "var(--gradient-hero)" } : undefined}
           >
-            <Icon className="w-3.5 h-3.5" />
+            <Icon className="w-4 h-4" strokeWidth={1.9} />
             {label}
           </button>
         ))}

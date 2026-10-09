@@ -3,6 +3,7 @@ import { Check, X } from "lucide-react";
 
 const inputClassByVariant = {
   rose: "w-full border border-rose-100 rounded-xl p-2.5 text-sm text-gray-700 focus:outline-none focus:border-rose-300",
+  app: "w-full rounded-full border border-[rgba(155,93,229,0.18)] bg-white px-4 py-3 text-[15px] text-ink focus:outline-none focus:border-brand-pink transition-colors box-border",
   violet:
     "w-full border border-partner-dashed-border rounded-xl p-2.5 text-sm text-partner-ink focus:outline-none focus:border-partner-violet",
 };

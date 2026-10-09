@@ -3,7 +3,6 @@ import Header from "./Header";
 import FeatureCard from "./FeatureCard";
 import HistorialEmbarazo from "./HistorialEmbarazo";
 import Contactos from "./Contactos";
-import BackButton from "./BackButton";
 import PlanParto from "./PlanParto";
 import ChecklistHospital from "./ChecklistHospital";
 import ListaCompras from "./ListaCompras";
@@ -14,11 +13,12 @@ import PreferenciasContenido from "./PreferenciasContenido";
 import PartnerManagement from "./partner/PartnerManagement";
 import PrivacidadPanel from "./PrivacidadPanel";
 import CuentaPanel from "./CuentaPanel";
+import { PantallaTop, Card, SectionLabel, BotonGuardar, BotonPrimario, Guardado } from "./ui/Perfil";
+import { inputClass, labelClass, opcionClass, opcionStyle } from "./ui/estilos";
 import { emptyPerfil, loadPerfil, savePerfil } from "../data/perfil";
 import { totalWeeks } from "../data/seguimientoSemanal";
 import { emptyBebe, loadBebe, saveBebe } from "../data/bebe";
 import {
-  Save,
   Pencil,
   BookOpen,
   NotebookPen,
@@ -35,13 +35,9 @@ import {
   Bell,
   Lock,
   UserRound,
-  Check,
+  Baby,
 } from "lucide-react";
 
-const inputClass =
-  "w-full border border-[var(--border-soft)] rounded-xl p-2.5 text-sm text-ink bg-white focus:outline-none focus:border-brand-pink transition-colors";
-
-const primaryButtonStyle = { background: "var(--gradient-hero)" };
 
 const hojas = {
   historial: {
@@ -111,6 +107,7 @@ const hojas = {
 const grupos = {
   checklists: {
     icon: <ListChecks className="w-5 h-5" />,
+    Icon: ListChecks,
     title: "Checklists",
     desc: "Bolso del hospital, compras, nombres y nursery",
     items: ["checklist-hospital", "lista-compras", "lista-nombres", "checklist-nursery"],
@@ -129,6 +126,7 @@ const grupos = {
   },
   tramites: {
     icon: <FolderOpen className="w-5 h-5" />,
+    Icon: FolderOpen,
     title: "Trámites y documentos",
     desc: "Trámites, plan de parto e historial del embarazo",
     items: ["tramites", "plan-parto", "historial"],
@@ -151,14 +149,6 @@ const SEXO_OPTIONS = [
   { value: "mixto", label: "Uno de cada uno" },
   { value: "no-se", label: "Todavía no sé" },
 ];
-
-function toggleOptionClass(active) {
-  return `flex-1 text-sm font-medium py-2 rounded-xl border transition-colors ${
-    active
-      ? "bg-brand-pink text-white border-brand-pink"
-      : "bg-white text-ink-muted border-[var(--border-soft)] hover:border-brand-pink"
-  }`;
-}
 
 export default function PerfilPanel({ onLogout }) {
   const [grupo, setGrupo] = useState(null);
@@ -191,6 +181,7 @@ export default function PerfilPanel({ onLogout }) {
   if (grupo === "ajustes") {
     return (
       <HubList
+        icon={Settings}
         title="Ajustes"
         subtitle="Tu cuenta, tus notificaciones y tu privacidad"
         items={ajustesItems}
@@ -204,7 +195,7 @@ export default function PerfilPanel({ onLogout }) {
     const g = grupos[grupo];
     if (g.Component) return <g.Component onBack={backToPerfil} />;
     return (
-      <HubList title={g.title} subtitle={g.desc} items={g.items} onBack={backToPerfil} onOpen={setView} />
+      <HubList icon={g.Icon} title={g.title} subtitle={g.desc} items={g.items} onBack={backToPerfil} onOpen={setView} />
     );
   }
 
@@ -245,7 +236,7 @@ export default function PerfilPanel({ onLogout }) {
   return (
     <div>
       <div className="flex items-start justify-between gap-4">
-        <Header title="Mi Perfil" subtitle="Tus datos y los de tu bebé" />
+        <Header icon={UserRound} title="Mi Perfil" subtitle="Tus datos y los de tu bebé" />
         <button
           type="button"
           onClick={() => openGrupo("ajustes")}
@@ -257,14 +248,12 @@ export default function PerfilPanel({ onLogout }) {
         </button>
       </div>
 
-      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-6 shadow-sm mb-6">
-        <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-4">
-          Datos personales
-        </p>
+      <Card className="mb-5">
+        <SectionLabel icon={UserRound} className="mb-4">Datos personales</SectionLabel>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="text-xs text-ink-muted block mb-1">
+            <label className={labelClass}>
               Semana actual de embarazo
             </label>
             <input
@@ -281,7 +270,7 @@ export default function PerfilPanel({ onLogout }) {
           </div>
 
           <div>
-            <label className="text-xs text-ink-muted block mb-1">Fecha probable de parto</label>
+            <label className={labelClass}>Fecha probable de parto</label>
             <input
               type="date"
               value={perfil.fpp}
@@ -291,7 +280,7 @@ export default function PerfilPanel({ onLogout }) {
           </div>
 
           <div>
-            <label className="text-xs text-ink-muted block mb-1">Médico / obstetra</label>
+            <label className={labelClass}>Médico / obstetra</label>
             <input
               type="text"
               value={perfil.medico}
@@ -302,7 +291,7 @@ export default function PerfilPanel({ onLogout }) {
           </div>
 
           <div>
-            <label className="text-xs text-ink-muted block mb-1">Hospital / clínica</label>
+            <label className={labelClass}>Hospital / clínica</label>
             <input
               type="text"
               value={perfil.hospital}
@@ -314,14 +303,15 @@ export default function PerfilPanel({ onLogout }) {
         </div>
 
         <div className="mb-4">
-          <label className="text-xs text-ink-muted block mb-2">¿Cuántos bebés esperás?</label>
+          <label className={`${labelClass} mb-2`}>¿Cuántos bebés esperás?</label>
           <div className="flex gap-2">
             {CANTIDAD_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => update("cantidadBebes", opt.value)}
-                className={toggleOptionClass(perfil.cantidadBebes === opt.value)}
+                className={opcionClass(perfil.cantidadBebes === opt.value)}
+                style={opcionStyle(perfil.cantidadBebes === opt.value)}
               >
                 {opt.label}
               </button>
@@ -330,14 +320,15 @@ export default function PerfilPanel({ onLogout }) {
         </div>
 
         <div className="mb-4">
-          <label className="text-xs text-ink-muted block mb-2">¿Sabés el sexo?</label>
+          <label className={`${labelClass} mb-2`}>¿Sabés el sexo?</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {SEXO_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => update("sexo", opt.value)}
-                className={toggleOptionClass(perfil.sexo === opt.value)}
+                className={opcionClass(perfil.sexo === opt.value)}
+                style={opcionStyle(perfil.sexo === opt.value)}
               >
                 {opt.label}
               </button>
@@ -346,46 +337,32 @@ export default function PerfilPanel({ onLogout }) {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleGuardar}
-            aria-label="Guardar datos"
-            title="Guardar datos"
-            className="flex items-center justify-center w-10 h-10 text-white rounded-full hover:brightness-105 transition-[filter]"
-            style={primaryButtonStyle}
-          >
-            <Save className="w-4 h-4" />
-          </button>
-          {saved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
+          <BotonGuardar label="Guardar datos" onClick={handleGuardar} />
+          <Guardado visible={saved} />
         </div>
-      </div>
+      </Card>
 
-      <div className="bg-white rounded-[20px] border border-[var(--border-soft)] p-6 shadow-sm mb-6">
-        <p className="text-sm font-semibold text-ink-muted uppercase tracking-wide mb-4">
-          Tu bebé
-        </p>
+      <Card className="mb-5">
+        <SectionLabel icon={Baby} className="mb-4">Tu bebé</SectionLabel>
 
         {!bebe.registrado && !editandoBebe && (
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="text-sm font-medium text-ink">¿Ya nació tu bebé?</p>
+              <p className="text-[15px] font-bold text-ink">¿Ya nació tu bebé?</p>
               <p className="text-sm text-ink-muted mt-1">
                 Registrá el nacimiento para activar tu cuarto trimestre en Inicio
               </p>
             </div>
-            <button
-              onClick={() => setEditandoBebe(true)}
-              className="text-white text-sm font-medium px-4 py-2 rounded-full hover:brightness-105 transition-[filter] whitespace-nowrap"
-              style={primaryButtonStyle}
-            >
+            <BotonPrimario onClick={() => setEditandoBebe(true)} className="text-sm px-4 py-2.5">
               Registrar nacimiento
-            </button>
+            </BotonPrimario>
           </div>
         )}
 
         {bebe.registrado && !editandoBebe && (
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div>
-              <p className="text-sm font-medium text-ink">{bebe.nombre || "Tu bebé"}</p>
+              <p className="font-heading text-[17px] font-extrabold text-ink">{bebe.nombre || "Tu bebé"}</p>
               <p className="text-sm text-ink-muted mt-1">
                 Nació el {bebe.fechaNacimiento}
                 {bebe.peso ? ` · ${bebe.peso} g` : ""}
@@ -397,13 +374,13 @@ export default function PerfilPanel({ onLogout }) {
                 onClick={() => setEditandoBebe(true)}
                 aria-label="Editar"
                 title="Editar"
-                className="text-brand-pink"
+                className="w-8 h-8 rounded-full bg-brand-pink-light/60 text-brand-pink flex items-center justify-center cursor-pointer hover:bg-brand-pink-light transition-colors"
               >
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={handleVolverAEmbarazo}
-                className="text-sm text-ink-muted hover:text-brand-pink hover:underline"
+                className="text-sm font-bold text-ink-muted hover:text-brand-pink cursor-pointer"
               >
                 Volver a modo embarazo
               </button>
@@ -415,7 +392,7 @@ export default function PerfilPanel({ onLogout }) {
           <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-xs text-ink-muted block mb-1">Fecha de nacimiento</label>
+                <label className={labelClass}>Fecha de nacimiento</label>
                 <input
                   type="date"
                   value={bebe.fechaNacimiento}
@@ -424,7 +401,7 @@ export default function PerfilPanel({ onLogout }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-ink-muted block mb-1">Nombre (opcional)</label>
+                <label className={labelClass}>Nombre (opcional)</label>
                 <input
                   type="text"
                   value={bebe.nombre}
@@ -434,7 +411,7 @@ export default function PerfilPanel({ onLogout }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-ink-muted block mb-1">Peso (g)</label>
+                <label className={labelClass}>Peso (g)</label>
                 <input
                   type="number"
                   min={0}
@@ -445,7 +422,7 @@ export default function PerfilPanel({ onLogout }) {
                 />
               </div>
               <div>
-                <label className="text-xs text-ink-muted block mb-1">Próximo control</label>
+                <label className={labelClass}>Próximo control</label>
                 <input
                   type="date"
                   value={bebe.proximoControl}
@@ -455,27 +432,18 @@ export default function PerfilPanel({ onLogout }) {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                onClick={handleGuardarBebe}
-                disabled={!bebe.fechaNacimiento}
-                aria-label="Guardar"
-                title="Guardar"
-                className="flex items-center justify-center w-10 h-10 text-white rounded-full hover:brightness-105 transition-[filter] disabled:opacity-50"
-                style={primaryButtonStyle}
-              >
-                <Save className="w-4 h-4" />
-              </button>
+              <BotonGuardar onClick={handleGuardarBebe} disabled={!bebe.fechaNacimiento} />
               <button
                 onClick={() => setEditandoBebe(false)}
-                className="text-sm text-ink-muted hover:text-brand-pink"
+                className="text-sm font-bold text-ink-muted hover:text-brand-pink cursor-pointer"
               >
                 Cancelar
               </button>
-              {bebeSaved && <span className="text-sm text-green-600 inline-flex items-center gap-1"><Check className="w-4 h-4" strokeWidth={2.2} />Guardado</span>}
+              <Guardado visible={bebeSaved} />
             </div>
           </div>
         )}
-      </div>
+      </Card>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
         {gruposOrden.map((id, i) => {
@@ -495,7 +463,7 @@ export default function PerfilPanel({ onLogout }) {
 
       <button
         onClick={onLogout}
-        className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 font-medium"
+        className="flex items-center gap-2 text-sm font-bold text-red-500 hover:bg-red-50 border-[1.5px] border-red-200 rounded-full px-4 py-2.5 transition-colors cursor-pointer"
       >
         <LogOut className="w-4 h-4" />
         Cerrar sesión
@@ -504,11 +472,10 @@ export default function PerfilPanel({ onLogout }) {
   );
 }
 
-function HubList({ title, subtitle, items, onBack, onOpen, children }) {
+function HubList({ icon, title, subtitle, items, onBack, onOpen, children }) {
   return (
     <div>
-      <BackButton onBack={onBack} label="Volver a Mi Perfil" className="mb-4" />
-      <Header title={title} subtitle={subtitle} />
+      <PantallaTop onBack={onBack} icon={icon} title={title} subtitle={subtitle} />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {items.map((id, i) => {
           const h = hojas[id];
