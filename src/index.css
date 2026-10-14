@@ -345,16 +345,42 @@ button:focus-visible {
   }
 }
 
+.mosaic-dots {
+  display: none;
+}
+
+/* On phones the stacked mosaic was a long scroll — turn it into a
+   swipeable, auto-advancing carousel (autoplay lives in MosaicCarousel) */
 @media (max-width: 540px) {
   .photo-mosaic {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 260px;
-    grid-template-areas:
-      "big"
-      "a"
-      "b"
-      "c"
-      "d";
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin: 0 -24px;
+    padding: 0 24px;
+    scroll-padding: 0 24px;
+  }
+  .photo-mosaic::-webkit-scrollbar {
+    display: none;
+  }
+  .photo-mosaic .mosaic-photo {
+    flex: 0 0 86%;
+    height: 340px;
+    scroll-snap-align: start;
+  }
+  .photo-mosaic .mosaic-photo:last-child {
+    scroll-snap-align: end;
+  }
+  .mosaic-photo:hover {
+    transform: none;
+  }
+  .mosaic-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
   }
 }
 

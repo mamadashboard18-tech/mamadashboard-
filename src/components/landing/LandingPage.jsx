@@ -609,6 +609,113 @@ function MosaicPhoto({ src, alt, phrase, className = "" }) {
   );
 }
 
+const MOSAIC_PHOTOS = [
+  { className: "mosaic-big", src: fotoVentana, alt: "Mujer embarazada mirando su teléfono junto a una ventana", phrase: "Un lugar tranquilo para volver, cuando lo necesites." },
+  { className: "mosaic-a", src: fotoPareja, alt: "Pareja embarazada compartiendo el teléfono en casa", phrase: "Para vivirlo acompañada, no solo de guardia." },
+  { className: "mosaic-b", src: fotoPanza, alt: "Mujer embarazada usando el teléfono de pie", phrase: "Tu semana, siempre a mano." },
+  { className: "mosaic-c", src: fotoSillon, alt: "Mujer embarazada recostada revisando el teléfono", phrase: "Para esas pausas que también cuentan." },
+  { className: "mosaic-d", src: fotoSonrisa, alt: "Mujer embarazada sonriendo con el teléfono en la mano", phrase: "Cada check-in, una sonrisa menos sola." },
+];
+
+const MOSAIC_AUTOPLAY_MS = 4000;
+const MOSAIC_RESUME_AFTER_MS = 7000;
+
+/* Grid mosaic on desktop; on phones the CSS turns the same container into a
+   horizontal scroll-snap carousel, and this auto-advances it. Autoplay only
+   runs while the carousel layout is active, the section is on screen and
+   the user isn't touching it — a manual swipe pauses it for a while. */
+function MosaicCarousel() {
+  const trackRef = useRef(null);
+  const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
+  const pausedUntil = useRef(0);
+
+  const goTo = useCallback((i) => {
+    const track = trackRef.current;
+    const card = track?.children[i];
+    if (!card) return;
+    track.scrollTo({ left: card.offsetLeft - track.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft), behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const onScroll = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      if (max <= 0) return;
+      const i = Math.round((track.scrollLeft / max) * (track.children.length - 1));
+      activeRef.current = i;
+      setActive(i);
+    };
+    const pause = () => {
+      pausedUntil.current = Date.now() + MOSAIC_RESUME_AFTER_MS;
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    track.addEventListener("pointerdown", pause);
+    track.addEventListener("touchstart", pause, { passive: true });
+    track.addEventListener("wheel", pause, { passive: true });
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      track.removeEventListener("pointerdown", pause);
+      track.removeEventListener("touchstart", pause);
+      track.removeEventListener("wheel", pause);
+    };
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const mobile = window.matchMedia("(max-width: 540px)");
+    let onScreen = false;
+    const io = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+    }, { threshold: 0.5 });
+    io.observe(track);
+    const id = setInterval(() => {
+      if (!mobile.matches || !onScreen || document.hidden || Date.now() < pausedUntil.current) return;
+      goTo((activeRef.current + 1) % track.children.length);
+    }, MOSAIC_AUTOPLAY_MS);
+    return () => {
+      clearInterval(id);
+      io.disconnect();
+    };
+  }, [goTo]);
+
+  return (
+    <>
+      <div ref={trackRef} className="photo-mosaic">
+        {MOSAIC_PHOTOS.map((p) => (
+          <MosaicPhoto key={p.className} {...p} />
+        ))}
+      </div>
+      <div className="mosaic-dots" role="tablist" aria-label="Fotos">
+        {MOSAIC_PHOTOS.map((p, i) => (
+          <button
+            key={p.className}
+            type="button"
+            role="tab"
+            aria-selected={i === active}
+            aria-label={`Foto ${i + 1} de ${MOSAIC_PHOTOS.length}`}
+            onClick={() => {
+              pausedUntil.current = Date.now() + MOSAIC_RESUME_AFTER_MS;
+              goTo(i);
+            }}
+            className="cursor-pointer border-0 p-0"
+            style={{
+              width: i === active ? 22 : 8,
+              height: 8,
+              borderRadius: 999,
+              background: i === active ? C.pink : "rgba(36,29,43,0.18)",
+              transition: "width 0.3s ease, background 0.3s ease",
+            }}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
 const SHOWCASE_PANELS = {
   multimedia: { src: "/?app_preview=multimedia", title: "Vista previa: Multimedia" },
   inicio: { src: "/?app_preview=inicio", title: "Vista previa: Inicio" },
@@ -807,13 +914,8 @@ export default function LandingPage({ onGoToAuth, onDevPreview }) {
           not invented customer quotes (see FlipCard/MosaicPhoto comments) */}
       <LazySection minHeight={480}>
         <section className="max-w-[1120px] mx-auto" style={{ padding: "clamp(40px,6vw,64px) 24px 0" }}>
-          <div className="photo-mosaic">
-            <MosaicPhoto className="mosaic-big" src={fotoVentana} alt="Mujer embarazada mirando su teléfono junto a una ventana" phrase="Un lugar tranquilo para volver, cuando lo necesites." />
-            <MosaicPhoto className="mosaic-a" src={fotoPareja} alt="Pareja embarazada compartiendo el teléfono en casa" phrase="Para vivirlo acompañada, no solo de guardia." />
-            <MosaicPhoto className="mosaic-b" src={fotoPanza} alt="Mujer embarazada usando el teléfono de pie" phrase="Tu semana, siempre a mano." />
-            <MosaicPhoto className="mosaic-c" src={fotoSillon} alt="Mujer embarazada recostada revisando el teléfono" phrase="Para esas pausas que también cuentan." />
-            <MosaicPhoto className="mosaic-d" src={fotoSonrisa} alt="Mujer embarazada sonriendo con el teléfono en la mano" phrase="Cada check-in, una sonrisa menos sola." />
-          </div>
+          <MosaicCarousel />
+
         </section>
       </LazySection>
 
