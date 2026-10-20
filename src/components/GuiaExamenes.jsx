@@ -251,22 +251,32 @@ export default function GuiaExamenes({ onBack, onNavigate }) {
                         {agendandoId === ex.id && (
                           <div className="mb-3.5 p-3.5 bg-[var(--bg)] border border-[rgba(155,93,229,0.14)] rounded-2xl space-y-2.5">
                             <div className="grid grid-cols-2 gap-2.5">
-                              <input
-                                type="date"
-                                value={agendaForm.fecha}
-                                onChange={(e) =>
-                                  setAgendaForm((prev) => ({ ...prev, fecha: e.target.value }))
-                                }
-                                className="w-full rounded-full border border-[rgba(155,93,229,0.18)] bg-white px-3.5 py-2 text-sm text-ink focus:outline-none focus:border-brand-pink"
-                              />
-                              <input
-                                type="time"
-                                value={agendaForm.hora}
-                                onChange={(e) =>
-                                  setAgendaForm((prev) => ({ ...prev, hora: e.target.value }))
-                                }
-                                className="w-full rounded-full border border-[rgba(155,93,229,0.18)] bg-white px-3.5 py-2 text-sm text-ink focus:outline-none focus:border-brand-pink"
-                              />
+                              <div className="relative min-w-0">
+                                {!agendaForm.fecha && (
+                                  <span className="ios-date-placeholder" aria-hidden="true">dd/mm/aaaa</span>
+                                )}
+                                <input
+                                  type="date"
+                                  value={agendaForm.fecha}
+                                  onChange={(e) =>
+                                    setAgendaForm((prev) => ({ ...prev, fecha: e.target.value }))
+                                  }
+                                  className="w-full rounded-full border border-[rgba(155,93,229,0.18)] bg-white px-3.5 py-2 text-sm text-ink focus:outline-none focus:border-brand-pink"
+                                />
+                              </div>
+                              <div className="relative min-w-0">
+                                {!agendaForm.hora && (
+                                  <span className="ios-date-placeholder" aria-hidden="true">--:--</span>
+                                )}
+                                <input
+                                  type="time"
+                                  value={agendaForm.hora}
+                                  onChange={(e) =>
+                                    setAgendaForm((prev) => ({ ...prev, hora: e.target.value }))
+                                  }
+                                  className="w-full rounded-full border border-[rgba(155,93,229,0.18)] bg-white px-3.5 py-2 text-sm text-ink focus:outline-none focus:border-brand-pink"
+                                />
+                              </div>
                             </div>
                             <input
                               type="text"

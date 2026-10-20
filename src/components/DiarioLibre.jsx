@@ -15,7 +15,6 @@ import {
   X,
 } from "lucide-react";
 import EscribirEntradaModal from "./EscribirEntradaModal";
-import BackButton from "./BackButton";
 import CalendarioMensual from "./CalendarioMensual";
 import DesbloqueoDiarioModal from "./DesbloqueoDiarioModal";
 import { toISODate } from "../data/diarioLibre";
@@ -241,12 +240,6 @@ export default function DiarioLibre({ onNavigate }) {
           <User className="w-5 h-5" strokeWidth={1.7} />
         </button>
       </div>
-
-      <BackButton
-        onBack={() => onNavigate?.("inicio")}
-        label="Volver a Inicio"
-        className="lg:hidden mb-4"
-      />
 
       <h2 className="font-heading text-[28px] font-extrabold text-ink leading-tight mb-2 flex items-center gap-2.5">
         <Heart className="w-6 h-6 text-brand-pink shrink-0" fill="#e26fce" strokeWidth={0} />
