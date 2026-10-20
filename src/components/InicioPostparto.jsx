@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import useScrollMemory from "../lib/useScrollMemory";
 import { Flame, NotebookPen, Lightbulb, CircleCheck } from "lucide-react";
 import RegistroDiarioModal from "./RegistroDiarioModal";
 import { tipoIcono } from "../data/citasIconos";
@@ -26,6 +27,7 @@ export default function InicioPostparto({ nombre, bebe, onNavigate }) {
   const [registros, setRegistros] = useState({});
   const [modalAbierto, setModalAbierto] = useState(false);
   const [view, setView] = useState("list");
+  useScrollMemory(view);
 
   useEffect(() => {
     setCitas(loadCitas());

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useScrollMemory from "../lib/useScrollMemory";
 import Header from "./Header";
 import FeatureCard from "./FeatureCard";
 import HistorialEmbarazo from "./HistorialEmbarazo";
@@ -153,6 +154,7 @@ const SEXO_OPTIONS = [
 export default function PerfilPanel({ onLogout }) {
   const [grupo, setGrupo] = useState(null);
   const [view, setView] = useState(null);
+  useScrollMemory(`${grupo}/${view}`);
   const [perfil, setPerfil] = useState(emptyPerfil);
   const [saved, setSaved] = useState(false);
   const [bebe, setBebe] = useState(emptyBebe);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useScrollMemory from "./lib/useScrollMemory";
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/BottomNav";
 import InicioPanel from "./components/InicioPanel";
@@ -65,6 +66,7 @@ export default function App() {
   const [authTab, setAuthTab] = useState("login");
   const [user, setUser] = useState(null);
   const [active, setActive] = useState("inicio");
+  useScrollMemory(active);
 
   const handleNavigate = (section) => {
     setActive(section);
@@ -179,7 +181,7 @@ export default function App() {
     <div className="h-dvh bg-[var(--bg)] flex flex-col">
       <div className="flex flex-1 min-h-0">
         <Sidebar active={active} onSelect={(id) => handleNavigate(id)} onLogout={handleLogout} />
-        <main className="flex-1 p-4 pb-28 sm:p-6 lg:p-8 lg:pb-8 max-w-5xl overflow-y-auto">
+        <main data-scroll-root className="flex-1 p-4 pb-28 sm:p-6 lg:p-8 lg:pb-8 max-w-5xl overflow-y-auto">
           {active === "inicio" ? (
             <InicioPanel nombre={user?.nombre} onNavigate={handleNavigate} />
           ) : active === "citas" ? (

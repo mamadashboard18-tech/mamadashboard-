@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useScrollMemory from "../../lib/useScrollMemory";
 import { User } from "lucide-react";
 import { fetchPartnerData, sendRsvp } from "../../data/partner";
 import { logout } from "../../data/auth";
@@ -27,6 +28,7 @@ export default function PartnerDashboard({ initialActive = "inicio" }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(initialActive);
+  useScrollMemory(active);
   const isDesktop = useIsDesktop();
 
   const load = () => {
@@ -141,7 +143,7 @@ export default function PartnerDashboard({ initialActive = "inicio" }) {
           </button>
         </div>
 
-        <main className="flex-1 overflow-y-auto px-[18px] py-5 pb-[110px] lg:px-10 lg:py-10 lg:pb-[60px]">
+        <main data-scroll-root className="flex-1 overflow-y-auto px-[18px] py-5 pb-[110px] lg:px-10 lg:py-10 lg:pb-[60px]">
           <div className="lg:max-w-[680px] lg:mx-auto">
             {active === "perfil" ? (
               <PartnerProfile

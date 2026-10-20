@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import useScrollMemory from "../lib/useScrollMemory";
 import {
   User,
   Flame,
@@ -90,6 +91,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
   const todayISO = toISODateCita(today);
 
   const [view, setView] = useState("list");
+  useScrollMemory(view);
   const [refDate, setRefDate] = useState(today);
   const [selectedDate, setSelectedDate] = useState(todayISO);
   const diasSemana = useMemo(() => getWeekDates(refDate), [refDate]);
@@ -307,7 +309,7 @@ export default function InicioPanel({ nombre, onNavigate }) {
         />
 
         <div className="relative z-10">
-          <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 mb-3">
             <p className="text-white text-[17px] sm:text-[19px] font-bold whitespace-nowrap">
               Semana {semanaMostrada} de {totalWeeks}
             </p>

@@ -54,7 +54,7 @@ export default function BottomNav({ active, onSelect }) {
                   />
                 </span>
                 <span
-                  className={`text-[12px] mt-0.5 mb-2 ${
+                  className={`text-[11px] min-[360px]:text-[12px] mt-0.5 mb-2 ${
                     isActive ? "font-bold text-brand-pink" : "font-medium text-[#9c93a3]"
                   }`}
                 >
@@ -68,7 +68,7 @@ export default function BottomNav({ active, onSelect }) {
             <button
               key={s.id}
               onClick={() => onSelect(s.id)}
-              className="relative flex flex-col items-center justify-center gap-1 py-2.5 min-h-[56px] cursor-pointer"
+              className="relative min-w-0 flex flex-col items-center justify-center gap-1 py-2.5 min-h-[56px] cursor-pointer"
               aria-current={isActive ? "page" : undefined}
             >
               <Icon
@@ -77,7 +77,7 @@ export default function BottomNav({ active, onSelect }) {
                 color={isActive ? "var(--brand-pink)" : "#9c93a3"}
               />
               <span
-                className={`text-[12px] leading-none transition-colors ${
+                className={`text-[11px] min-[360px]:text-[12px] tracking-tight min-[360px]:tracking-normal leading-none whitespace-nowrap transition-colors ${
                   isActive ? "text-brand-pink font-semibold" : "text-[#9c93a3] font-medium"
                 }`}
               >

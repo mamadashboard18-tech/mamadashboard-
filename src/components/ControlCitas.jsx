@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import useScrollMemory from "../lib/useScrollMemory";
 import {
   User,
   ChevronLeft,
@@ -90,6 +91,7 @@ export default function ControlCitas({ onNavigate }) {
   const todayISO = toISODate(today);
 
   const [view, setView] = useState("list");
+  useScrollMemory(view);
   const [cursor, setCursor] = useState({ year: today.getFullYear(), month: today.getMonth() });
   const [citas, setCitas] = useState([]);
   const [selectedDate, setSelectedDate] = useState(todayISO);
@@ -472,7 +474,7 @@ export default function ControlCitas({ onNavigate }) {
                 const isSelected = iso === selectedDate;
 
                 let cls =
-                  "relative w-10 h-10 mx-auto rounded-full text-[16px] flex items-center justify-center transition-colors cursor-pointer";
+                  "relative w-full max-w-10 aspect-square mx-auto rounded-full text-[16px] flex items-center justify-center transition-colors cursor-pointer";
                 let style;
                 if (isSelected) {
                   cls += " text-white font-bold";
@@ -675,7 +677,7 @@ export default function ControlCitas({ onNavigate }) {
                               setDraftIso(iso);
                               setFechaAbierta(false);
                             }}
-                            className={`w-8 h-8 mx-auto rounded-full text-[13px] flex items-center justify-center cursor-pointer transition-colors focus:outline-none ${
+                            className={`w-full max-w-8 aspect-square mx-auto rounded-full text-[13px] flex items-center justify-center cursor-pointer transition-colors focus:outline-none ${
                               isSelected
                                 ? "text-white font-bold"
                                 : isToday
