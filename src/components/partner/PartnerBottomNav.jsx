@@ -45,7 +45,7 @@ export default function PartnerBottomNav({ active, onSelect, citasPendientesRsvp
                     boxShadow: "0 10px 20px rgba(91,33,182,0.4), 0 0 0 7px rgba(124,58,237,0.12)",
                   }
                 : {
-                    background: "var(--partner-violet-fill-soft)",
+                    background: "#efe7fd",
                     boxShadow: "0 4px 10px rgba(91,33,182,0.15)",
                   }
             }
