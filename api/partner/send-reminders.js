@@ -33,6 +33,13 @@ export default async function handler(req, res) {
     return;
   }
 
+  // Recordatorios de citas desactivados a pedido de la usuaria: respondemos OK sin enviar
+  // nada, así el workflow programado de GitHub no falla ni manda mails.
+  if (process.env.CITA_REMINDERS_ENABLED !== "true") {
+    res.status(200).json({ success: true, sent: 0, disabled: true });
+    return;
+  }
+
   const { data: citas, error } = await supabaseAdmin
     .from("citas_compartidas")
     .select("id, mother_id, fecha, hora, tipo, medico, lugar, partner_rsvp")
